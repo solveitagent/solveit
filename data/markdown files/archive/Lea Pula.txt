@@ -102,4 +102,5 @@
 **Lea:** I’ll cooperate fully.  
 
 ---
-**Open: CC Y**
+
+- **Open**: CC Y

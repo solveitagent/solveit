@@ -1,0 +1,19 @@
+# Attendance Log
+
+*September 30th*:
+
+- RH - 9:00 AM
+- BK - 9:15 AM
+- KM - 11:30 AM
+- AZ - 1:00 PM
+- BN - 4:15 PM
+- TD - 6:00 PM
+
+*October 1st*:
+
+- BK - 8:45 AM
+- MJ - 10:00 AM
+- SO - 3:30 PM
+- TM - 7:00 PM
+
+- **Discard**: SC 17

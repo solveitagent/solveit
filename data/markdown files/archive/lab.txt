@@ -9,8 +9,8 @@ Your team has uncovered vital leads, but the mystery deepens. The stakes are hig
 
 You can: 
 
-1. **Discard: CC F**
-2. **Open SC 20, CC X, CC G, CC H**
-3. **Search Arlinda Kelmendi**: Interview Dr. Arlinda Kelmendi the Head of Research
+- **Open**: SC 20, CC X, CC G, CC H
+- **Discard**: CC F
+- **Search Interview**: Arlinda Kelmendi, Head of Research
 
 Time is running out, and the truth hangs in the balance.

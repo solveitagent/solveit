@@ -6,9 +6,7 @@ Among the items, you also spot a partially filled form for a new ID card applica
 
 **Take a closer look! Well done, team!**  
 
-- **Discard:** SC 21, CC S, CC Q, CC I
-
-- **Open:** SC 22, CC R, CC G, CC H
-
-- **Search in archive for** Application 159
+- **Open**: SC 22, CC R, CC G, CC H
+- **Discard**: SC 21, CC S, CC Q, CC I
+- **Search in Archive**: Application 159
 

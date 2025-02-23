@@ -12,6 +12,4 @@
 
 
 
-**Open:**
-
-**SC 6, CC B** 
+- **Open**: SC 6, CC B

@@ -48,12 +48,11 @@
 
 **End of Interview**
 
-**Discard CC P, CC Y**
 
-**Interview: Ardian Zogaj**
-
-A legal expert or an undercover worker opens **SC 14** 
-- 🔎 **MC 3** 
+- **Search Interview**: Ardian Zogaj
+- A legal expert or an undercover worker opens **SC 14**
+- 🔎 **MC 3**
+- **Discard**: CC P, CC Y
 
 
 

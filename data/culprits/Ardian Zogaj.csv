@@ -12,13 +12,7 @@ Agent,"We’re following leads that suggest a possible link. We’re on it, but 
 Comment,sighs
 Inspector Zogaj,"If that’s true, then it’s much bigger than we thought. I’ll support your team however I can. Let me know what you need."
 Agent,"Thank you, Inspector. We’ll be in touch."
-Hint,"**Discard:**
-- SC 19
+Hint,"**Open: CC Q, CC I, SC 21**
 
-**Open:** 
-- CC Q, 
-- CC I,
-- SC 21
-
-
+**Discard: SC 19**
 "

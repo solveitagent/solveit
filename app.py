@@ -21,6 +21,9 @@ from db_functions import read_user_data, save_data_logout, add_new_user, read_al
 
 
 
+
+
+
 archive_culprits_table_df = pd.read_csv(
     'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits.csv')
 archive_culprits_table_df[
@@ -505,7 +508,7 @@ cards_layout = html.Div(
                                 html.Div(
                                     children=[
                                         html.Button(
-                                            "Can't find the mystery word, help me!",
+                                            "Can't find the password, help me!",
                                             id='markdown_text_help_more_button',
                                             style={'display': 'none'}
                                         )
