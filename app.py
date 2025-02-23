@@ -20,10 +20,6 @@ import os
 from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users
 
 
-
-
-
-
 archive_culprits_table_df = pd.read_csv(
     'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits.csv')
 archive_culprits_table_df[
@@ -1325,7 +1321,7 @@ def send_email(receiver_email):
             <div class="footer">
                 <p>Stay sharp, Agents. Kosovo is counting on you.</p>
                 <p><strong>Open SC 5</strong></p>
-                <img src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/solveIT-logo.png" alt="SolveIT Logo" class="logo">
+                <img src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/solveIT-logo.png" alt="SolveIT Logo" class="logo">
             </div>
         </div>
     </body>
