@@ -66,10 +66,10 @@ user_data = read_user_data(cities_info)
 
 app_start_time = time.time()
 
-cities_infected_beginning = {'Drenas': 15, 'Prishtina': 15, 'Lipjan': 13}
+cities_infected_beginning = {'Drenasi': 15, 'Prishtina': 15, 'Lipjani': 13}
 
 for city in cities_info.City.tolist():
-    if city in ['Drenas', 'Prishtina', 'Lipjan']:
+    if city in ['Drenasi', 'Prishtina', 'Lipjani']:
         continue
     ct = cities_info[cities_info == city].iloc[0]
     cities_infected_beginning[city] = 0
@@ -692,8 +692,8 @@ main_screen = html.Div([
                         id="map",
                         children=[dl.TileLayer(),
                                   dl.DivMarker(
-                                      position=[cities_info[cities_info.City == 'Drenas']['Lat'].iloc[0],
-                                                cities_info[cities_info.City == 'Drenas']['Long'].iloc[0]],
+                                      position=[cities_info[cities_info.City == 'Drenasi']['Lat'].iloc[0],
+                                                cities_info[cities_info.City == 'Drenasi']['Long'].iloc[0]],
                                       iconOptions=dict(
                                           html='<div><span>15</span></div>',
                                           className='marker-cluster marker-cluster-small',
@@ -710,8 +710,8 @@ main_screen = html.Div([
                                       )
                                   ),
                                   dl.DivMarker(
-                                      position=[cities_info[cities_info.City == 'Lipjan']['Lat'].iloc[0],
-                                                cities_info[cities_info.City == 'Lipjan']['Long'].iloc[0]],
+                                      position=[cities_info[cities_info.City == 'Lipjani']['Lat'].iloc[0],
+                                                cities_info[cities_info.City == 'Lipjani']['Long'].iloc[0]],
                                       iconOptions=dict(
                                           html='<div><span>13</span></div>',
                                           className='marker-cluster marker-cluster-small',
@@ -1877,7 +1877,7 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
             else:
                 nr_cities_infected[city] = 0
 
-    filtered_dict = {key: value for key, value in nr_cities_infected.items() if value > 0}
+    filtered_dict = {key: int(value) for key, value in nr_cities_infected.items() if int(value) > 0}
 
     to_add = [dl.TileLayer()]
     for city in filtered_dict.keys():
@@ -2830,7 +2830,7 @@ def display_click_data(markdown_text_help_more_button, single_card_title):
 def collect_answers(n_clicks, time, *answers):
     if n_clicks:
         result = [answers[i] for i in range(len(answers)) if answers[i]]
-        real_answers = ['Drenas', 'Taulant Gashi', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
+        real_answers = ['Drenasi', 'Taulant Gashi', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
         if not result:
             return True, 'Wrong, try again!'
 
