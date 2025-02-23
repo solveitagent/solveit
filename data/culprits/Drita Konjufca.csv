@@ -1,0 +1,16 @@
+speaker,message
+Agent,"Hello Drita, I hope you're feeling alright today. We need to ask you a few questions about your recent activities to help us understand the virus outbreak. Can you tell us where you’ve been just before you started feeling unwell?"
+Drita,"I had been in Prishtina for three days, receiving treatment for a condition that weakened my immune system. On the 28th of September, I took the last bus back to Drenas at 19:45. It was a quiet ride, with only a few passengers."
+Agent,"Did you come into contact with anyone who seemed sick, or notice anything unusual on the bus or during your trip?"
+Drita,"No, not really. The bus was almost empty, with two other passengers beside me. I remember a sweet girl sitting a few seats away. She seemed like a regular passenger, quiet and calm. Then there was this student... He seemed really out of it, like his mind was somewhere else. First, he forgot to pay his ticket, and then he left his phone behind until I picked it up and gave it to him. He didn’t even notice until I called him back three times or more.  The only other person was the bus driver. I didn’t see anyone coughing or looking sick though. Everything felt normal, except for how I felt after the ride. "
+Agent,Did you feel any symptoms before that night?
+Drita,"No, I felt fine during my time in Prishtina. But a few hours after I got back from the bus ride, I started feeling a strange sensation and then a severe headache."
+Agent," Drita, aside from your recent travels, can you tell us a bit about your profession? Were you feeling well before your trip back to Drenas?"
+Drita ,"I work as a librarian in Drenas. I’ve been managing the library there for a few years now. I wasn’t feeling my best before the trip, though. But after coming back to Drenas, my situation got worse within hours, and this is completely different. This has nothing to do with my condition."
+Agent,Do you live alone?
+Drita ,"Yes, I live alone, so I don’t think I’ve put anyone else in danger."
+Agent,Do you think the treatment you were undergoing might have made you more vulnerable to getting sick?
+Drita,It’s possible. My immune system was definitely weaker than usual because of the treatment. Maybe that’s why I fell ill so quickly after getting home.
+Agent,"Thanks, Drita. We’ll be looking into everything you’ve shared. Hope you recover very soon! "
+Hint,"**Open:**  
+- SC 11"

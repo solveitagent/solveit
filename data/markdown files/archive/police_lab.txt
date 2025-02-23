@@ -1,0 +1,3 @@
+Agents, your next move is important. Decide which record you want to see first.
+Choose one: Police Records or Lab Records. 
+Careful a click on *Police* or *Lab* records each costs **100 $**.

@@ -1,0 +1,18 @@
+# Entry Logs for September 28, 2024
+
+| Timestamp           | User ID | Action       |
+|---------------------|---------|--------------|
+| 28/09/2024 08:00   | 558     | Entered Lab  |
+| 28/09/2024 14:00   | 558     | Exited Lab   |
+| 28/09/2024 18:15   | 1565    | Entered Lab  |
+
+### Discard:
+- CC O
+- CC U
+- CC X
+
+### Open:
+- SC 18
+
+### Search in Archive: 
+- Lea Pula - interview transcript with Inspector Ardian Zogaj. 

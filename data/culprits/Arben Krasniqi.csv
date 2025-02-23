@@ -1,0 +1,15 @@
+speaker,message
+Agent,"Hello, Arben. Thank you for taking the time to speak with us. Can you tell us when you first started feeling unwell?"
+Arben,Sure. It was October 3rd. I had a fever and a sore throat. I figured it was just the weather changing—it’s happened before.
+Agent,Where do you think you might have taken the illness?
+Arben,"Well, I use public transportation a lot. I was at the bus station in Lipjan and later went to the market in Prishtina. Both places were crowded. It could’ve been anywhere, honestly."
+Agent,Did you have close contact with anyone during that time?
+Comment,pauses
+Arben,"I did buy groceries at the market. The cashier coughed a couple of times, but who knows?"
+Agent,Did you risk anyone else by being around them while feeling unwell?
+Arben,"I hope not. I live with my younger brother, but I stayed in my room once I realized I wasn’t feeling well. He’s also a bit sick now, so I guess I also helped to spread it."
+Agent,Do you work?
+Comment,smiles slightly
+Arben,"I’m a cook at a small café. My dream is to one day open my own restaurant. It’s nothing fancy, just a place where people feel at home. Cooking has always been my way of expressing joy. "
+Agent,"Thank you, Arben. "
+Hint,

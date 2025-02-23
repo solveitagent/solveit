@@ -1,0 +1,15 @@
+dash==2.18.2
+plotly==5.15.0
+dash_bootstrap_components==1.6.0
+dash_leaflet==1.0.15
+dash_mantine_components==0.12.1
+numpy==1.26.4
+pandas
+bcrypt
+flask==3.0.3
+dash_player==1.1.0
+Pillow
+gunicorn
+sendgrid
+psycopg2
+python-dotenv

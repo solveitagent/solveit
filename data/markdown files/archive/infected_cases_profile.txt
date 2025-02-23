@@ -1,0 +1,17 @@
+| Acronym | Date when first symptoms appeared | Symptoms           |
+|---------|-----------------------------------|--------------------|
+| TG      | September 29                     | Fever, Muscle Pain |
+| RH      | September 30                     | Headache, Nausea   |
+| DK      | September 28                     | Fever, Muscle Pain |
+| BC      | October 1                        | Sore Throat, Nausea |
+| AK      | October 3                        | Fever, Sore Throat |
+| LT      | September 29                     | Fever, Muscle Pain |
+| VF      | October 3                        | Headache, Nausea   |
+| BK      | October 1                        | Headache, Sore Throat |
+| VM      | October 4                        | Headache, Nausea   |
+
+
+
+**Open:**
+
+**SC 6, CC B** 

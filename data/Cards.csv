@@ -1,0 +1,133 @@
+Code,Img,Title,Text,Hint,hasPassword
+CC D,False,CC D,"You’ve found a set of symbols that seem to lead somewhere important. You wonder what this could be related to!
+
+X ☾ 2 ⚖️ 6 ✵ 10
+Y ⚖️ 15 ✺ 5","**A puzzle solver or a codebreaker opens CC E**
+🔎 **MC 1**",False
+CC A,False,CC A,"Your commander after analyzing the data says:
+
+You are looking for a city situated along a river in Kosova that is estimated to be the 5th most populous in the Prishtina district.",**A deduction expert or a codebreaker opens CC C**,False
+CC C,CC C.png,CC C, , ,False
+CC B,False,CC B,"You find these weird numbers:
+42.X0833, Y.892778","**A puzzle solver, or a codebreaker opens SC 7**
+🔎 **MC 8**",False
+CC E,False,CC E,"You found a clue that could help you crack the code.
+
+In every ⚖️  the balance lies. Not everything is as it seems especially when it comes to ✺,✵, ☾ and ⚖️ .
+
+4 ✺ 2 ⚖️ 6
+3 ✵ 3 ⚖️ 9
+5 ☾ 1 ⚖️ 4  ",**Open CC Z**,False
+CC F,CC F.jpg,CC F,  ,  ,False
+CC G,CC G.jpg,CC G,  ,  ,False
+CC K,CC K.jpg,CC K,  ,🔎 MC 2,True
+CC H,CC H.jpg,CC H,  ,  ,False
+CC J,CC J.png,CC J,,"A deduction expert, or an undercover worker opens **SC 12**",False
+CC L,CC L.png,CC L,  ,  ,False
+CC O,CC O.jpg,CC O,  ,  ,False
+CC M,CC M.jpg,CC M,  ,  ,False
+CC N,CC N.JPG,CC N,  ,  ,False
+CC U,CC U.jpg,CC U,  ,🔎 MC 4,True
+CC P,CC P.png,CC P ,  ,  ,False
+CC Q,CC Q.jpg,CC Q,  ,  ,False
+CC I,CC I.png,CC I,  ,  ,False
+CC V,CC V.jpg,CC V,  ,🔎 MC 5,True
+CC R,CC R.jpg,CC R,  ,  ,False
+CC W,CC W.png,CC W,  ,🔎 MC 6,True
+CC T,CC T.jpg,CC T,  ,  ,False
+CC S,CC S.png,CC S, , ,False
+CC X,CC X.png,CC X,,,False
+CC Y,CC Y.png,CC Y ,Search in archive what you see.,,False
+CC Z,CC Z.png,CC Z,,🔎 MC 7,True
+CC NJ,CC NJ.jpg,CC NJ,,**Open: CC NJ**,False
+CC SH,CC SH.png,CC SH,,"**Discard: CC SH**
+**Open: CC GJ**",False
+CC DH,CC DH.jpg,CC DH,,🔎 MC 9,True
+CC GJ,CC GJ.png,CC GJ,,,False
+MC 1,False,MC 1,"##### Urgent 🔎
+
+**Expert Consults MC 1**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 2,False,MC 2,"##### Urgent 🔎
+
+**Expert Consults MC 2**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 3,False,MC 3,"##### 🔎 Urgent 🔎
+
+**Expert Consults MC 3**
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 4,False,MC 4,"##### 🔎 Urgent 🔎
+
+**Expert Consults MC 4**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 5,False,MC 5,"##### Urgent 🔎
+
+**Expert Consults MC 5**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 6,False,MC 6,"##### Urgent 🔎
+
+**Expert Consults MC 6**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 7,False,MC 7,"##### Urgent 🔎
+
+**Expert Consults MC 7**
+
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 8,False,MC 8,"##### Urgent 🔎
+
+**Expert Consults MC 8**
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True
+MC 9,False,MC 9,"##### Urgent 🔎
+
+**Expert Consults MC 9**
+
+Time is critical, detectives! You have **120 seconds** to guess the mystery word. Every second counts—failure to find the mystery word costs you 100$.
+
+If you think you’ve cracked it, type the mystery word into the system to unlock a crucial hint from the SolveIT Detectives.  
+
+The fate of this investigation hinges on your deduction skills. **Don’t let us down!**",,True

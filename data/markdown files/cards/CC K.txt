@@ -1,0 +1,49 @@
+# Patient Anamnesis: Drita Konjufca
+
+## Personal Information
+- **Name**: Drita Konjufca
+- **Date of Birth**: \[REDACTED\]
+- **Current Location**: Prishtina
+
+---
+
+## Condition History
+- The patient is undergoing treatment for an immune-related condition.
+- Regular medication is required, resulting in:
+  - Moderate immunosuppression.
+  - Increased vulnerability to infections.
+
+---
+
+## Notes on Treatment
+- Frequent visits to Prishtina for therapy sessions.
+- Higher risk of contracting illnesses, particularly in crowded or confined spaces.
+
+---
+
+## Symptoms on Admission
+- Fever
+- Muscle Pain
+
+---
+
+## Doctor’s Observations
+### Mode of Transmission:
+- **Suspected**: The new virus seems to spread through physical contact. Conclusion drawn after observing the particular patient, and other patients treated at the hospital.
+- **Reasoning**: 
+  - If airborne, the infection rate would be significantly higher.
+  - Cases are concentrated among individuals exposed in close quarters or through shared surfaces.
+- **Recommendation**: Further investigation is needed to confirm transmission pathways.
+
+---
+
+## Additional Notes
+- Patient expressed concern about symptoms worsening upon returning from Prishtina.
+- Symptoms align with early stages of viral infection.
+
+---
+
+### Discard:
+- CC K
+- SC 23
+- SC 13

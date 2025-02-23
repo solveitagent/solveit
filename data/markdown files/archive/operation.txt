@@ -1,0 +1,38 @@
+You decided to start field operations. 
+Move the location token to the *Operations* and reduce your funds by **100 $** on the gameboard.
+
+# Cases
+
+### Arben Krasniqi
+- **Date of Illness**: Oct-03  
+- **Places Visited**: Bus Station (Peja), Local Market (Peja)  
+- **Symptoms**: Fever, Sore Throat  
+
+---
+
+### Rina Hoxha
+- **Date of Illness**: Sep-30  
+- **Places Visited**: Hospital (Prishtina), Gym (Prishtina)  
+- **Symptoms**: Headache, Nausea  
+
+---
+
+### Blerim Krasniqi
+- **Date of Illness**: Oct-01  
+- **Places Visited**: Market (Peja), Gym (Peja)  
+- **Symptoms**: Headache, Sore Throat  
+
+---
+
+### Besart Caka
+- **Date of Illness**: Oct-01  
+- **Places Visited**: Local Coffee Shop (Drenas)  
+- **Symptoms**: Sore Throat, Nausea  
+
+---
+
+### Valon Murati
+- **Date of Illness**: Oct-04  
+- **Places Visited**: Library (Lipjan), Bus Station (Lipjan)  
+- **Symptoms**: Headache, Nausea  
+

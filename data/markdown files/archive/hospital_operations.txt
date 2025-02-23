@@ -1,0 +1,3 @@
+Agents, your next move is crucial. Decide whether to interview hospitalized patients or those receiving treatment at home.  
+Choose one: Hospital Records or Operations Records.
+Careful a click on *Hospital* or *Operations* records, each costs **100 $**.

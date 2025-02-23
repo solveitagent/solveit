@@ -1,0 +1,31 @@
+speaker,message
+Agent,"Thank you for taking the time to speak with us, Mr. Caka. I know you’re not feeling well. Can you tell us where you were working before you became ill?"
+Comment,"lying in bed, clearly irritated"
+Besart,"I work at a law firm here in Prishtina—Judex. Sometimes I meet with clients wherever they are. Now, can we make this quick? I don’t have time for this."
+Agent,Of course. When did you first start feeling unwell?
+Besart,"On October 1st. It started with a sore throat, and by the next day, I was feeling completely drained."
+Agent,Where were you in the days leading up to your illness?
+Besart,I had a couple of meetings. One was with a client in Drenas. It was nothing out of the ordinary. We discussed… business.
+Agent,Do you recall anything unusual about the client?
+Comment,hesitates briefly
+Besart,"They seemed distracted, a bit off. But I didn’t pry—it’s not my job to get involved in their personal matters."
+Agent,What line of work was this client in?
+Comment,"pauses, choosing his words carefully"
+Besart,"Research. They work in research. Specifically on viruses, I believe."
+Agent,Research on viruses? That’s quite specific. Did you know them well?
+Besart,"Not personally. It was a professional consultation. I offer advice on patents and intellectual property, and that’s all I’ll say about it."
+Agent,Did this client mention any concerns or frustrations?
+Comment,looks annoye
+Besart,"They seemed frustrated with their work, sure. Something about… not getting the credit they felt they deserved. Look, I don’t want to discuss my clients. Can we move on?"
+Agent,Did you have any close contact with family or colleagues after meeting with this client?
+Besart,"My parents live nearby, and I’ve seen them recently. They’re not feeling great, either. That’s why I’m trying to limit contact now."
+Agent,"Thank you, Mr. Caka. One last question—how long have you been consulting with this particular client?"
+Comment,shifts uncomfortably
+Besart,"A while. They’ve been exploring their options, trying to figure out the best way to move forward with their work."
+Agent,Understood. Can you give us their name?
+Besart,I would not like too.
+Agent,We appreciate your cooperation and hope you feel better soon.
+Comment,waves dismissively
+Besart,Fine. Just don’t take up more of my time.
+Hint,"**Open:**  
+- CC N"

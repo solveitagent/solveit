@@ -1,0 +1,24 @@
+speaker,message
+Agent,"Inspector Zogaj, thank you for taking the time to speak with us. We’re revisiting the break-in case at the Biology & Chemistry Lab of the University of Prishtina, as it might be linked to the virus outbreak. Can you tell us what you recall about the investigation?"
+Inspector Zogaj,"The break-in? Yes, I remember it. Ms. Lea Pula reported it, claiming she arrived at the lab and found the door ajar. She said she saw someone running out—a male, wearing a lab coat."
+Agent,And the entry logs?
+Inspector Zogaj,"Taulant Gashi’s entries matched perfectly with his account—entered in the morning, left in the afternoon. Lea’s, however, did not. She claimed she entered at 18:40, but the logs show her entry at 18:15. When confronted, she gave some excuse about losing her ID card, which we couldn’t confirm."
+Agent,Was there anything missing from the lab?
+Inspector Zogaj,"No. That’s the frustrating part. Nothing was reported stolen. There were signs of tampering near the N-Serum container, but it was still there. With the virus outbreak demanding our attention, we had to deprioritize the case."
+Agent,"Inspector, we have reason to believe that this break-in might be directly connected to the outbreak."
+Comment,"pauses, surprised"
+Inspector Zogaj,Connected to the outbreak? That’s quite a leap.
+Agent,"We’re following leads that suggest a possible link. We’re on it, but this case needs renewed attention."
+Comment,sighs
+Inspector Zogaj,"If that’s true, then it’s much bigger than we thought. I’ll support your team however I can. Let me know what you need."
+Agent,"Thank you, Inspector. We’ll be in touch."
+Hint,"**Discard:**
+- SC 19
+
+**Open:** 
+- CC Q, 
+- CC I,
+- SC 21
+
+
+"

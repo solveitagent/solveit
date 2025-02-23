@@ -1,0 +1,32 @@
+You decided to visit the Hospital. 
+Move the location token to the *Hospital* and reduce your funds by **100 $** on the gameboard.
+
+# Cases
+
+### Drita Konjufca
+- **Date of Illness**: Sep-28  
+- **Places Visited**: Local Coffee Shop (Drenas), Pharmacy (Drenas)  
+- **Symptoms**: Fever, Muscle Pain  
+
+---
+
+### Lira Tahiri
+- **Date of Illness**: Sep-29  
+- **Places Visited**: Local Market (Drenas), Bus Station (Drenas)  
+- **Symptoms**: Headache, Sore Throat  
+
+---
+
+### Valon Fejzullahu
+- **Date of Illness**: Oct-03  
+- **Places Visited**: Gym (Lipjan)  
+- **Symptoms**: Headache, Nausea 
+
+---
+### Taulant Gashi
+- **Date of Illness**: Sep-29  
+- **Places Visited**: Bus Station (Drenas), Local Coffee Shop (Drenas)  
+- **Symptoms**: Fever, Muscle Pain  
+
+
+**Open: SC 10**
