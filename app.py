@@ -907,14 +907,14 @@ login_screen = html.Div([
                 children=[
                     dbc.Input(
                         id="username_login",
-                        value='mullatahiri.aurora@gmail.com',
+                        value='',
                         placeholder="Enter your username",
                         type="text",
                         style={"marginBottom": "10px"},
                     ),
                     dbc.Input(
                         id="password_login",
-                        value='lepuri',
+                        value='',
                         placeholder="Enter your password",
                         type="password",
                         style={"marginBottom": "20px"},
