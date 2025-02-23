@@ -1874,6 +1874,7 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
     if elapsed_time % 3 == 0 and elapsed_time != 0:
         for city, value in nr_cities_infected.items():
             if value > 0:
+                print(city)
                 new_nr_infected = value + math.ceil(
                     value * virus_infection_rate * cities_info[cities_info.City == city]['Population rel'].iloc[0])
                 if cities_info[cities_info.City == city].iloc[0].Population >= new_nr_infected:
