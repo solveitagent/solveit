@@ -171,3 +171,7 @@ cython_debug/
 .pypirc
 Dashboard_with_login_livemsg-Copy1.ipynb
 Untitled.ipynb
+data/culprits/.DS_Store
+data/.DS_Store
+.idea/workspace.xml
+.idea/inspectionProfiles/profiles_settings.xml

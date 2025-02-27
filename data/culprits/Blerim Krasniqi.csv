@@ -1,33 +1,31 @@
-speaker,message,,
-Agent,"Thank you for speaking with us, Blerim. Let’s start with the basics. When did you first notice symptoms?",,
-Blerim, It was October 1st. I had a headache and a sore throat. I didn’t think much of it at first—it felt like a regular cold.,,
-Agent,Where were you in the days leading up to your illness?,,
-Blerim,I usually stick to a routine. I went to the local market and the gym in Prishtina.,,
-Agent,Did you notice anything unusual at either location?,,
-Blerim,"Not really. The market was its usual busy self, and the gym was crowded, as always. Nothing stood out to me.",,
-Agent,Did you have any contact with people who seemed unwell?,,
-Blerim ,"No, not that I can recall. Most people were just focused on their workouts at the gym.",,
-Agent,"So, nothing unusual?",,
-Blerim,"Well, actually… earlier, I slipped a letter into Rina’s bag. It was our little secret—a blend of fitness, history, and a promise.",,
-Agent,A letter? For what?,,
-Blerim,Well Rina is into detective games. So I was trying to send not just a clue to the gym’s hidden corner; more like a  reminder of our shared journey at the gym. ,,
-Agent,Looks like love and mystery are working out hand in hand here.,,
-Blerim,You could say that. Rina and I always find our way.,,
-Agent,Tell us about yourself. What do you do?,,
-Blerim," I’m a journalism student, and I work for Koha Ditore. It’s a lot to balance, but I enjoy it. Lately, I've been investigating a break-in that occurred on September 28, 2024, at the University of Prishtina. 
-",,
-Agent,And what did you find out from your search?,,
-Blerim,"The investigation is still ongoing from the police, but check out my article.",,
-Agent ,"Do you live alone, or did anyone in your household fall ill after you?",,
-Blerim,"I live alone here in Prishtina, so I didn’t have much interaction with anyone at home.",,
-Comment,pauses briefly,,
-Agent,Did you meet with anyone socially after your gym visit?,,
-Blerim," No, not really. I just went about my day as usual.",,
-Agent,"Blerim, you mentioned the gym earlier. Where do you usually go? Also, were you there alone?",,
-Comment,fidgets slightly,,
-Blerim,"Yes, I usually do. I go to Fivestar Fitness Grand Hotel Gym.  It’s my time to focus and clear my head.",,
-Agent ,"Thank you, Blerim. If we need further clarification, we’ll reach out.",,
+speaker,message
+Agent,"Thank you for speaking with us, Blerim. Let's start with the basics. When did you first notice symptoms?"
+Blerim,"It was October 1st. I had a headache and a sore throat. I didn't think much of it at first'it felt like a regular cold."
+Agent,Where were you in the days leading up to your illness?
+Blerim,I usually stick to a routine. I went to the local market and the gym in Prishtina.
+Agent,Did you notice anything unusual at either location?
+Blerim,"Not really. The market was its usual busy self, and the gym was crowded, as always. Nothing stood out to me."
+Agent,Did you have any contact with people who seemed unwell?
+Blerim,"No, not that I can recall. Most people were just focused on their workouts at the gym."
+Agent,"So, nothing unusual?"
+Blerim,"Well, actually earlier, I slipped a letter into Rina's bag. It was our little secret blend of fitness, history, and a promise."
+Agent,A letter? For what?
+Blerim,"Well Rina is into detective games. So I was trying to send not just a clue to the gym's hidden corner; more like a  reminder of our shared journey at the gym."
+Agent,Looks like love and mystery are working out hand in hand here.
+Blerim,You could say that. Rina and I always find our way.
+Agent,Tell us about yourself. What do you do?
+Blerim,"I'm a journalism student, and I work for Koha Ditore. It's a lot to balance, but I enjoy it. Lately, I've been investigating a break-in that occurred on September 28, 2024, at the University of Prishtina."
+Agent,And what did you find out from your search?
+Blerim,"The investigation is still ongoing from the police, but check out my article."
+Agent,"Do you live alone, or did anyone in your household fall ill after you?"
+Blerim,"I live alone here in Prishtina, so I didn't have much interaction with anyone at home."
+Comment,pauses briefly
+Agent,Did you meet with anyone socially after your gym visit?
+Blerim,"No, not really. I just went about my day as usual."
+Agent,"Blerim, you mentioned the gym earlier. Where do you usually go? Also, were you there alone?"
+Comment,fidgets slightly
+Blerim,"Yes, I usually do. I go to Fivestar Fitness Grand Hotel Gym. It's my time to focus and clear my head."
+Agent,"Thank you, Blerim. If we need further clarification, we'll reach out."
 Blerim,"Sure, no problem.",,
 Hint,"**Open:**
-- CC LL",,
-,,,
+- CC LL"
