@@ -28,7 +28,8 @@ CC O,CC O.jpg,CC O,  ,  ,FALSE
 CC M,CC M.jpg,CC M,  ,  ,FALSE
 CC N,CC N.JPG,CC N,  ,  ,FALSE
 CC U,CC U.jpg,CC U,  ,- 🔎 MC 4,TRUE
-CC P,CC P.png,CC P ,  ,  ,FALSE
+CC P,CC P.png,CC P,,"**Open: CC Q**
+**Discard: CC P**",FALSE
 CC Q,CC Q.jpg,CC Q,  ,  ,FALSE
 CC I,CC I.png,CC I,  ,  ,FALSE
 CC V,CC V.jpg,CC V,  ,- 🔎 MC 5,TRUE
