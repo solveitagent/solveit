@@ -36,11 +36,11 @@
 
 **Inspector Zogaj:** Paranoid? Care to explain?  
 
-**Taulant:** She sometimes misplaces things, and then assumes something’s wrong or someone’s trying to sabotage her. It’s a bit much, to be honest.  
+**Taulant:** She sometimes misplaces things, and then assumes something’s wrong or someone’s trying to sabotage her.  
 
 **Inspector Zogaj:** And what did you do after leaving the lab today?  
 
-**Taulant:** I left for Drenas shortly after. I needed to take some time away from the stress of research.  
+**Taulant:** I left for Drenas shortly after. I needed to take some time away from the stress of research. I wanted to return home. 
 
 **Inspector Zogaj:** Thank you for your cooperation, Mr. Gashi. If I have further questions, I’ll reach out again.  
 
@@ -48,10 +48,8 @@
 
 **End of Interview**
 
+- **Open**: CC I
 
-- **Search Interview**: Ardian Zogaj
-- A legal expert or an undercover worker opens **SC 14**
-- 🔎 **MC 3**
 - **Discard**: CC P, CC Y
 
 
