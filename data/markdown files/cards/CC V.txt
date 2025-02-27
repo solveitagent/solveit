@@ -2,11 +2,8 @@
 
 With a satisfying click, the locker opens, revealing its contents. Inside, you find a collection of neatly organized notes, a small vial labeled **"H₂O Compound,"** and a curious bookmark referencing Helium from the periodic table. You chuckle—she truly is obsessed with chemical compounds.  
 
-Among the items, you also spot a partially filled form for a new ID card application and a business card.  
-
 **Take a closer look! Well done, team!**  
 
-- **Open**: SC 22, CC R, CC G, CC H
-- **Discard**: SC 21, CC S, CC Q, CC I
+- **Open**: CC R, CC H, SC 22
 - **Search in Archive**: Application 159
-
+- **Discard**: SC 21, CC S, CC Q, CC I, CC V
