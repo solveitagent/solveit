@@ -7,5 +7,5 @@
 | 28/09/2024 18:15   | 1565    | Entered Lab  |
 
 - **Open**: SC 18
-- **Discard**: CC O, CC U, CC X
-- **Search in Archive**: Lea Pula - interview transcript with Inspector Ardian Zogaj
+- **Search in Archive**: Lea Pula 
+- **Discard**: CC O, CC U, CC X, CC F
