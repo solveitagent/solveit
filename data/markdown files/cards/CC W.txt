@@ -1,12 +1,19 @@
-With a tense pause, the lock gives way, and the locker creaks open to reveal its contents. Inside, you find a crumpled letter addressed to **Taulant,** clearly written in frustration, as it appears to be from **Lea.** 
-Beside it lies a notebook, its pages filled with research and contacts for pharmaceutical companies specializing in antiviral solutions.  
+**Taulant's Locker Opened!**
+
+With a tense pause, the lock gives way, and the locker creaks open to reveal its contents. 
+A notebook lies a notebook, its pages filled with research and contacts for pharmaceutical companies specializing in antiviral solutions.  
 
 
 **Take a closer look! Well done, team!**  
 
-- **Open: ** CC T,
-- **Discard:** SC 21, SC 22, CC F, CC G+, CC H+, CC L+, CC T, CC R.
-- **Search in archive:** Letter 122.
+- **Open: ** CC T
+
+- A legal expert or an undercover worker opens **SC 14** 
+
+🔎 **MC 3** 
+
+- **Discard:** SC 22, CC G, CC H, CC L
 
 
-**Well done agents. After you finish checking all the clues, please proceed to Final Answers in the SolveIt Website!**  
+
+
