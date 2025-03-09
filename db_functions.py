@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import pandas as pd
+from datetime import datetime
 
 def read_sql_data(sql_query):
     USER = os.getenv('db_user')
@@ -196,3 +197,23 @@ def read_all_users():
     df = read_sql_data(sql_query_user_mtd)
 
     return df
+
+
+def save_help_data(username, help_data, comments, time_start):
+    sql_query = f'''
+        INSERT INTO end_game_table (username, comments, mc_1, mc_2, mc_3, mc_4, mc_5, mc_6, mc_7, mc_8, mc_9, finished_time) 
+        VALUES ('{username}', 
+                '{comments}', 
+                '{help_data['mc 1']}', 
+                '{help_data['mc 2']}', 
+                '{help_data['mc 3']}', 
+                '{help_data['mc 4']}', 
+                '{help_data['mc 5']}', 
+                '{help_data['mc 6']}', 
+                '{help_data['mc 7']}', 
+                '{help_data['mc 8']}', 
+                '{help_data['mc 9']}', 
+                '{time_start}');
+
+    '''
+    insert_edit_sql_data(sql_query)

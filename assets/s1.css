@@ -61,6 +61,14 @@
   box-sizing: border-box;
 }
 
+/* For devices smaller than 450px */
+@media (max-width: 450px) {
+  .column,
+  .columns {
+    margin-left: 4%;
+  }
+}
+
 /* For devices larger than 400px */
 @media (min-width: 400px) {
   .container {
@@ -73,10 +81,6 @@
 @media (min-width: 550px) {
   .container {
     width: 80%;
-  }
-  .column,
-  .columns {
-    margin-left: 4%;
   }
 
   .one.column,
@@ -577,7 +581,7 @@ there.
     display: block !important;
   }
   .pretty_container {
-    margin: 0 !important;
+    /*margin: 0 !important;*/
     margin-bottom: 25px !important;
   }
   #individual_graph,

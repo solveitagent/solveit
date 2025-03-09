@@ -121,6 +121,12 @@ final_answers_dropdown_options = {
     ],
 }
 
+
+help_data = {}
+for crd in cards[cards.Code.str.contains('mc')].Code:
+    help_data[crd] = 'not_opened'
+
+
 app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[dbc.icons.BOOTSTRAP, dbc.themes.BOOTSTRAP,
                                                                          'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css'],
                 external_scripts=[
@@ -577,7 +583,18 @@ final_answers_layout = html.Div(
 
                     *The line goes quiet, waiting for your response!*
                     '''),
-
+                    html.Div(
+                        children=[
+                            dcc.Markdown('''
+                            **Can you please share your impressions and comments about this game?**
+                            ''', style={'alignItems': 'center'}),
+                            dcc.Textarea(
+                                id='comments_textarea',
+                                placeholder='Comments!',
+                                style={'width': '100%', 'height': 'auto', 'backgroundColor': 'rgba(0,0,0,0)'},
+                            ),
+                        ]
+                    ),
                     html.Div(
                         html.Button('Submit', id='button_clicked', style={'width': '150px', 'alignItems': 'center'}),
                         style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
@@ -1217,6 +1234,7 @@ app.layout = dmc.NotificationsProvider(
         dcc.Store(id='archive_button_clicked_3sec_delay', storage_type="local"),
         dcc.Store(id='cards_open', data={}, storage_type="local"),
         dcc.Store(id='last_touched_button', storage_type="local"),
+        dcc.Store(id="help_data", data=help_data, storage_type="local"),
         dcc.Store(id="previous_url", data=''),
         dcc.Interval(
             id='interval-component',
@@ -1531,6 +1549,7 @@ def handle_register(n_clicks, name, surname, email, password, previous_url):
                                      "time": '0 Mins',
                                      "store_what_happened": None,
                                      "nr_cities_infected": cities_infected_beginning,
+                                     "help_data":help_data,
                                      "virus_infection_rate": 0.2,
                                      "restart_timer_state": 0,
                                      "should_we_call_popup": None,
@@ -1643,6 +1662,7 @@ def handle_logout(logout_button, time, cities_infected, money_left, store_what_h
     Output('money_left_cards', 'children', allow_duplicate=True),
     Output('store_what_happened', 'data', allow_duplicate=True),
     Output('nr_cities_infected', 'data', allow_duplicate=True),
+    Output('help_data', 'data', allow_duplicate=True),
     Output('virus_infection_rate', 'data', allow_duplicate=True),
     Output('restart_timer_state', 'data', allow_duplicate=True),
     Output('should_we_call_popup', 'data', allow_duplicate=True),
@@ -1665,7 +1685,7 @@ def handle_restartgame(restart_button):
     if restart_button:
         button_, style_ = switch_between_input_and_back_button_archive('back_button')
         return (0, '0 Mins', '0 Mins', '0 Mins', '3', '3', '3', '1000$', '1000$', '1000$', None,
-                cities_infected_beginning, 0.2,
+                cities_infected_beginning, help_data, 0.2,
                 -1, None, {"archive_parent": None, "archive_child1": None, "archive_child2": None},
                 {"NOTE_1": 0, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0},
                 {"Hospital": 0, "Police": 0, "CCTV": 0, "Operations": 0, "Lab": 0, "Evidence Photos": 0}, None, None,
@@ -2637,13 +2657,15 @@ def button_pressed(cards_open):
     Output('card_pwd_button', 'style'),
     Output('cards_password', 'value'),
     Output('cards_password', 'placeholder'),
+    Output('help_data', 'data', allow_duplicate=True),
     [Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks')],
     State('small_cards_grid', 'children'),
     State('cards_input', 'value'),
     State('cards_open', 'data'),
+    State('help_data', 'data'),
     prevent_initial_call=True
 )
-def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
+def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, help_data):
     ctx = dash.callback_context
     if small_cards_grid:
         nr_of_children = len(small_cards_grid)
@@ -2665,7 +2687,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
             if len(selectedRows) == 0:
                 if cards_input == '':
                     return no_update
-                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update
+                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update, no_update
             else:
                 card_data = selectedRows.iloc[0]
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
@@ -2685,6 +2707,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
                                         'backgroundColor': '#F5F5F5'}
                 if card_data['Code'] not in cards_open.values():
                     cards_open = cards_open | {str(uuid4()): card_data['Code']}
+                    help_data[card_data['Code'].lower()] = 'opened'
 
                 if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
                     image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Culprit2.jpg"
@@ -2709,10 +2732,11 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
                         "marginLeft": "-80%",
                         "marginBottom": "12px",
                     }
+
                 return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                     'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                            'Hint'], image, cards_open, False, no_update, no_update, {
-                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder
+                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data
         elif button_index in cards['Code'].tolist():
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
@@ -2743,7 +2767,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
                         "cursor": "pointer",
                         "object-fit": "cover",
                     }
-                    style_layover = {
+                style_layover = {
                         "position": "absolute",
                         "bottom": "10px",
                         "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
@@ -2755,7 +2779,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
             return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                 'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                        'Hint'], image, cards_open, False, no_update, no_update, {
-                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder
+                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update
         else:
             return no_update
 
@@ -2809,11 +2833,13 @@ def display_click_data(card_pwd_button, cards_password, single_card_title, popup
 @app.callback(
     Output('alert_more_help', 'opened', allow_duplicate=True),
     Output('alert_more_help_text', 'children', allow_duplicate=True),
+    Output('help_data', 'data', allow_duplicate=True),
     Input('markdown_text_help_more_button', 'n_clicks'),
     State('single_card_title', 'children'),
+    State('help_data', 'data'),
     prevent_initial_call=True
 )
-def display_click_data(markdown_text_help_more_button, single_card_title):
+def display_click_data(markdown_text_help_more_button, single_card_title, help_data):
     ctx = dash.callback_context
     if not ctx.triggered:
         return no_update
@@ -2825,7 +2851,8 @@ def display_click_data(markdown_text_help_more_button, single_card_title):
         markdown_single_file = markdown_lists[(markdown_lists['title'] == single_card_title.lower())]
         if len(markdown_single_file) > 0:
             markdown_single_file = markdown_single_file['hint'].iloc[0]
-            return True, markdown_single_file
+            help_data[card_data['Code'].lower()] = 'help'
+            return True, markdown_single_file, help_data
     return no_update
 
 
@@ -2834,10 +2861,13 @@ def display_click_data(markdown_text_help_more_button, single_card_title):
     Output('alert_other_text', 'children'),
     Input("button_clicked", "n_clicks"),
     State('time_sgs_archive', 'children'),
+    State('help_data', 'data'),
+    State('comments_textarea', 'value'),
+    State('store_email', 'data'),
     [State(f"question_answer_input_{index}", "value") for index in range(len(final_answers_dropdown_options.keys()))],
     # Inputs for all questions
 )
-def collect_answers(n_clicks, time, *answers):
+def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *answers):
     if n_clicks:
         result = [answers[i] for i in range(len(answers)) if answers[i]]
         real_answers = ['Drenasi', 'Taulant Gashi', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
@@ -2850,6 +2880,8 @@ def collect_answers(n_clicks, time, *answers):
                 incorrect_answers[list(final_answers_dropdown_options.keys())[i]] = result[i]
 
         if len(incorrect_answers) == 0:
+
+            save_help_data(store_email['email'], help_data, comments_textarea, int(store_money_cities_time['time'].split(' ')[0]))
             return True, 'Congrats, you solved the case in ' + time + '!'
         else:
             to_return_text = [dcc.Markdown('**Wrong answers**'), html.Br()]
