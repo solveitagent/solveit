@@ -122,9 +122,9 @@ final_answers_dropdown_options = {
 }
 
 
-help_data = {}
+help_data_start = {}
 for crd in cards[cards.Code.str.contains('mc')].Code:
-    help_data[crd] = 'not_opened'
+    help_data_start[crd] = 'not_opened'
 
 
 app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[dbc.icons.BOOTSTRAP, dbc.themes.BOOTSTRAP,
@@ -1234,7 +1234,7 @@ app.layout = dmc.NotificationsProvider(
         dcc.Store(id='archive_button_clicked_3sec_delay', storage_type="local"),
         dcc.Store(id='cards_open', data={}, storage_type="local"),
         dcc.Store(id='last_touched_button', storage_type="local"),
-        dcc.Store(id="help_data", data=help_data, storage_type="local"),
+        dcc.Store(id="help_data", data=help_data_start, storage_type="local"),
         dcc.Store(id="previous_url", data=''),
         dcc.Interval(
             id='interval-component',
@@ -1549,7 +1549,6 @@ def handle_register(n_clicks, name, surname, email, password, previous_url):
                                      "time": '0 Mins',
                                      "store_what_happened": None,
                                      "nr_cities_infected": cities_infected_beginning,
-                                     "help_data":help_data,
                                      "virus_infection_rate": 0.2,
                                      "restart_timer_state": 0,
                                      "should_we_call_popup": None,
@@ -1685,7 +1684,7 @@ def handle_restartgame(restart_button):
     if restart_button:
         button_, style_ = switch_between_input_and_back_button_archive('back_button')
         return (0, '0 Mins', '0 Mins', '0 Mins', '3', '3', '3', '1000$', '1000$', '1000$', None,
-                cities_infected_beginning, help_data, 0.2,
+                cities_infected_beginning, help_data_start, 0.2,
                 -1, None, {"archive_parent": None, "archive_child1": None, "archive_child2": None},
                 {"NOTE_1": 0, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0},
                 {"Hospital": 0, "Police": 0, "CCTV": 0, "Operations": 0, "Lab": 0, "Evidence Photos": 0}, None, None,
@@ -1739,6 +1738,7 @@ def handle_login(back_button_storyline, previous_url):
     Output('store_money_cities_time', 'data', allow_duplicate=True),
     Output('previous_url', 'data', allow_duplicate=True),
     Output('show_loader_div', 'children'),
+    Output('help_data', 'data', allow_duplicate=True),
     Input({"type": "storyline_buttons", "index": ALL}, "n_clicks"),
     State("store_email", "data"),
     State("url", "pathname"),
@@ -1779,7 +1779,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                     'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [], button_,
                     style_,
                     {'time': our_user['time'], 'cities': our_user['cities_infected'], 'money': our_user['money_left']},
-                    previous_url, '')
+                    previous_url, ''), help_data_start
 
     return no_update
 
