@@ -17,7 +17,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Attachment, FileContent, FileName, FileType, Disposition, ContentId
 import base64
 import os
-from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users
+from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users, save_help_data
 
 
 archive_culprits_table_df = pd.read_csv(
@@ -593,7 +593,8 @@ final_answers_layout = html.Div(
                                 placeholder='Comments!',
                                 style={'width': '100%', 'height': 'auto', 'backgroundColor': 'rgba(0,0,0,0)'},
                             ),
-                        ]
+                        ],
+                        style={'marginTop':'15px'}
                     ),
                     html.Div(
                         html.Button('Submit', id='button_clicked', style={'width': '150px', 'alignItems': 'center'}),
@@ -1779,7 +1780,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                     'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [], button_,
                     style_,
                     {'time': our_user['time'], 'cities': our_user['cities_infected'], 'money': our_user['money_left']},
-                    previous_url, ''), help_data_start
+                    previous_url, '', help_data_start)
 
     return no_update
 
@@ -2851,7 +2852,7 @@ def display_click_data(markdown_text_help_more_button, single_card_title, help_d
         markdown_single_file = markdown_lists[(markdown_lists['title'] == single_card_title.lower())]
         if len(markdown_single_file) > 0:
             markdown_single_file = markdown_single_file['hint'].iloc[0]
-            help_data[card_data['Code'].lower()] = 'help'
+            help_data[single_card_title.lower()] = 'help'
             return True, markdown_single_file, help_data
     return no_update
 
@@ -2881,7 +2882,7 @@ def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *
 
         if len(incorrect_answers) == 0:
 
-            save_help_data(store_email['email'], help_data, comments_textarea, int(store_money_cities_time['time'].split(' ')[0]))
+            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]))
             return True, 'Congrats, you solved the case in ' + time + '!'
         else:
             to_return_text = [dcc.Markdown('**Wrong answers**'), html.Br()]
