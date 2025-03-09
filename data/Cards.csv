@@ -6,7 +6,7 @@ Y ⚖️ 15 ✺ 5","- A puzzle solver or a codebreaker opens **CC E**
 - 🔎 **MC 1**",FALSE
 CC A,FALSE,CC A,"Your commander after analyzing the data says:
 
-You are looking for a city situated along a river in Kosova that is estimated to be the 5th most populous in the Prishtina district.",- A deduction expert or a codebreaker opens **CC C**,FALSE
+You are looking for a city situated along a river in Kosova that is estimated to be the 5th most populous in the Prishtina district.",- A detective or a codebreaker opens **CC C**,FALSE
 CC C,CC C.png,CC C, , ,FALSE
 CC B,FALSE,CC B,"You find these weird numbers:
 42.X0833, Y.892778","- A puzzle solver, or a codebreaker opens **SC 7**
@@ -21,14 +21,16 @@ In every ⚖️  the balance lies. Not everything is as it seems especially when
 CC F,CC F.jpg,CC F,  ,  ,FALSE
 CC G,CC G.jpg,CC G,  ,  ,FALSE
 CC K,CC K.jpg,CC K,  ,- 🔎 MC 2,TRUE
-CC H,CC H.jpg,CC H,  ,  ,FALSE
-CC J,CC J.png,CC J,,"- A deduction expert, or an undercover worker opens **SC 12**",FALSE
+
+CC H,CC H.jpg,CC H,, "**Open: CC G**,FALSE
+CC J,CC J.png,CC J,,"- A detective, or an cybercrime analyst opens **SC 12**",FALSE
 CC L,CC L.png,CC L,  ,  ,FALSE
 CC O,CC O.jpg,CC O,  ,  ,FALSE
 CC M,CC M.jpg,CC M,  ,  ,FALSE
 CC N,CC N.JPG,CC N,  ,  ,FALSE
 CC U,CC U.jpg,CC U,  ,- 🔎 MC 4,TRUE
-CC P,CC P.png,CC P ,  ,  ,FALSE
+CC P,CC P.png,CC P,,"**Open: CC Q**
+**Discard: CC P**",FALSE
 CC Q,CC Q.jpg,CC Q,  ,  ,FALSE
 CC I,CC I.png,CC I,  ,  ,FALSE
 CC V,CC V.jpg,CC V,  ,- 🔎 MC 5,TRUE
