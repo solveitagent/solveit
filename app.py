@@ -2552,7 +2552,7 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
         if (len(selectedRows) > 0):
 
             suspect_image = selectedRows['Image'].iloc[0]
-            content = pd.read_csv('data/culprits/' + suspects_input.title() + '.csv')
+            content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
 
             if (suspects_input.lower() == 'Taulant Gashi 383'.lower()) & (popup_status['NOTE_2'] == 0):
                 should_we_call_popup = 'NOTE_2'
