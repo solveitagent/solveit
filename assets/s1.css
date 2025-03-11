@@ -39,6 +39,12 @@
 }
 
 
+@media (max-width: 760px) { /* Adjust breakpoint as needed */
+    #offcanvas_scrollable {
+        width: 100% !important;
+    }
+}
+
 #markdown_content img, #markdown_text img {
     max-width: 100%;  /* Resize image to 50% of the parent container */
     height: auto;  /* Keep aspect ratio */

@@ -390,6 +390,8 @@ cards_layout = html.Div(
                                     },
                                     children=[
                                         dbc.Card(
+                                            id='card_body_id',
+                                            children=
                                             dbc.CardBody([
                                                 html.H4(
                                                     id='single_card_title',
@@ -782,7 +784,8 @@ main_screen = html.Div([
                                style={"marginRight": "10px"}),
                     dbc.Button("Open tutorial video", id="open-video-button", color="primary"),
                 ],
-                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'flex-start',
+                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
+                       'flexWrap': 'wrap', 'maxWidth':'100%',
                        'marginBottom': '20px'}
             ),
             # Timer display
@@ -1341,10 +1344,11 @@ def send_email(receiver_email):
                 <p>Keep in mind you get <strong>3 free</strong> hints from an expert, each extra costs <strong>100$</strong>. Follow the <strong>Rule Book</strong> for more information.</p>
 
                 <p class="warning">The fate of Kosovo is in your hands. Proceed with caution but act decisively. Time is not on our side.</p>
+                
+                <p>If you want to train-before the mission, open <strong>SC 1</strong>. If you want to start the mission directly open <strong>SC 5</strong>.</p>
             </div>
             <div class="footer">
                 <p>Stay sharp, Agents. Kosovo is counting on you.</p>
-                <p><strong>Open SC 5</strong></p>
                 <img src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/solveIT-logo.png" alt="SolveIT Logo" class="logo">
             </div>
         </div>
@@ -1760,7 +1764,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
             our_user = user_data[store_email['email'].lower()]
             button_, style_ = switch_between_input_and_back_button_archive('back_button')
             try:
-                print('Cant send email')
+                print('Sent email')
                 send_email(store_email['email'].lower())
             except Exception as e:
                 print(f'No Internet connection or {e}')
@@ -2598,6 +2602,10 @@ def toggle_modal(cards_open):
     if len(cards_open) > 0:
         list_of_buttons_to_return = []
         for card in cards_open.values():
+            if "mc" in card.lower():
+                bcg_color = 'rgb(69, 155, 196)'
+            else:
+                bcg_color = 'rgb(162, 138, 208)'
             button = dbc.Button(
                 card,
                 className="card-title",
@@ -2612,7 +2620,7 @@ def toggle_modal(cards_open):
                     "borderColor": "black",
                     "borderWidth": "1px",
                     "fontWeight": "bold",
-                    "backgroundColor": "#fdf8e4",
+                    "backgroundColor": bcg_color,
                     "backgroundImage": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
                     "padding": "10px"},
                 # id='btn_'+card
@@ -2658,6 +2666,7 @@ def button_pressed(cards_open):
     Output('cards_password', 'value'),
     Output('cards_password', 'placeholder'),
     Output('help_data', 'data', allow_duplicate=True),
+    Output('card_body_id', 'style'),
     [Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks')],
     State('small_cards_grid', 'children'),
     State('cards_input', 'value'),
@@ -2687,15 +2696,28 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
             if len(selectedRows) == 0:
                 if cards_input == '':
                     return no_update
-                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update, no_update
+                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
             else:
                 card_data = selectedRows.iloc[0]
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
                 if card_data['Code'].lower().startswith("mc"):
                     placeholder = 'Please enter the mystery word'
+                    color_cardbutton = 'rgb(69, 155, 196)'
                 else:
                     placeholder = 'Please enter the password'
+                    color_cardbutton = 'rgb(162, 138, 208)'
+
+                card_buton_style = {
+                    "width": "100%",  # Adjust dynamically
+                    "max-width": "400px",  # Limit max width on larger screens
+                    "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                    "border": "2px solid #2d2b28",
+                    "border-radius": "5px",
+                    "background-color": color_cardbutton,
+                    "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                    "padding": "20px",
+                }
 
                 if (card_data.hasPassword == False):
                     style_input_pwd = {'width': '100%', 'display': 'none'}
@@ -2710,7 +2732,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                     help_data[card_data['Code'].lower()] = 'opened'
 
                 if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
-                    image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Culprit2.jpg"
+                    image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png"
                     style = {'display': 'none'}
                     style_layover = {'display': 'none'}
                 else:
@@ -2736,16 +2758,28 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                 return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                     'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                            'Hint'], image, cards_open, False, no_update, no_update, {
-                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data
+                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data, card_buton_style
         elif button_index in cards['Code'].tolist():
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
             if card_data['Code'].lower().startswith("mc"):
                 placeholder = 'Please enter the mystery word'
+                color_cardbutton = 'rgb(69, 155, 196)'
             else:
                 placeholder = 'Please enter the password'
+                color_cardbutton = 'rgb(162, 138, 208)'
 
+            card_buton_style = {
+                "width": "100%",  # Adjust dynamically
+                "max-width": "400px",  # Limit max width on larger screens
+                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                "border": "2px solid #2d2b28",
+                "border-radius": "5px",
+                "background-color": color_cardbutton,
+                "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                "padding": "20px",
+            }
             if (card_data.hasPassword == False):
                 style_input_pwd = {'width': '100%', 'display': 'none'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
@@ -2754,7 +2788,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                     'backgroundColor': '#F5F5F5'}
             if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
-                image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Culprit2.jpg"
+                image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Unknown.png"
                 style = {'display': 'none'}
                 style_layover = {'display': 'none'}
             else:
@@ -2779,7 +2813,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
             return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                 'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                        'Hint'], image, cards_open, False, no_update, no_update, {
-                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update
+                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update, card_buton_style
         else:
             return no_update
 
