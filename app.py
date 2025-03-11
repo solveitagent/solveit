@@ -1254,7 +1254,7 @@ app.layout = dmc.NotificationsProvider(
                     html.Div(
                         DashPlayer(
                             id="player",
-                            url="https://youtu.be/d5pb9TgCGc0",
+                            url="https://youtu.be/2CDrKvceYPI",
                             controls=True,
                             width="100%",
                             height="100%",  # Ensures it takes full height
