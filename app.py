@@ -1131,6 +1131,10 @@ def storyline_func(storylines_returned):
                     "overflowY": "auto",  # Enables vertical scrolling
                     "whiteSpace": "normal",  # Ensures text wraps to new lines
                     "wordWrap": "break-word",
+		    "display":"flex",
+		    "flexDirection":"column",
+		    "alignItems":"center",
+		    "overflowX": "hidden",
                     "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",  # Optional: Shadow for a card effect
                 }
             )
