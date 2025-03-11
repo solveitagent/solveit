@@ -779,10 +779,11 @@ main_screen = html.Div([
             html.Div(
                 [
                     dbc.Button("Restart Game", id="restart-game-button", color="secondary",
-                               style={"marginRight": "10px"}),
+                               style={"marginRight": "10px", "marginBottom": "10px"}),
                     dbc.Button("Storyline Selection", id="logout-button", color="danger",
-                               style={"marginRight": "10px"}),
-                    dbc.Button("Open tutorial video", id="open-video-button", color="primary"),
+                               style={"marginRight": "10px", "marginBottom": "10px"}),
+                    dbc.Button("Open tutorial video", id="open-video-button", color="primary",
+                               style={"marginBottom": "10px"}),
                 ],
                 style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
                        'flexWrap': 'wrap', 'maxWidth':'100%',
