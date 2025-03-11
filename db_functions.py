@@ -112,7 +112,6 @@ def save_data_logout(username, cities_infected, money_left, time, store_what_hap
         
         
     '''
-    print(sql_query)
     insert_edit_sql_data(sql_query)
 
 
@@ -192,7 +191,6 @@ def read_all_users():
             FROM users
     '''
 
-    print(sql_query_user_mtd)
 
     df = read_sql_data(sql_query_user_mtd)
 

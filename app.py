@@ -58,7 +58,6 @@ for col in ['id']:
     archive_child2[col] = archive_child2[col].str.lower()
 
 users = read_all_users()
-print(users)
 for col in ['username']:
     users[col] = users[col].str.lower()
 
