@@ -1364,8 +1364,8 @@ def send_email(receiver_email):
     # Create Word Document Attachment
     doc_attachment = Attachment(
         FileContent(encoded_doc),
-        FileName('Rules.docx'),
-        FileType('application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+        FileName('RuleBook.pdf'),
+        FileType('application/pdf'),
         Disposition('attachment')  # This will be a downloadable attachment
     )
 
