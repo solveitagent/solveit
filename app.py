@@ -1298,7 +1298,7 @@ app.layout = dmc.NotificationsProvider(
 
 def send_email(receiver_email):
     # Load and encode the Word Document
-    response = requests.get('https://github.com/solveitagent/solveit/raw/refs/heads/main/data/Rules.docx')
+    response = requests.get('https://github.com/solveitagent/solveit/raw/refs/heads/main/data/RuleBook.pdf')
     doc_data = response.content
     encoded_doc = base64.b64encode(doc_data).decode()
 
