@@ -1,65 +1,48 @@
 ID,TEXT,YES,NO,YES Msg,NO Msg
 NOTE_1,"**Commander Elira** calls your team with urgency in her voice:
 
-*""Team, we need more clarity on this virus. What do we know so far? Based on your findings, I must decide on the next critical step to control the situation.""*
+Team, we need more clarity on this virus. What do we know so far? Based on your findings, I must decide on the next critical step to control the situation. You must decide on which measures to prioritize to prevent the virus from spreading further.
 
-You must decide on which measures to prioritize to prevent the virus from spreading further. **Commander Elira** outlines two options, choose only one:
+**Commander Elira** outlines two options, choose only one:
 
 **Option 1**: *Hold a Press Conference*
 - **Action**: Inform the public immediately to exercise caution.
 - **Cost**: Pay the media $100 to broadcast the message widely.
 
 **Option 2**: *Monitor the Situation*
-- **Action**: Avoid creating public panic by withholding the message until more concrete information is gathered."
-
-,Hold a Press Conference,Monitor the Situation,
-"You chose to **Hold a Press Conference**. The media has been paid $100 to broadcast the message, urging the public to exercise caution. While the public is informed, there's a risk of panic if further actions aren't taken quickly."
-",You chose to **Monitor the Situation**. The team doesn't have definitive answers yet but is making progress. More time is needed to gather further information."
-
+- **Action**: Avoid creating public panic by withholding the message until more concrete information is gathered." ,Hold a Press Conference,Monitor the Situation,"You chose to **Hold a Press Conference**. The media has been paid $100 to broadcast the message, urging the public to exercise caution. While the public is informed, there's a risk of panic if further actions aren't taken quickly.","You chose to **Monitor the Situation**. The team doesn't have definitive answers yet but is making progress. More time is needed to gather further information."
 NOTE_2,"**Commander Elira’s** voice crackles urgently through the communication line:
 
-*""Team, have you uncovered anything that could help us counter the virus? The numbers are rising quickly, and time is not on our side. We must tread carefully—we don’t want to incite panic, but we need actionable solutions now. What can you tell me?""*
+Team, have you uncovered anything that could help us counter the virus? The numbers are rising quickly, and time is not on our side. We must tread carefully—we don’t want to incite panic, but we need actionable solutions now. What can you tell me?
+
 Choose only one response:
 
 **Option 1**: *Confiscate the Lab*
-- **Action**: Take full control of the lab to secure all materials and prevent any tampering or misuse.  
+- **Action**: Take full control of the lab to secure all materials and prevent any tampering or misuse.
 - **Cost**: Pay €100 to launch an emergency operation.
 
 **Option 2**: *Request Access from the University*
-- **Action**: Work with the university to gain authorized access to the vaccine, ensuring transparency and academic cooperation."
+- **Action**: Work with the university to gain authorized access to the vaccine, ensuring transparency and academic cooperation.",Confiscate the Lab,Request Access from the University,"You chose to **Confiscate the Lab**. You acted swiftly — no room for delays when lives are at stake. The lab is now under your control. You must immediately analyze the virus and test the vaccine formula to begin mass production.  This decisive move cost your team $100, but you may have just bought the world some time.","You chose to **Request Access from the University**. You’ve chosen the official route. Now it’s forms, approvals, signatures — endless bureaucracy. While you're stuck pushing papers, the virus pushes forward."
+NOTE_4,"Commander Elira calls you, she considers the situation and gives you your next task:
+You are my best agents. Decide on how to handle the situation!
 
-,Confiscate the Lab,Request Access from the University,
-"You chose to **Confiscate the Lab**. 
-You acted swiftly — no room for delays when lives are at stake. The lab is now under your control. You must immediately analyze the virus and test the vaccine formula to begin mass production. 
-This decisive move cost your team $100, but you may have just bought the world some time.",
-"You chose to **Request Access from the University**. You’ve chosen the official route. Now it’s forms, approvals, signatures — endless bureaucracy. While you're stuck pushing papers, the virus pushes forward."
+Choose only one from the two options:
 
-NOTE_4,"Commander Elira calls you, she considers the situation and gives you your next task: 
-
-*""You are my best agents. Decide on how to handle the situation!""*
-Choose only one from the two options: 
-
-
-**Option 1**: *Invest on Hand Sanitizers* 
+**Option 1**: *Invest on Hand Sanitizers*
 
 - **Action**: Distribute hand sanitizers to the public for free and instruct them to use them in crowded spaces.
 - **Cost**: Pay $100 to broadcast the message widely.
 **Option 2**: *Do not Invest*
 
-- **Action**: Advise people to purchase their own hand sanitizers, and ask the media to spread the message of avoiding gatherings in large groups to limit the spread.
-
-",Invest on Hand Sanitizers ,Do not Invest,"You chose to ** Invest on Hand Sanitizers **. **. The public has received hand sanitizers, and they have been instructed to use them and stay away from crowded spaces through the media campaign that you funded. $100 was spent on this initiative to help limit the virus spread.",You chose **Do not Invest**. People are advised to purchase their own hand sanitizers, take good care of their personal hygiene and avoid large gatherings to limit the virus spread. The decision has been made to avoid the investment at this stage.
-
+- **Action**: Advise people to purchase their own hand sanitizers, and ask the media to spread the message of avoiding gatherings in large groups to limit the spread.",Invest on Hand Sanitizers ,Do not Invest,"You chose to **Invest on Hand Sanitizers**. The public has received hand sanitizers, and they have been instructed to use them and stay away from crowded spaces through the media campaign that you funded. $100 was spent on this initiative to help limit the virus spread.","You chose **Do not Invest**. People are advised to purchase their own hand sanitizers, take good care of their personal hygiene and avoid large gatherings to limit the virus spread. The decision has been made to avoid the investment at this stage."
 NOTE_5,"**Commander Elira’s** voice crackles through the secure line:
 
-*""Team, time is running out. The situation is growing more critical, and we need actionable information. Do you have any updates on the investigation? Have you uncovered anything that could aid us in fighting the virus’s spread? Do we have any suspects yet?""*
+Team, time is running out. The situation is growing more critical, and we need actionable information. Do you have any updates on the investigation? Have you uncovered anything that could aid us in fighting the virus’s spread? Do we have any suspects yet?
 Your team considers the question carefully. You must choose your response:
 
-**Option 1**:*Analyze N-Serum* 
+**Option 1**:*Analyze N-Serum*
 - **Action**: Yes, Commander, we have a breakthrough. We want to analyze the N-Serum Vaccine sample and potentially uncover vital information about the virus.
 - **Cost**: Pay $100 to launch an emergency operation.
 
 **Option 2**:*Investigate Further*
-- **Action**: No, Commander, we need more time to investigate. Continue delving into leads to solidify your case.
-
-",Analyze N-Serum,Investigate Further,You chose **Analyze N-Serum**. The team has made a breakthrough and paid $100 to analyze the N-Serum sample. This analysis could potentially uncover vital information about the virus.,You chose **Investigate Further**. More time is needed for the investigation. The team works harder to solidify the case.
+- **Action**: No, Commander, we need more time to investigate. Continue delving into leads to solidify your case.",Analyze N-Serum,Investigate Further,"You chose **Analyze N-Serum**. The team has made a breakthrough and paid $100 to analyze the N-Serum sample. This analysis could potentially uncover vital information about the virus.","You chose **Investigate Further**. More time is needed for the investigation. The team works harder to solidify the case."
