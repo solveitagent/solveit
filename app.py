@@ -17,7 +17,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Attachment, FileContent, FileName, FileType, Disposition, ContentId
 import base64
 import os
-from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users
+from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users, save_help_data
 
 
 archive_culprits_table_df = pd.read_csv(
@@ -58,7 +58,6 @@ for col in ['id']:
     archive_child2[col] = archive_child2[col].str.lower()
 
 users = read_all_users()
-print(users)
 for col in ['username']:
     users[col] = users[col].str.lower()
 
@@ -120,6 +119,12 @@ final_answers_dropdown_options = {
         {"label": "I dont know", "value": "I dont know"},
     ],
 }
+
+
+help_data_start = {}
+for crd in cards[cards.Code.str.contains('mc')].Code:
+    help_data_start[crd] = 'not_opened'
+
 
 app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[dbc.icons.BOOTSTRAP, dbc.themes.BOOTSTRAP,
                                                                          'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css'],
@@ -372,124 +377,132 @@ cards_layout = html.Div(
                     [
                         html.Div(
                             id='single_card_div',
-                            style={'display': 'none'},
-                            children=
-                            html.Div(
-                                style={
-                                    "width": "100%",
-                                    "display": "flex",
-                                    "align-items": "center",
-                                    "justify-content": "center",
-                                    "padding": "20px",
-
-                                },
-                                children=[
-                                    dbc.Card(
-                                        dbc.CardBody([
-                                            html.H4(
-                                                id='single_card_title',
-                                                className="card-title",
-                                                style={
-                                                    "text-align": "center",
-                                                    "font-family": "'Libre Baskerville', serif",  # Classic serif font
-                                                    "font-size": "1.8em",
-                                                    "font-weight": "bold",
-                                                    "color": "#2d2b28",
-                                                }
-                                            ),
-                                            html.Hr(style={"border-top": "2px solid #2d2b28", "margin": "10px 0"}),
-                                            html.Div(
-                                                children=[
-                                                    html.Img(
-                                                        id="single_card_thumbnail-img",
-                                                        style={
-                                                            "width": "100%",  # Full width of the card
-                                                            "height": "auto",
-                                                            "margin-bottom": "15px",
-                                                            "border": "1px solid #2d2b28",
-                                                            "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
-                                                            "cursor": "pointer",  # Indicate it's clickable
-                                                            "object-fit": "cover",
-                                                            # Maintain aspect ratio while covering
-                                                        }
-                                                    ),
-                                                    html.Img(
-                                                        id="overlay_image",
-                                                        src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/magnifier.png",
-                                                        # Replace with your overlay image path
-                                                        style={
-                                                            "position": "absolute",
-                                                            "bottom": "17px",
-                                                            # "right": "0",
-                                                            "width": "30px",
-                                                            # Set the desired width of the overlay image
-                                                            "height": "30px",
-                                                            # Set the desired height of the overlay image
-                                                            "opacity": "1",
-                                                            'marginLeft': '2px',
-                                                            'marginBottom': '2px'
-                                                        },
-                                                    ),
-                                                ],
-                                                style={
-                                                    "display": "inline",
-                                                    "justify-content": "center",
-                                                    "align-items": "center",
-                                                    "height": "60%",  # 2:1 aspect ratio height
-                                                    "overflow": "hidden",
-                                                    "position": "relative",
-                                                    "cursor": "pointer"
-                                                },
-                                                className="thumbnail-container"
-                                            ),
-                                            dcc.Markdown(
-                                                id='single_card_text',
-                                                className="card-text",
-                                                style={
-                                                    "white-space": "pre-wrap",
-                                                    "font-family": "'Courier New', monospace",
-                                                    "font-size": "1.2em",
-                                                    "color": "#2d2b28",
-                                                    "line-height": "1.6",
-                                                }
-                                            ),
-                                            html.Div(
-                                                [
-                                                    dbc.Input(id="cards_password",
-                                                              placeholder="Please enter the Mystery Word!",
-                                                              type="password",
-                                                              style={
-                                                                  'background-color': 'rgba(0,0,0,0)',
-                                                                  'border': "1px solid #bbbbbb"
-                                                              }
-                                                              ),
-                                                    html.Div(
-                                                        html.Button('Submit', id='card_pwd_button',
-                                                                    style={'width': '150px', 'alignItems': 'center'}),
-                                                        style={'display': 'flex', 'alignItems': 'center',
-                                                               'justifyContent': 'center', 'marginTop': '30px'}
-                                                    )
-
-                                                ],
-                                                style={'display': 'block'}
-                                            ),
-                                            html.Div(
-                                                style={"border-top": "1px solid #2d2b28", "margin-top": "10px"}
-                                            ),
-                                            dcc.Markdown(id='single_card_hint'),
-                                        ]),
-                                        style={
-                                            "width": "30%",
-                                            "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
-                                            "border": "2px solid #2d2b28",
-                                            "border-radius": "5px",
-                                            "background-color": "#fdf8e4",
-                                            "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
-                                            # Worn texture
-                                            "padding": "20px",
-                                        },
-                                    ),
-                                ]),
+                            style={'display': 'none', 'justify-content': 'center'},  # Center the card
+                            children=[
+                                html.Div(
+                                    style={
+                                        "width": "90%",  # Make it responsive by default
+                                        "max-width": "600px",  # Prevent it from getting too wide
+                                        "display": "flex",
+                                        "align-items": "center",
+                                        "justify-content": "center",
+                                        "padding": "20px",
+                                    },
+                                    children=[
+                                        dbc.Card(
+                                            id='card_body_id',
+                                            children=
+                                            dbc.CardBody([
+                                                html.H4(
+                                                    id='single_card_title',
+                                                    className="card-title",
+                                                    style={
+                                                        "text-align": "center",
+                                                        "font-family": "'Libre Baskerville', serif",
+                                                        "font-size": "clamp(1.4em, 2vw, 2.2em)",  # Responsive text
+                                                        "font-weight": "bold",
+                                                        "color": "#2d2b28",
+                                                    }
+                                                ),
+                                                html.Hr(style={"border-top": "2px solid #2d2b28", "margin": "10px 0"}),
+                                                html.Div(
+                                                    children=[
+                                                        html.Img(
+                                                            id="single_card_thumbnail-img",
+                                                            style={
+                                                                "width": "100%",  # Always fit the container
+                                                                "height": "auto",
+                                                                "margin-bottom": "15px",
+                                                                "border": "1px solid #2d2b28",
+                                                                "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                                                                "cursor": "pointer",
+                                                                "object-fit": "cover",
+                                                            }
+                                                        ),
+                                                        html.Img(
+                                                            id="overlay_image",
+                                                            src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/magnifier.png",
+                                                            style={
+                                                                "position": "absolute",
+                                                                "bottom": "10px",
+                                                                "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                                                                "height": "clamp(20px, 5vw, 40px)",
+                                                                "opacity": "1",
+                                                                "marginLeft": "-80%",
+                                                                "marginBottom": "12px",
+                                                            },
+                                                        ),
+                                                    ],
+                                                    style={
+                                                        "display": "flex",
+                                                        "justify-content": "center",
+                                                        "align-items": "center",
+                                                        "height": "60%",
+                                                        "overflow": "hidden",
+                                                        "position": "relative",
+                                                        "cursor": "pointer",
+                                                    },
+                                                    className="thumbnail-container"
+                                                ),
+                                                dcc.Markdown(
+                                                    id='single_card_text',
+                                                    className="card-text",
+                                                    style={
+                                                        "white-space": "pre-wrap",
+                                                        "font-family": "'Courier New', monospace",
+                                                        "font-size": "clamp(1em, 1.5vw, 1.2em)",  # Responsive font
+                                                        "color": "#2d2b28",
+                                                        "line-height": "1.6",
+                                                    }
+                                                ),
+                                                html.Div(
+                                                    [
+                                                        dbc.Input(
+                                                            id="cards_password",
+                                                            placeholder="Please enter the Mystery Word!",
+                                                            type="password",
+                                                            style={
+                                                                'background-color': 'rgba(0,0,0,0)',
+                                                                'border': "1px solid #bbbbbb"
+                                                            }
+                                                        ),
+                                                        html.Div(
+                                                            html.Button(
+                                                                'Submit', id='card_pwd_button',
+                                                                style={
+                                                                    'width': 'clamp(100px, 15vw, 150px)',  # Responsive button
+                                                                    'alignItems': 'center'
+                                                                }
+                                                            ),
+                                                            style={
+                                                                'display': 'flex',
+                                                                'alignItems': 'center',
+                                                                'justifyContent': 'center',
+                                                                'marginTop': '30px'
+                                                            }
+                                                        )
+                                                    ],
+                                                    style={'display': 'block'}
+                                                ),
+                                                html.Div(
+                                                    style={"border-top": "1px solid #2d2b28", "margin-top": "10px"}
+                                                ),
+                                                dcc.Markdown(id='single_card_hint'),
+                                            ]),
+                                            style={
+                                                "width": "100%",  # Adjust dynamically
+                                                "max-width": "400px",  # Limit max width on larger screens
+                                                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                                                "border": "2px solid #2d2b28",
+                                                "border-radius": "5px",
+                                                "background-color": "#fdf8e4",
+                                                "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                                                "padding": "20px",
+                                            },
+                                        ),
+                                    ]
+                                ),
+                            ]
                         ),
                         html.Div(
                             style={
@@ -571,7 +584,19 @@ final_answers_layout = html.Div(
 
                     *The line goes quiet, waiting for your response!*
                     '''),
-
+                    html.Div(
+                        children=[
+                            dcc.Markdown('''
+                            **Can you please share your impressions and comments about this game?**
+                            ''', style={'alignItems': 'center'}),
+                            dcc.Textarea(
+                                id='comments_textarea',
+                                placeholder='Comments!',
+                                style={'width': '100%', 'height': 'auto', 'backgroundColor': 'rgba(0,0,0,0)'},
+                            ),
+                        ],
+                        style={'marginTop':'15px'}
+                    ),
                     html.Div(
                         html.Button('Submit', id='button_clicked', style={'width': '150px', 'alignItems': 'center'}),
                         style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
@@ -754,12 +779,14 @@ main_screen = html.Div([
             html.Div(
                 [
                     dbc.Button("Restart Game", id="restart-game-button", color="secondary",
-                               style={"marginRight": "10px"}),
+                               style={"marginRight": "10px", "marginBottom": "10px"}),
                     dbc.Button("Storyline Selection", id="logout-button", color="danger",
-                               style={"marginRight": "10px"}),
-                    dbc.Button("Open tutorial video", id="open-video-button", color="primary"),
+                               style={"marginRight": "10px", "marginBottom": "10px"}),
+                    dbc.Button("Open tutorial video", id="open-video-button", color="primary",
+                               style={"marginBottom": "10px"}),
                 ],
-                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'flex-start',
+                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
+                       'flexWrap': 'wrap', 'maxWidth':'100%',
                        'marginBottom': '20px'}
             ),
             # Timer display
@@ -1104,6 +1131,10 @@ def storyline_func(storylines_returned):
                     "overflowY": "auto",  # Enables vertical scrolling
                     "whiteSpace": "normal",  # Ensures text wraps to new lines
                     "wordWrap": "break-word",
+		    "display":"flex",
+		    "flexDirection":"column",
+		    "alignItems":"center",
+		    "overflowX": "hidden",
                     "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",  # Optional: Shadow for a card effect
                 }
             )
@@ -1211,6 +1242,7 @@ app.layout = dmc.NotificationsProvider(
         dcc.Store(id='archive_button_clicked_3sec_delay', storage_type="local"),
         dcc.Store(id='cards_open', data={}, storage_type="local"),
         dcc.Store(id='last_touched_button', storage_type="local"),
+        dcc.Store(id="help_data", data=help_data_start, storage_type="local"),
         dcc.Store(id="previous_url", data=''),
         dcc.Interval(
             id='interval-component',
@@ -1229,7 +1261,7 @@ app.layout = dmc.NotificationsProvider(
                     html.Div(
                         DashPlayer(
                             id="player",
-                            url="https://youtu.be/d5pb9TgCGc0",
+                            url="https://youtu.be/2CDrKvceYPI",
                             controls=True,
                             width="100%",
                             height="100%",  # Ensures it takes full height
@@ -1266,7 +1298,7 @@ app.layout = dmc.NotificationsProvider(
 
 def send_email(receiver_email):
     # Load and encode the Word Document
-    response = requests.get('https://github.com/solveitagent/solveit/raw/refs/heads/main/data/Rules.docx')
+    response = requests.get('https://github.com/solveitagent/solveit/raw/refs/heads/main/data/RuleBook.pdf')
     doc_data = response.content
     encoded_doc = base64.b64encode(doc_data).decode()
 
@@ -1317,10 +1349,11 @@ def send_email(receiver_email):
                 <p>Keep in mind you get <strong>3 free</strong> hints from an expert, each extra costs <strong>100$</strong>. Follow the <strong>Rule Book</strong> for more information.</p>
 
                 <p class="warning">The fate of Kosovo is in your hands. Proceed with caution but act decisively. Time is not on our side.</p>
+                
+                <p>If you want to train-before the mission, open <strong>SC 1</strong>. If you want to start the mission directly open <strong>SC 5</strong>.</p>
             </div>
             <div class="footer">
                 <p>Stay sharp, Agents. Kosovo is counting on you.</p>
-                <p><strong>Open SC 5</strong></p>
                 <img src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/solveIT-logo.png" alt="SolveIT Logo" class="logo">
             </div>
         </div>
@@ -1331,8 +1364,8 @@ def send_email(receiver_email):
     # Create Word Document Attachment
     doc_attachment = Attachment(
         FileContent(encoded_doc),
-        FileName('Rules.docx'),
-        FileType('application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+        FileName('RuleBook.pdf'),
+        FileType('application/pdf'),
         Disposition('attachment')  # This will be a downloadable attachment
     )
 
@@ -1637,6 +1670,7 @@ def handle_logout(logout_button, time, cities_infected, money_left, store_what_h
     Output('money_left_cards', 'children', allow_duplicate=True),
     Output('store_what_happened', 'data', allow_duplicate=True),
     Output('nr_cities_infected', 'data', allow_duplicate=True),
+    Output('help_data', 'data', allow_duplicate=True),
     Output('virus_infection_rate', 'data', allow_duplicate=True),
     Output('restart_timer_state', 'data', allow_duplicate=True),
     Output('should_we_call_popup', 'data', allow_duplicate=True),
@@ -1659,7 +1693,7 @@ def handle_restartgame(restart_button):
     if restart_button:
         button_, style_ = switch_between_input_and_back_button_archive('back_button')
         return (0, '0 Mins', '0 Mins', '0 Mins', '3', '3', '3', '1000$', '1000$', '1000$', None,
-                cities_infected_beginning, 0.2,
+                cities_infected_beginning, help_data_start, 0.2,
                 -1, None, {"archive_parent": None, "archive_child1": None, "archive_child2": None},
                 {"NOTE_1": 0, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0},
                 {"Hospital": 0, "Police": 0, "CCTV": 0, "Operations": 0, "Lab": 0, "Evidence Photos": 0}, None, None,
@@ -1713,6 +1747,7 @@ def handle_login(back_button_storyline, previous_url):
     Output('store_money_cities_time', 'data', allow_duplicate=True),
     Output('previous_url', 'data', allow_duplicate=True),
     Output('show_loader_div', 'children'),
+    Output('help_data', 'data', allow_duplicate=True),
     Input({"type": "storyline_buttons", "index": ALL}, "n_clicks"),
     State("store_email", "data"),
     State("url", "pathname"),
@@ -1734,7 +1769,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
             our_user = user_data[store_email['email'].lower()]
             button_, style_ = switch_between_input_and_back_button_archive('back_button')
             try:
-                print('Cant send email')
+                print('Sent email')
                 send_email(store_email['email'].lower())
             except Exception as e:
                 print(f'No Internet connection or {e}')
@@ -1753,7 +1788,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                     'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [], button_,
                     style_,
                     {'time': our_user['time'], 'cities': our_user['cities_infected'], 'money': our_user['money_left']},
-                    previous_url, '')
+                    previous_url, '', help_data_start)
 
     return no_update
 
@@ -2254,8 +2289,17 @@ def get_child_div_children(child1):
                             'color': 'black',
                             'padding': '5px 10px',
                             'border-radius': '5px',
-                            'font-size': '16px',
+                            'font-size': 'clamp(5px, 2vw, 20px)',  # Dynamically adjusts font size
                             'text-align': 'center',
+                            'white-space': 'normal',  # Allows text to wrap into multiple lines
+                            'word-wrap': 'break-word',  # Ensures long words are broken properly
+                            'overflow': 'hidden',  # Prevents overflow
+                            'display': 'flex',
+                            'align-items': 'center',
+                            'justify-content': 'center',
+                            'width': '100%',  # Ensures it scales with the parent
+                            'height': '100%',  # Adjust based on the div size
+                            'margin-left':'7px'
                         }
                     ),
                 ],
@@ -2369,7 +2413,7 @@ def handle_dynamic_button(n_clicks, archive_button_child1_3sec_delay, hierarchy_
                 child2['markdown_id'])
             content = response.text
 
-            div_return = [dcc.Markdown(children=content, style={'width': '100%'})]
+            div_return = [dcc.Markdown(id='markdown_content', children=content, style={'width': '100%'})]
 
             this_is_the_parent_button_clicked = archive_child1[
                 (archive_child1['id'] == parent_id) & (archive_child1['button_clicked'] == int(archive_child1_id))][
@@ -2513,7 +2557,7 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
         if (len(selectedRows) > 0):
 
             suspect_image = selectedRows['Image'].iloc[0]
-            content = pd.read_csv('data/culprits/' + suspects_input.title() + '.csv')
+            content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
 
             if (suspects_input.lower() == 'Taulant Gashi 383'.lower()) & (popup_status['NOTE_2'] == 0):
                 should_we_call_popup = 'NOTE_2'
@@ -2563,6 +2607,10 @@ def toggle_modal(cards_open):
     if len(cards_open) > 0:
         list_of_buttons_to_return = []
         for card in cards_open.values():
+            if "mc" in card.lower():
+                bcg_color = 'rgb(69, 155, 196)'
+            else:
+                bcg_color = 'rgb(162, 138, 208)'
             button = dbc.Button(
                 card,
                 className="card-title",
@@ -2577,7 +2625,7 @@ def toggle_modal(cards_open):
                     "borderColor": "black",
                     "borderWidth": "1px",
                     "fontWeight": "bold",
-                    "backgroundColor": "#fdf8e4",
+                    "backgroundColor": bcg_color,
                     "backgroundImage": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
                     "padding": "10px"},
                 # id='btn_'+card
@@ -2597,7 +2645,7 @@ def button_pressed(cards_open):
     if len(cards_open) == 0:
         return {'display': 'none'}
     else:
-        return {'display': 'flex'}
+        return {'display': 'flex', 'justify-content': 'center'}
 
 
 # THIS cards_buttons_all IS GETTING PRESSED
@@ -2622,13 +2670,16 @@ def button_pressed(cards_open):
     Output('card_pwd_button', 'style'),
     Output('cards_password', 'value'),
     Output('cards_password', 'placeholder'),
+    Output('help_data', 'data', allow_duplicate=True),
+    Output('card_body_id', 'style'),
     [Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks')],
     State('small_cards_grid', 'children'),
     State('cards_input', 'value'),
     State('cards_open', 'data'),
+    State('help_data', 'data'),
     prevent_initial_call=True
 )
-def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
+def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, help_data):
     ctx = dash.callback_context
     if small_cards_grid:
         nr_of_children = len(small_cards_grid)
@@ -2650,17 +2701,30 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
             if len(selectedRows) == 0:
                 if cards_input == '':
                     return no_update
-                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update
+                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
             else:
                 card_data = selectedRows.iloc[0]
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
                 if card_data['Code'].lower().startswith("mc"):
                     placeholder = 'Please enter the mystery word'
+                    color_cardbutton = 'rgb(69, 155, 196)'
                 else:
                     placeholder = 'Please enter the password'
+                    color_cardbutton = 'rgb(162, 138, 208)'
 
-                if card_data.hasPassword == False:
+                card_buton_style = {
+                    "width": "100%",  # Adjust dynamically
+                    "max-width": "400px",  # Limit max width on larger screens
+                    "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                    "border": "2px solid #2d2b28",
+                    "border-radius": "5px",
+                    "background-color": color_cardbutton,
+                    "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                    "padding": "20px",
+                }
+
+                if (card_data.hasPassword == False):
                     style_input_pwd = {'width': '100%', 'display': 'none'}
                     style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
                 else:
@@ -2670,83 +2734,91 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open):
                                         'backgroundColor': '#F5F5F5'}
                 if card_data['Code'] not in cards_open.values():
                     cards_open = cards_open | {str(uuid4()): card_data['Code']}
+                    help_data[card_data['Code'].lower()] = 'opened'
 
-                if (card_data['Img'] == False) | (card_data['Img'] == 'False'):
-                    image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Culprit2.jpg"
+                if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
+                    image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png"
                     style = {'display': 'none'}
                     style_layover = {'display': 'none'}
                 else:
-                    style = {
-                        "display": "block",
-                        "width": "100%",  # Full width of the card
-                        "maxwidth": '100%',
+                    style={
+                        "width": "100%",  # Always fit the container
                         "height": "auto",
-                        "marginBottom": "15px",
+                        "margin-bottom": "15px",
                         "border": "1px solid #2d2b28",
-                        "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
-                        "cursor": "pointer",  # Indicate it's clickable
-                        "objectFit": "cover",  # Maintain aspect ratio while covering
+                        "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                        "cursor": "pointer",
+                        "object-fit": "cover",
                     }
                     style_layover = {
                         "position": "absolute",
-                        "bottom": "17px",
-                        # "right": "0",
-                        "width": "30px",  # Set the desired width of the overlay image
-                        "height": "30px",  # Set the desired height of the overlay image
+                        "bottom": "10px",
+                        "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                        "height": "clamp(20px, 5vw, 40px)",
                         "opacity": "1",
-                        'marginLeft': '2px',
-                        'marginBottom': '2px'
+                        "marginLeft": "-80%",
+                        "marginBottom": "12px",
                     }
-                return {'display': 'flex'}, {'display': 'none'}, {'display': 'none'}, card_data[
+
+                return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                     'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                            'Hint'], image, cards_open, False, no_update, no_update, {
-                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder
+                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data, card_buton_style
         elif button_index in cards['Code'].tolist():
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
             if card_data['Code'].lower().startswith("mc"):
                 placeholder = 'Please enter the mystery word'
+                color_cardbutton = 'rgb(69, 155, 196)'
             else:
                 placeholder = 'Please enter the password'
+                color_cardbutton = 'rgb(162, 138, 208)'
 
-            if card_data.hasPassword == False:
+            card_buton_style = {
+                "width": "100%",  # Adjust dynamically
+                "max-width": "400px",  # Limit max width on larger screens
+                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                "border": "2px solid #2d2b28",
+                "border-radius": "5px",
+                "background-color": color_cardbutton,
+                "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                "padding": "20px",
+            }
+            if (card_data.hasPassword == False):
                 style_input_pwd = {'width': '100%', 'display': 'none'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
             else:
                 style_input_pwd = {'width': '100%', 'display': 'block'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                     'backgroundColor': '#F5F5F5'}
-            if (card_data['Img'] == False) | (card_data['Img'] == 'False'):
-                image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Culprit2.jpg"
+            if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
+                image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Unknown.png"
                 style = {'display': 'none'}
                 style_layover = {'display': 'none'}
             else:
-                style = {
-                    "display": "block",
-                    "width": "100%",  # Full width of the card
-                    "maxwidth": '100%',
-                    "height": "auto",
-                    "marginBottom": "15px",
-                    "border": "1px solid #2d2b28",
-                    "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
-                    "cursor": "pointer",  # Indicate it's clickable
-                    "objectFit": "cover",  # Maintain aspect ratio while covering
-                }
+                style={
+                        "width": "100%",  # Always fit the container
+                        "height": "auto",
+                        "margin-bottom": "15px",
+                        "border": "1px solid #2d2b28",
+                        "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                        "cursor": "pointer",
+                        "object-fit": "cover",
+                    }
                 style_layover = {
-                    "position": "absolute",
-                    "bottom": "17px",
-                    # "right": "0",
-                    "width": "30px",  # Set the desired width of the overlay image
-                    "height": "30px",  # Set the desired height of the overlay image
-                    "opacity": "1",
-                    'marginLeft': '2px',
-                    'marginBottom': '2px'
-                }
-            return {'display': 'flex'}, {'display': 'none'}, {'display': 'none'}, card_data[
+                        "position": "absolute",
+                        "bottom": "10px",
+                        "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                        "height": "clamp(20px, 5vw, 40px)",
+                        "opacity": "1",
+                        "marginLeft": "-80%",
+                        "marginBottom": "12px",
+                    }
+            return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
                 'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                        'Hint'], image, cards_open, False, no_update, no_update, {
-                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder
+                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update, card_buton_style
         else:
             return no_update
 
@@ -2800,11 +2872,13 @@ def display_click_data(card_pwd_button, cards_password, single_card_title, popup
 @app.callback(
     Output('alert_more_help', 'opened', allow_duplicate=True),
     Output('alert_more_help_text', 'children', allow_duplicate=True),
+    Output('help_data', 'data', allow_duplicate=True),
     Input('markdown_text_help_more_button', 'n_clicks'),
     State('single_card_title', 'children'),
+    State('help_data', 'data'),
     prevent_initial_call=True
 )
-def display_click_data(markdown_text_help_more_button, single_card_title):
+def display_click_data(markdown_text_help_more_button, single_card_title, help_data):
     ctx = dash.callback_context
     if not ctx.triggered:
         return no_update
@@ -2816,7 +2890,8 @@ def display_click_data(markdown_text_help_more_button, single_card_title):
         markdown_single_file = markdown_lists[(markdown_lists['title'] == single_card_title.lower())]
         if len(markdown_single_file) > 0:
             markdown_single_file = markdown_single_file['hint'].iloc[0]
-            return True, markdown_single_file
+            help_data[single_card_title.lower()] = 'help'
+            return True, markdown_single_file, help_data
     return no_update
 
 
@@ -2825,10 +2900,13 @@ def display_click_data(markdown_text_help_more_button, single_card_title):
     Output('alert_other_text', 'children'),
     Input("button_clicked", "n_clicks"),
     State('time_sgs_archive', 'children'),
+    State('help_data', 'data'),
+    State('comments_textarea', 'value'),
+    State('store_email', 'data'),
     [State(f"question_answer_input_{index}", "value") for index in range(len(final_answers_dropdown_options.keys()))],
     # Inputs for all questions
 )
-def collect_answers(n_clicks, time, *answers):
+def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *answers):
     if n_clicks:
         result = [answers[i] for i in range(len(answers)) if answers[i]]
         real_answers = ['Drenasi', 'Taulant Gashi', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
@@ -2841,6 +2919,8 @@ def collect_answers(n_clicks, time, *answers):
                 incorrect_answers[list(final_answers_dropdown_options.keys())[i]] = result[i]
 
         if len(incorrect_answers) == 0:
+
+            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]))
             return True, 'Congrats, you solved the case in ' + time + '!'
         else:
             to_return_text = [dcc.Markdown('**Wrong answers**'), html.Br()]

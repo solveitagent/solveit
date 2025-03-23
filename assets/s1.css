@@ -38,6 +38,20 @@
     background-color: rgba(255, 255, 255, 0.5) !important;
 }
 
+
+@media (max-width: 760px) { /* Adjust breakpoint as needed */
+    #offcanvas_scrollable {
+        width: 100% !important;
+    }
+}
+
+#markdown_content img, #markdown_text img {
+    max-width: 100%;  /* Resize image to 50% of the parent container */
+    height: auto;  /* Keep aspect ratio */
+    display: block;
+}
+
+
 .container {
   position: relative;
   width: 100%;
@@ -53,6 +67,14 @@
   box-sizing: border-box;
 }
 
+/* For devices smaller than 450px */
+@media (max-width: 450px) {
+  .column,
+  .columns {
+    margin-left: 4%;
+  }
+}
+
 /* For devices larger than 400px */
 @media (min-width: 400px) {
   .container {
@@ -65,10 +87,6 @@
 @media (min-width: 550px) {
   .container {
     width: 80%;
-  }
-  .column,
-  .columns {
-    margin-left: 4%;
   }
 
   .one.column,
@@ -569,7 +587,7 @@ there.
     display: block !important;
   }
   .pretty_container {
-    margin: 0 !important;
+    /*margin: 0 !important;*/
     margin-bottom: 25px !important;
   }
   #individual_graph,
