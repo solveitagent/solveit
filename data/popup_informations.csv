@@ -12,7 +12,9 @@ You must decide on which measures to prioritize to prevent the virus from spread
 **Option 2**: *Monitor the Situation*
 - **Action**: Avoid creating public panic by withholding the message until more concrete information is gathered."
 
-,Hold a Press Conference,Monitor the Situation,"You chose to **Hold a Press Conference**. The media has been paid $100 to broadcast the message, urging the public to exercise caution. While the public is informed, there's a risk of panic if further actions aren't taken quickly.",You chose to **Monitor the Situation**. The team doesn't have definitive answers yet but is making progress. More time is needed to gather further information.
+,Hold a Press Conference,Monitor the Situation,
+"You chose to **Hold a Press Conference**. The media has been paid $100 to broadcast the message, urging the public to exercise caution. While the public is informed, there's a risk of panic if further actions aren't taken quickly."
+",You chose to **Monitor the Situation**. The team doesn't have definitive answers yet but is making progress. More time is needed to gather further information."
 
 NOTE_2,"**Commander Elira’s** voice crackles urgently through the communication line:
 
@@ -24,12 +26,13 @@ Choose only one response:
 - **Cost**: Pay €100 to launch an emergency operation.
 
 **Option 2**: *Request Access from the University*
-- **Action**: Work with the university to gain authorized access to the vaccine, ensuring transparency and academic cooperation.  
+- **Action**: Work with the university to gain authorized access to the vaccine, ensuring transparency and academic cooperation."
 
-
-",Confiscate the Lab,Request Access from the University,You chose to **Confiscate the Lab**. 
-You acted swiftly — no room for delays when lives are at stake. The lab is now under your control. You must immediately analyze the virus and test the vaccine formula to begin mass production. This decisive move cost your team $100, but you may have just bought the world some time.,
-You chose to **Request Access from the University**. You’ve chosen the official route. Now it’s forms, approvals, signatures — endless bureaucracy. While you're stuck pushing papers, the virus pushes forward.
+,Confiscate the Lab,Request Access from the University,
+"You chose to **Confiscate the Lab**. 
+You acted swiftly — no room for delays when lives are at stake. The lab is now under your control. You must immediately analyze the virus and test the vaccine formula to begin mass production. 
+This decisive move cost your team $100, but you may have just bought the world some time.",
+"You chose to **Request Access from the University**. You’ve chosen the official route. Now it’s forms, approvals, signatures — endless bureaucracy. While you're stuck pushing papers, the virus pushes forward."
 
 NOTE_4,"Commander Elira calls you, she considers the situation and gives you your next task: 
 
