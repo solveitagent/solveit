@@ -35,4 +35,8 @@ Taulant,"I don’t know. She didn’t explain much, just said they were investig
 Agent,"If there’s more you know about this virus or your work in the lab, you need to share it now."
 Comment,sighs heavily 
 Taulant,That’s all I know. I’ve told you everything.
-Hint,"**Discard: SC 14**"
+
+
+Hint,
+"**Search in Archive: Letter 122**
+**Discard: SC 14**"
