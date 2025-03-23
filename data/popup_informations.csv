@@ -21,7 +21,7 @@ NOTE_2,"**Commander Elira’s** voice crackles urgently through the communicatio
 *""Team, have you uncovered anything that could help us counter the virus? The numbers are rising quickly, and time is not on our side. We must tread carefully—we don’t want to incite panic, but we need actionable solutions now. What can you tell me?""*
 Choose only one response:
 
-**Option 1**: *Confiscate the Lab*: 
+**Option 1**: *Confiscate the Lab*
 - **Action**: Take full control of the lab to secure all materials and prevent any tampering or misuse.  
 - **Cost**: Pay €100 to launch an emergency operation.
 
@@ -55,10 +55,11 @@ NOTE_5,"**Commander Elira’s** voice crackles through the secure line:
 *""Team, time is running out. The situation is growing more critical, and we need actionable information. Do you have any updates on the investigation? Have you uncovered anything that could aid us in fighting the virus’s spread? Do we have any suspects yet?""*
 Your team considers the question carefully. You must choose your response:
 
-**Option 1**: *Yes*: 
-- **Action**: Yes, Commander, we have a breakthrough. Pay 100€ to analyze the N-Serum sample you’ve collected and potentially uncover vital information about the virus.
-- **Open**: Search Interview with Ardian Zogaj
+**Option 1**:*Analyze N-Serum* 
+- **Action**: Yes, Commander, we have a breakthrough. We want to analyze the N-Serum Vaccine sample and potentially uncover vital information about the virus.
+- **Cost**: Pay $100 to launch an emergency operation.
 
-**Option 2**: *No*
-- **Action**: No, Commander, we need more time to investigate. Continue delving into leads to solidify your case. Pay 100€ to visit the Lab.
-- **Search Archive**: Police and Lab Records, Open Lab Records.",Yes,No,You chose **Yes**. The team has made a breakthrough and paid 100€ to analyze the N-Serum sample. This analysis could potentially uncover vital information about the virus.,You chose **No**. More time is needed for investigation. The team has paid 100€ to either visit the Lab or consult the Field Operation Archive Folder to solidify the case.
+**Option 2**:*Investigate Further*
+- **Action**: No, Commander, we need more time to investigate. Continue delving into leads to solidify your case.
+
+",Analyze N-Serum,Investigate Further,You chose **Analyze N-Serum**. The team has made a breakthrough and paid $100 to analyze the N-Serum sample. This analysis could potentially uncover vital information about the virus.,You chose **Investigate Further**. More time is needed for the investigation. The team works harder to solidify the case.
