@@ -40,10 +40,15 @@ NOTE_4,"Commander Elira calls you, she considers the situation and gives you you
 Choose only one from the two options: 
 
 
-**Invest in Masks 100$**: Distribute masks to the public for free and instruct them to use them in crowded spaces.
+**Option 1**: *Invest on Hand Sanitizers* 
 
-**Do Not Invest**: Advise people to purchase their own masks and avoid gathering in large groups to limit the spread.
-",Invest in Masks,Do Not Invest,"You chose to **Invest in Masks**. The public has received free masks, and they have been instructed to use them in crowded spaces. $100 was spent on this initiative to help limit the virus spread. ",You chose **Do Not Invest**. People are advised to purchase their own masks and avoid large gatherings to limit the virus spread. The decision has been made to avoid the investment at this stage.
+- **Action**: Distribute hand sanitizers to the public for free and instruct them to use them in crowded spaces.
+- **Cost**: Pay $100 to broadcast the message widely.
+**Option 2**: *Do not Invest*
+
+- **Action**: Advise people to purchase their own hand sanitizers, and ask media to spread message of avoid gatherings in large groups to limit the spread.
+
+",Invest on Hand Sanitizers ,Do not Invest,"You chose to ** Invest on Hand Sanitizers **. **. The public has received hand sanitizers, and they have been instructed to use them and stay away from crowded spaces through the media campaign that you funded. $100 was spent on this initiative to help limit the virus spread.",You chose **Do not Invest**. People are advised to purchase their own hand sanitizers, take good care of their personal hygiene and avoid large gatherings to limit the virus spread. The decision has been made to avoid the investment at this stage.
 
 NOTE_5,"**Commander Elira’s** voice crackles through the secure line:
 
