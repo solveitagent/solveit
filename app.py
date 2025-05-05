@@ -2579,7 +2579,7 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
                 new_message_div = generate_interview_divs(current_speaker, current_message_part, suspect_image,
                                                           store_email['name'].split(' ')[0])
                 displayed.append(new_message_div)
-            return displayed, False, no_update, no_update, suspect_image, should_we_call_popup, no_update
+            return displayed, False, no_update, no_update, suspect_image, should_we_call_popup, popup_status
         else:
             return no_update, True, 'Alert', f'Wrong submitted code "{suspects_input}"!', '/assets/img/interviews/Unknown.png', no_update, no_update
     return no_update
