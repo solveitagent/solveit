@@ -1649,7 +1649,7 @@ def handle_logout(logout_button, time, cities_infected, money_left, store_what_h
                              }
         global user_data
         user_data[new_element_key] = new_element_value
-        print(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
+        # print(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
         save_data_logout(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
 
         return '/storyline', False, previous_url
