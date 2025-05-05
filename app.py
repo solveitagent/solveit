@@ -1775,6 +1775,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                 print(f'No Internet connection or {e}')
             # import time
             # time.sleep(50)
+            print(our_user['popup_status'])
             return ('/main', int(our_user['time'].split(' ')[0]),
                     our_user['time'], our_user['time'], our_user['time'],
                     our_user['cities_infected'], our_user['cities_infected'], our_user['cities_infected'],
