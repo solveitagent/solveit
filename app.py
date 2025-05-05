@@ -1649,7 +1649,7 @@ def handle_logout(logout_button, time, cities_infected, money_left, store_what_h
                              }
         global user_data
         user_data[new_element_key] = new_element_value
-
+        print(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
         save_data_logout(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
 
         return '/storyline', False, previous_url
@@ -1905,7 +1905,6 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
     if elapsed_time % 3 == 0 and elapsed_time != 0:
         for city, value in nr_cities_infected.items():
             if value > 0:
-                # print('MACAAAA:',city)
                 new_nr_infected = value + math.ceil(
                     value * virus_infection_rate * cities_info[cities_info.City == city]['Population rel'].iloc[0])
                 if cities_info[cities_info.City == city].iloc[0].Population >= new_nr_infected:
@@ -2110,7 +2109,6 @@ def display_click_data(should_we_call_popup, money_left):
 def display_click_data(alert_submit_button, alert_cancel_button, should_we_call_popup, money_left,
                        virus_infection_rate):
     trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
-    print('2113', should_we_call_popup)
     if should_we_call_popup:
         popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
         if len(popup_data) > 0:
@@ -2559,8 +2557,6 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
             suspect_image = selectedRows['Image'].iloc[0]
             content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
 
-
-            print('Notescheck', suspects_input.lower(), popup_status['NOTE_5'], suspects_input.lower() == 'Taulant Gashi'.lower(), popup_status['NOTE_5'] == 0)
             if (suspects_input.lower() == 'Taulant Gashi 383'.lower()) & (popup_status['NOTE_2'] == 0):
                 should_we_call_popup = 'NOTE_2'
                 popup_status['NOTE_2'] = 1
