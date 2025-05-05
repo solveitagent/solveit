@@ -85,7 +85,7 @@ for col in button_columns:
     archive_button_statuses.extend(archive_child1[col][archive_child1[col] == archive_child1[col]].tolist())
 archive_button_statuses_dict = {i: 0 for i in archive_button_statuses}
 
-popup_statuses_dict = {i: 1 for i in popup_info['ID'].tolist()}
+popup_statuses_dict = {i: 0 for i in popup_info['ID'].tolist()}
 
 final_answers_dropdown_options = {
     "1. **_Where did the virus spread first?_**": [
