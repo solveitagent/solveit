@@ -1775,7 +1775,6 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                 print(f'No Internet connection or {e}')
             # import time
             # time.sleep(50)
-            print(our_user['popup_status'])
             return ('/main', int(our_user['time'].split(' ')[0]),
                     our_user['time'], our_user['time'], our_user['time'],
                     our_user['cities_infected'], our_user['cities_infected'], our_user['cities_infected'],
@@ -1906,7 +1905,7 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
     if elapsed_time % 3 == 0 and elapsed_time != 0:
         for city, value in nr_cities_infected.items():
             if value > 0:
-                print('MACAAAA:',city)
+                # print('MACAAAA:',city)
                 new_nr_infected = value + math.ceil(
                     value * virus_infection_rate * cities_info[cities_info.City == city]['Population rel'].iloc[0])
                 if cities_info[cities_info.City == city].iloc[0].Population >= new_nr_infected:
@@ -2560,6 +2559,8 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
             suspect_image = selectedRows['Image'].iloc[0]
             content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
 
+
+            print('Notescheck', suspects_input.lower(), popup_status['NOTE_5'], suspects_input.lower() == 'Taulant Gashi'.lower(), popup_status['NOTE_5'] == 0)
             if (suspects_input.lower() == 'Taulant Gashi 383'.lower()) & (popup_status['NOTE_2'] == 0):
                 should_we_call_popup = 'NOTE_2'
                 popup_status['NOTE_2'] = 1
