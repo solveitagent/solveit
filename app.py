@@ -2110,7 +2110,7 @@ def display_click_data(should_we_call_popup, money_left):
 def display_click_data(alert_submit_button, alert_cancel_button, should_we_call_popup, money_left,
                        virus_infection_rate):
     trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
-
+    print('2113', should_we_call_popup)
     if should_we_call_popup:
         popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
         if len(popup_data) > 0:
@@ -2583,7 +2583,7 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
                 new_message_div = generate_interview_divs(current_speaker, current_message_part, suspect_image,
                                                           store_email['name'].split(' ')[0])
                 displayed.append(new_message_div)
-            return displayed, False, no_update, no_update, suspect_image, no_update, no_update
+            return displayed, False, no_update, no_update, suspect_image, should_we_call_popup, no_update
         else:
             return no_update, True, 'Alert', f'Wrong submitted code "{suspects_input}"!', '/assets/img/interviews/Unknown.png', no_update, no_update
     return no_update
