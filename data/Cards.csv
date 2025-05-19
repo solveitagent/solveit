@@ -4,6 +4,7 @@ CC D,FALSE,CC D,"You’ve found a set of symbols that seem to lead somewhere imp
 X ☾ 2 ⚖️ 6 ✵ 10
 Y ⚖️ 15 ✺ 5","- A puzzle solver or a codebreaker opens **CC E**
 - 🔎 **MC 1**",FALSE
+Test,FALSE,Test,"Congrats for opening your first Card",FALSE
 CC A,FALSE,CC A,"Your commander after analyzing the data says:
 
 You are looking for a city situated along a river in Kosova that is estimated to be the 5th most populous in the Prishtina district.",- A detective or a codebreaker opens **CC C**,FALSE

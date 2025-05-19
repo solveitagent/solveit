@@ -1,0 +1,6 @@
+# This is a testing Archive site
+
+---
+
+Congrats you opened your first Archive page!
+

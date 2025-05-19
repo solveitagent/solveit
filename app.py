@@ -140,12 +140,21 @@ archive_layout = html.Div(
         html.Div([
             html.Div([html.H6(id="time_sgs_archive", children='0 Mins'), html.P("Time since game started")],
                      className="mini_container mini_container_margin",
+                    **{"data-intro": "In this place you will see the time since you started the game!",
+                       "data-step": "1"
+                        }
                      ),
             html.Div([html.H6(id="cities_outbreak_archive", children='3'), html.P("Outbreak Cities")],
                      className="mini_container mini_container_margin",
+                    **{"data-intro": "In this place you will see number of cities that were infected!",
+                       "data-step": "2"
+                        }
                      ),
             html.Div([html.H6(id="money_left_archive", children='1000$'), html.P("Money")],
                      className="mini_container mini_container_margin",
+                    **{"data-intro": "In this place you will see amount of money that you have available!",
+                       "data-step": "3"
+                        }
                      )
         ],
             className="row container-display",
