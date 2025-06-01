@@ -35,22 +35,22 @@
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.introjs-tooltip {
-  z-index: 9999 !important;
-}
+/*.introjs-tooltip {*/
+/*  z-index: 9999 !important;*/
+/*}*/
 
-.introjs-overlay {
-  z-index: 9998 !important;
-}
+/*.introjs-overlay {*/
+/*  z-index: 9998 !important;*/
+/*}*/
 
-.introjs-tooltipReferenceLayer {
-  position: fixed !important;
-  z-index: 2147483647 !important;
-}
+/*.introjs-tooltipReferenceLayer {*/
+/*  position: fixed !important;*/
+/*  z-index: 2147483647 !important;*/
+/*}*/
 
-body * {
-  overflow: visible !important;
-}
+/*body * {*/
+/*  overflow: visible !important;*/
+/*}*/
 
 .fullscreen-loader {
     background-color: rgba(255, 255, 255, 0.5) !important;
