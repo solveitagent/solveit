@@ -19,25 +19,25 @@ window.addEventListener("beforeunload", function (e) {
 });
 
 
-function waitForElement(id, callback, retries = 10, delay = 300) {
-    const el = document.getElementById(id);
-    if (el) {
-        callback(el);
-    } else if (retries > 0) {
-        setTimeout(() => waitForElement(id, callback, retries - 1, delay), delay);
-    } else {
-        console.error(`Element with id '${id}' not found after multiple attempts.`);
-    }
-}
-
-window.onload = function () {
-    waitForElement("start-btn", function (btn) {
-        btn.onclick = function () {
-            if (typeof introJs === "function") {
-                introJs().start();
-            } else {
-                console.error("Intro.js is not loaded.");
-            }
-        };
-    });
-};
+// function waitForElement(id, callback, retries = 10, delay = 300) {
+//     const el = document.getElementById(id);
+//     if (el) {
+//         callback(el);
+//     } else if (retries > 0) {
+//         setTimeout(() => waitForElement(id, callback, retries - 1, delay), delay);
+//     } else {
+//         console.error(`Element with id '${id}' not found after multiple attempts.`);
+//     }
+// }
+//
+// window.onload = function () {
+//     waitForElement("start-btn", function (btn) {
+//         btn.onclick = function () {
+//             if (typeof introJs === "function") {
+//                 introJs().start();
+//             } else {
+//                 console.error("Intro.js is not loaded.");
+//             }
+//         };
+//     });
+// };
