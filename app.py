@@ -2487,28 +2487,28 @@ def handle_dynamic_button_click(n_clicks_list, hierarchy_status, archive_back_bu
 def generate_interview_divs(current_speaker, current_message_part, suspect_image, agent_name):
     container_style = {
         'display': 'flex',
-        'justify-content': 'flex-start' if current_speaker.trim() == "Agent" else 'flex-end',
+        'justify-content': 'flex-start' if current_speaker.strip() == "Agent" else 'flex-end',
         'marginBottom': '10px',
         'maxWidth': '60%',
-        'align-self': 'flex-start' if current_speaker.trim() == "Agent" else 'flex-end',
+        'align-self': 'flex-start' if current_speaker.strip() == "Agent" else 'flex-end',
         'align-items': 'center'}
 
     div_style = {
         'padding': '10px',
-        'backgroundColor': '#f0f0f0' if current_speaker.trim() == "Agent" else '#d0e0f0',
+        'backgroundColor': '#f0f0f0' if current_speaker.strip() == "Agent" else '#d0e0f0',
         'border': '1px solid #ddd',
         'borderRadius': '5px'
     }
     image_style = {'width': '40px', 'height': '40px', 'borderRadius': '50%', 'marginLeft': '10px'}
-    current_speaker_name = current_speaker if current_speaker.trim() != 'Agent' else agent_name
-    image_to_show = 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Agent.png' if current_speaker.trim() == "Agent" else suspect_image
+    current_speaker_name = current_speaker if current_speaker.strip() != 'Agent' else agent_name
+    image_to_show = 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Agent.png' if current_speaker.strip() == "Agent" else suspect_image
 
-    if current_speaker.trim() == 'Comment':
+    if current_speaker.strip() == 'Comment':
         new_message_div = html.Div([
             html.P("(" + current_message_part + ")",
                    style={'fontStyle': 'italic', 'textAlign': 'center', 'marginBottom': '10px'})
         ])
-    elif current_speaker.trim() == 'Agent':
+    elif current_speaker.strip() == 'Agent':
         new_message_div = html.Div([
             html.Img(src=f'{image_to_show}', style=image_style),
             html.Div([
@@ -2517,7 +2517,7 @@ def generate_interview_divs(current_speaker, current_message_part, suspect_image
             ], style=div_style)
         ],
             style=container_style)
-    elif current_speaker.trim() == 'Hint':
+    elif current_speaker.strip() == 'Hint':
         new_message_div = dcc.Markdown(
             children=current_message_part,
             style={'marginTop': '20px', "font-size": "12px"})
