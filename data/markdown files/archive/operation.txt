@@ -5,7 +5,7 @@ Move the location token to the *Operations* and reduce your funds by **100 $** o
 
 ### Arben Krasniqi
 - **Date of Illness**: Oct-03  
-- **Places Visited**: Bus Station (Peja), Local Market (Peja)  
+- **Places Visited**: Bus Station (Lipjan), Local Market (Prishtina)  
 - **Symptoms**: Fever, Sore Throat  
 
 ---
@@ -19,7 +19,7 @@ Move the location token to the *Operations* and reduce your funds by **100 $** o
 
 ### Blerim Krasniqi
 - **Date of Illness**: Oct-01  
-- **Places Visited**: Market (Peja), Gym (Peja)  
+- **Places Visited**: Market (Prishtina), Gym (Prishtina)  
 - **Symptoms**: Headache, Sore Throat  
 
 ---

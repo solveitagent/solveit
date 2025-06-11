@@ -7,7 +7,7 @@ Agent,Did you come into close contact with anyone after your trip to Drenas?
 Taulant,"No, I didn't. I've mostly been keeping to myself. I didn't meet with family or friends after returning."
 Agent,Let's go back to your journey. Can you recall who else was on the bus?
 Comment,Shrugs
-Taulant,"Not really. I wasn't paying much attention. There was a woman old woman, I think sitting closer to the front."
+Taulant,"Not really. I wasn't paying much attention. There was a woman - old woman, I think sitting closer to the front."
 Agent,Witnesses said you were wearing a lab coat during the trip. Is that typical for you?
 Comment,shifts uncomfortably
 Taulant,I guess I forgot to change before leaving the lab. It's not that unusual.
@@ -24,5 +24,4 @@ Agent,"I see. And I noticed you took some time off recently do you often step aw
 Taulant,"I needed a break. I've been putting in long hours, and going back to my hometown Drenas felt like a good place to clear my head."
 Agent,"Thank you, Taulant. If we have more questions, we'll reach out. Please remain available."
 Taulant,"Absolutely, I'm here to provide any additional details you need."
-Hint,"**Open:**
-- SC 16, CC L"
+Hint,"**Open: P, 13**"
