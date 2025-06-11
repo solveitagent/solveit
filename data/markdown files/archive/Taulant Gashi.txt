@@ -30,6 +30,10 @@
 
 **Taulant:** She called me this evening, saying something about the police being at the lab. I told her I didn’t know anything and ended the call.  
 
+**Inspector Zogaj:** Did Lea mention that she lost her ID card to you?
+
+**Taulant:**No. I do not think so.
+
 **Inspector Zogaj:** Were there any issues between you and Ms. Pula recently? Any conflicts?  
 
 **Taulant:** Conflicts? No, not really. But she can be a bit... paranoid at times.  
@@ -48,11 +52,11 @@
 
 **End of Interview**
 
-- **Open**: CC I
+-**Open**: 10
 
-- **Interview**: Ardian Zogaj
+-**Interview**: Ardian Zogaj
 
-- **Discard**: CC P, CC Y
+-**Discard**: 28
 
 
 

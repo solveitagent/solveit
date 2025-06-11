@@ -1,5 +1,8 @@
 # Police Report
 
+You decided to investigate the Police Report. 
+Move the location token to the *Police* and reduce your funds by **100 $** on the gameboard. 
+
 **Report Number**: PR-0928-2024
 
 **Incident Type**: Break-In Reported at University of Prishtina Biology & Chemistry Lab
@@ -20,13 +23,13 @@ On the evening of September 28, 2024, PhD student Lea Pula reported a break-in a
 
 Upon entering, she sensed movement behind her and turned to see a figure running out of the lab. She observed the individual from the back and noted they were wearing a lab coat, appearing to be male and likely a student. Due to the rapidity of the situation, she was unable to provide further identifying details.Ms. Pula attempted to follow the individual but lost sight of them. She then contacted the authorities.
 
-Investigation Details:
+**Investigation Details**:
 
 - Police arrived on the scene on September 28, 2024 at 19:10. The lab was secured, and an initial inspection was conducted.
 - No items were reported missing; however, signs of tampering were found near the storage container labeled "N-Serum Experimental Vaccine."
 - CCTV cameras and access labs in the lab and surrounding areas were consulted.
 
-Investigation Documents Content:
+**Investigation Documents Content**:
 
 1. CCTV Recordings.
 2. Evidence Photos.
@@ -34,4 +37,6 @@ Investigation Documents Content:
 4. Interview Transcript with Taulant Gashi.
 5. Entry Logs from 28th of September.
 
-- **Open**: CC U
+- **Open**: 24
+- **Discard**: 14
+

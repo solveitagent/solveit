@@ -29,10 +29,10 @@
 
 ## Doctor’s Observations
 ### Mode of Transmission:
-- **Suspected**: The new virus seems to spread through physical contact. Conclusion drawn after observing the particular patient, and other patients treated at the hospital.
+- **Suspected**: Based on the current outbreak pattern, it is suspected that the virus spreads through physical contact rather than airborne transmission.
 - **Reasoning**: 
   - If airborne, the infection rate would be significantly higher.
-  - Cases are concentrated among individuals exposed in close quarters or through shared surfaces.
+  - Instead, cases are concentrated among individuals exposed in close quarters or through shared surfaces.
 - **Recommendation**: Further investigation is needed to confirm transmission pathways.
 
 ---
@@ -43,4 +43,4 @@
 
 ---
 
-- **Discard**: CC K, SC 23, SC 13
+- **Discard**: 12, M

@@ -1,16 +1,12 @@
+# Lab 
+
 You decided to investigate the Lab. 
 Move the location token to the *Lab* and reduce your funds by **100 $** on the gameboard. 
 
-**Open SC 19**
-
-# Lab 
-
 Your team has uncovered vital leads, but the mystery deepens. The stakes are high, and your decisions will shape the outcome of this investigation.
-
-You can: 
-
-- **Open**: SC 20, CC X, CC G, CC H
-- **Discard**: CC F
-- **Search Interview**: Arlinda Kelmendi, Head of Research
-
 Time is running out, and the truth hangs in the balance.
+
+**Leads:**
+
+- **Interview Dr.  Arlinda Kelmendi**, the Head of Research
+- **Open: T, 27**

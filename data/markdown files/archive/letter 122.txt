@@ -14,6 +14,6 @@ Ps: I would like to emphasize that we do not need to consult any lawyer for me t
 
 ---
 
-- **Discard**: CC R, CC T
+- **Discard**: 21, 23
 
 **Well done agents. After you finish checking all the clues, please proceed to Final Answers in the SolveIt Website!**  

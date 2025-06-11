@@ -39,7 +39,7 @@
 
 **Inspector Zogaj:** The access logs show you as the last recorded entry at 18:15, not 18:40. Care to explain?  
 
-**Lea:** That is not true. I only came by the lab at 18:40. I remember it well because I was rushing to catch my bus back home at 19:15. Someone else must have used my card. I never found it that evening.  
+**Lea:** How could that be?. I only came by the lab at 18:40. I remember it well because I was rushing to catch my bus back home at 19:15. I never found it that evening.  
 
 **Inspector Zogaj:** Did you share your card with anyone?  
 
@@ -93,14 +93,10 @@
 
 **Lea:** No, I did not find it.  
 
-**Inspector Zogaj:** Faculty staff and PhD students have access to the lab. Are you certain none of your colleagues could have used your card?  
-
-**Lea:** I don’t know. It’s possible someone found it and used it without my knowledge.  
-
 **Inspector Zogaj:** Thank you, Ms. Pula. If you recall anything else, we’ll need you to inform us immediately.  
 
 **Lea:** I’ll cooperate fully.  
 
 ---
 
-- **Open**: CC Y
+**Open: 28**

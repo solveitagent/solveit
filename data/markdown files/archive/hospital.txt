@@ -5,7 +5,7 @@ Move the location token to the *Hospital* and reduce your funds by **100 $** on 
 
 ### Drita Konjufca
 - **Date of Illness**: Sep-28  
-- **Places Visited**: Local Coffee Shop (Drenas), Pharmacy (Drenas)  
+- **Places Visited**: Local Coffee Shop (Drenas), Bus Station (Drenas)  
 - **Symptoms**: Fever, Muscle Pain  
 
 ---
@@ -29,4 +29,4 @@ Move the location token to the *Hospital* and reduce your funds by **100 $** on 
 - **Symptoms**: Fever, Muscle Pain  
 
 
-- **Open**: SC 10
+- **Open**: J

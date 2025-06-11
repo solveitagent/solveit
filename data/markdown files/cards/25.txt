@@ -4,6 +4,6 @@ With a satisfying click, the locker opens, revealing its contents. Inside, you f
 
 **Take a closer look! Well done, team!**  
 
-- **Open**: CC R, CC H, SC 22
+- **Open**: 21, 9, V
 - **Search in Archive**: Application 159
-- **Discard**: SC 21, CC S, CC Q, CC I, CC V
+- **Discard**: U, 22, 20, 10, 25

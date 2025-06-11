@@ -1,3 +1,0 @@
-# MC 1
-
-![MC 1](https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/MC_1.png)
