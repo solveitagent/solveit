@@ -2073,6 +2073,7 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
     Output('alert_submit_button', 'disabled', allow_duplicate=True),
     Output('alert_submit_button', 'children'),
     Output('alert_cancel_button', 'children'),
+    Output('alert_cancel_button', 'style'),
     Input('should_we_call_popup', 'data'),
     State('money_left_archive', 'children'),
     prevent_initial_call=True
@@ -2082,7 +2083,7 @@ def display_click_data(should_we_call_popup, money_left):
         if should_we_call_popup == 'NOTE_2':
             text = dcc.Markdown("Team, the clock has run out. It's time to submit your **Final Answers**. Upload your report and discover if you've truly uncovered the truth—or missed what was hiding in plain sight.", style={'width': '100%', 'fontSize': '12px'})
             
-            return True, text, False, 'Ok', None
+            return True, text, False, 'Ok', None, {'display':'none'}
         else:
             popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
             if len(popup_data) > 0:
@@ -2094,7 +2095,7 @@ def display_click_data(should_we_call_popup, money_left):
                     disbld = True
 
                 return True, dcc.Markdown(popup_data['TEXT'], style={'width': '100%', 'fontSize': '12px'}), disbld, \
-                       popup_data['YES'], popup_data['NO']
+                       popup_data['YES'], popup_data['NO'], {'display':'block'}
 
     return no_update
 
@@ -2118,23 +2119,26 @@ def display_click_data(alert_submit_button, alert_cancel_button, should_we_call_
                        virus_infection_rate):
     trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
     if should_we_call_popup:
-        popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
-        if len(popup_data) > 0:
-            popup_data = popup_data.iloc[0]
-            money_left = int(money_left.split('$')[0])
+        if should_we_call_popup=='NOTE_2':
+            return False, no_update, no_update, no_update, False, no_update, no_update
+        else:    
+            popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
+            if len(popup_data) > 0:
+                popup_data = popup_data.iloc[0]
+                money_left = int(money_left.split('$')[0])
 
-            if trigger == 'alert_submit_button':
-                money_left = money_left - 100
-                money_left = str(money_left) + '$'
-                message_to_show = dcc.Markdown(popup_data['YES Msg'], style={'width': '100%', 'fontSize': '12px'})
-            elif trigger == 'alert_cancel_button':
-                money_left = no_update
-                virus_infection_rate += 0.1
-                message_to_show = dcc.Markdown(popup_data['NO Msg'], style={'width': '100%', 'fontSize': '12px'})
-            else:
-                return no_update
+                if trigger == 'alert_submit_button':
+                    money_left = money_left - 100
+                    money_left = str(money_left) + '$'
+                    message_to_show = dcc.Markdown(popup_data['YES Msg'], style={'width': '100%', 'fontSize': '12px'})
+                elif trigger == 'alert_cancel_button':
+                    money_left = no_update
+                    virus_infection_rate += 0.1
+                    message_to_show = dcc.Markdown(popup_data['NO Msg'], style={'width': '100%', 'fontSize': '12px'})
+                else:
+                    return no_update
 
-            return False, money_left, money_left, money_left, True, message_to_show, virus_infection_rate
+                return False, money_left, money_left, money_left, True, message_to_show, virus_infection_rate
     return no_update
 
 
