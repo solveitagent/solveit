@@ -2256,7 +2256,7 @@ def toggle_content(n_clicks, archive_input, hierarchy_status, popup_status):
             if (archive_input.lower() == 'Police and Lab Records'.lower()) & (popup_status['NOTE_4'] == 0):
                 should_we_call_popup = 'NOTE_4'
                 popup_status['NOTE_4'] = 1
-            elif (suspects_input.lower() == 'Letter 122'.lower()) & (popup_status['NOTE_2'] == 0):
+            elif (archive_input.lower() == 'Letter 122'.lower()) & (popup_status['NOTE_2'] == 0):
                 should_we_call_popup = 'NOTE_2'
                 popup_status['NOTE_2'] = 1
             else:
