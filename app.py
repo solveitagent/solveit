@@ -2920,7 +2920,7 @@ def display_click_data(markdown_text_help_more_button, single_card_title, help_d
 def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *answers):
     if n_clicks:
         result = [answers[i] for i in range(len(answers)) if answers[i]]
-        real_answers = ['Drenasi', 'Taulant Gashi', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
+        real_answers = ['Drenasi', 'Drita Konjufca', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
         if not result:
             return True, 'Wrong, try again!'
 
