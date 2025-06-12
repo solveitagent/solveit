@@ -1,16 +1,16 @@
 title,password,id,hint
-CC K,redbloodcells,CC K.txt,
-CC U,tung,CC U.txt,
-CC V,435486,CC V.txt,
-CC W,466473,CC W.txt,
-CC Z,drenas,CC Z.txt,
-CC DH,56812,CC DH.txt,
-MC 1,equation,MC 1.txt,"I think the sings are as follows: ☾ is equal -, ⚖️ is equal =,  ✵ is equal x, ✺ is equal +"
-MC 2,cells,MC 2.txt,I think the password is 'redbloodcells'
-MC 3,id,MC 3.txt,I think you should search interview 'Taulant Gashi 383'
-MC 4,coding,MC 4.txt,I think the password is 'tung'
-MC 5,balloon,MC 5.txt,I think the password is helium written on a phone '435486'
-MC 6,dna,MC 6.txt,I think the password is based on the dna image '466473'
-MC 7,drenas,MC 7.txt,I think the password is 'Drenas'
-MC 8,coordinates,MC 8.txt,"I think 'X = 62, Y=20. The key is the location you are searching for in the map.'"
-MC 9,password,MC 9.txt,I think the password is '56812'
+12,redbloodcells,12.txt,
+24,tung,24.txt,
+25,435486,25.txt,
+26,466473,26.txt,
+29,drenas,29.txt,
+30,56812,30.txt,
+M 1,equation,M 1.txt,"I think the sings are as follows: ☾ is equal -, ⚖️ is equal =,  ✵ is equal x, ✺ is equal +"
+M 2,cells,M 2.txt,I think the password is 'redbloodcells'
+M 3,id,M 3.txt,I think you should search interview 'Taulant Gashi 383'
+M 4,coding,M 4.txt,I think the password is 'tung'
+M 5,balloon,M 5.txt,I think the password is helium written on a phone '435486'
+M 6,dna,M 6.txt,I think the password is based on the dna image '466473'
+M 7,drenas,M 7.txt,I think the password is 'Drenas'
+M 8,coordinates,M 8.txt,"I think 'X = 62, Y=20. The key is the location you are searching for in the map.'"
+M 9,password,M 9.txt,I think the password is '56812'
