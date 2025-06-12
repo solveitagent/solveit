@@ -2079,17 +2079,22 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
 )
 def display_click_data(should_we_call_popup, money_left):
     if should_we_call_popup:
-        popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
-        if len(popup_data) > 0:
-            popup_data = popup_data.iloc[0]
-            money_left = int(money_left.split('$')[0])
-            disbld = False
+        if should_we_call_popup == 'NOTE_2':
+            text = dcc.Markdown("Team, the clock has run out. It's time to submit your **Final Answers**. Upload your report and discover if you've truly uncovered the truth—or missed what was hiding in plain sight.", style={'width': '100%', 'fontSize': '12px'})
+            
+            return True, text, False, 'Ok', None
+        else:
+            popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
+            if len(popup_data) > 0:
+                popup_data = popup_data.iloc[0]
+                money_left = int(money_left.split('$')[0])
+                disbld = False
 
-            if money_left < 100:
-                disbld = True
+                if money_left < 100:
+                    disbld = True
 
-            return True, dcc.Markdown(popup_data['TEXT'], style={'width': '100%', 'fontSize': '12px'}), disbld, \
-                   popup_data['YES'], popup_data['NO']
+                return True, dcc.Markdown(popup_data['TEXT'], style={'width': '100%', 'fontSize': '12px'}), disbld, \
+                       popup_data['YES'], popup_data['NO']
 
     return no_update
 
@@ -2251,6 +2256,9 @@ def toggle_content(n_clicks, archive_input, hierarchy_status, popup_status):
             if (archive_input.lower() == 'Police and Lab Records'.lower()) & (popup_status['NOTE_4'] == 0):
                 should_we_call_popup = 'NOTE_4'
                 popup_status['NOTE_4'] = 1
+            elif (suspects_input.lower() == 'Letter 122'.lower()) & (popup_status['NOTE_2'] == 0):
+                should_we_call_popup = 'NOTE_2'
+                popup_status['NOTE_2'] = 1
             else:
                 should_we_call_popup = no_update
             return new_content_div, {'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
@@ -2560,10 +2568,8 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
             suspect_image = selectedRows['Image'].iloc[0]
             content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
 
-            if (suspects_input.lower() == 'Taulant Gashi 383'.lower()) & (popup_status['NOTE_2'] == 0):
-                should_we_call_popup = 'NOTE_2'
-                popup_status['NOTE_2'] = 1
-            elif (suspects_input.lower() == 'Taulant Gashi'.lower()) & (popup_status['NOTE_5'] == 0):
+            
+            if (suspects_input.lower() == 'Taulant Gashi'.lower()) & (popup_status['NOTE_5'] == 0):
                 should_we_call_popup = 'NOTE_5'
                 popup_status['NOTE_5'] = 1
             else:
