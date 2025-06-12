@@ -122,7 +122,7 @@ final_answers_dropdown_options = {
 
 
 help_data_start = {}
-for crd in cards[cards.Code.str.contains('mc')].Code:
+for crd in cards[cards.Code.str.contains('m ')].Code:
     help_data_start[crd] = 'not_opened'
 
 
@@ -2614,7 +2614,7 @@ def toggle_modal(cards_open):
     if len(cards_open) > 0:
         list_of_buttons_to_return = []
         for card in cards_open.values():
-            if "mc" in card.lower():
+            if "m " in card.lower():
                 bcg_color = 'rgb(69, 155, 196)'
             else:
                 bcg_color = 'rgb(162, 138, 208)'
@@ -2713,7 +2713,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                 card_data = selectedRows.iloc[0]
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
-                if card_data['Code'].lower().startswith("mc"):
+                if card_data['Code'].lower().startswith("m "):
                     placeholder = 'Please enter the mystery word'
                     color_cardbutton = 'rgb(69, 155, 196)'
                 else:
@@ -2775,7 +2775,7 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
 
-            if card_data['Code'].lower().startswith("mc"):
+            if card_data['Code'].lower().startswith("m "):
                 placeholder = 'Please enter the mystery word'
                 color_cardbutton = 'rgb(69, 155, 196)'
             else:
@@ -2857,12 +2857,12 @@ def display_click_data(card_pwd_button, cards_password, single_card_title, popup
                 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/cards/' + txt_file_name)
             content = response.text
 
-            if 'mc' in single_card_title.lower():
+            if 'm ' in single_card_title.lower():
                 help_button_style = {'width': '350px'}
             else:
                 help_button_style = {'display': 'none'}
 
-            if (single_card_title.lower() == 'CC K'.lower()) & (popup_status['NOTE_1'] == 0):
+            if (single_card_title.lower() == '12'.lower()) & (popup_status['NOTE_1'] == 0):
                 should_we_call_popup = 'NOTE_1'
                 popup_status['NOTE_1'] = 1
             else:
