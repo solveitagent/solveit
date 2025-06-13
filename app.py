@@ -1353,7 +1353,7 @@ def send_email(receiver_email):
 
                 <p class="warning">The fate of Kosovo is in your hands. Proceed with caution but act decisively. Time is not on our side.</p>
                 
-                <p>If you want to train-before the mission, open <strong>SC 1</strong>. If you want to start the mission directly open <strong>SC 5</strong>.</p>
+                <p>If you want to train-before the mission, open <strong>A</strong>. If you want to start the mission directly open <strong>E</strong>.</p>
             </div>
             <div class="footer">
                 <p>Stay sharp, Agents. Kosovo is counting on you.</p>
@@ -1365,12 +1365,12 @@ def send_email(receiver_email):
     """
 
     # Create Word Document Attachment
-    doc_attachment = Attachment(
-        FileContent(encoded_doc),
-        FileName('RuleBook.pdf'),
-        FileType('application/pdf'),
-        Disposition('attachment')  # This will be a downloadable attachment
-    )
+    #doc_attachment = Attachment(
+    #    FileContent(encoded_doc),
+    #    FileName('RuleBook.pdf'),
+    #    FileType('application/pdf'),
+    #    Disposition('attachment')  # This will be a downloadable attachment
+    #)
 
     # Create the email message
     message = Mail(
@@ -1381,7 +1381,7 @@ def send_email(receiver_email):
     )
 
     # Attach the logo image
-    message.attachment = doc_attachment
+    #message.attachment = doc_attachment
 
     # Send the email
     try:
