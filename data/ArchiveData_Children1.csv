@@ -1,5 +1,5 @@
-id,button_clicked,markdown_id,has_button1,has_button2,has_button3,has_button4,has_button5
-Hospital and Operations Records,1,hospital.txt,,,,,
-Hospital and Operations Records,2,operation.txt,,,,,
-Police and Lab Records,1,police.txt,CCTV,Evidence Photos,,,
-Police and Lab Records,2,lab.txt,,,,,
+name,id,button_clicked,markdown_id,has_button1,has_button2,has_button3,has_button4,has_button5
+Hospital,Hospital and Operations Records,1,hospital.txt,,,,,
+Operations,Hospital and Operations Records,2,operation.txt,,,,,
+Police,Police and Lab Records,1,police.txt,CCTV,Evidence Photos,,,
+Lab,Police and Lab Records,2,lab.txt,,,,,
