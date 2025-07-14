@@ -984,18 +984,18 @@ main_screen = html.Div([
         zIndex=10000,
         title='',
         closeOnClickOutside=False,
-        lockScroll=True,
+        fullScreen=True,
         children=[
             html.Div(
                 style={'justifyContent': 'center'},
                 children=[
                     html.Div(
                         [
-                            html.Span("⏱️", style={'fontSize': '38px', 'marginRight': '10px'}),
+                            html.Span("⏱️", style={'fontSize': '58px', 'marginRight': '10px'}),
                             html.Div(
                                 "120 seconds left",
                                 id='timer-display',
-                                style={'fontSize': '28px', 'fontWeight': 'bold'}
+                                style={'fontSize': '48px', 'fontWeight': 'bold'}
                             ),
                         ],
                         style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
