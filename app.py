@@ -194,9 +194,9 @@ archive_layout = html.Div(
                      ),
             html.Div([html.H6(id="money_left_archive", children='1000$'), html.P("Money")],
                      className="mini_container mini_container_margin",
-                    # **{"data-intro": "In this place you will see amount of money that you have available!",
-                    #    "data-step": "3"
-                    #     }
+                     # **{"data-intro": "In this place you will see amount of money that you have available!",
+                     #    "data-step": "3"
+                     #     }
                      )
         ],
             className="row container-display",
@@ -236,15 +236,15 @@ archive_layout = html.Div(
                         }
                     ),
                     html.Div(
-                        id = 'archive_history_div',
+                        id='archive_history_div',
                         children=[
                             html.Div()
                         ],
                         style={'display': 'flex',
                                'flexWrap': 'wrap',
                                'gap': '15px',
-                                'height': '40px',
-                                'overflowY':'auto'}
+                               'height': '40px',
+                               'overflowY': 'auto'}
                     ),
                 ],
                     className="pretty_container twelve columns",
@@ -282,7 +282,7 @@ archive_layout = html.Div(
     ],
 
 )
-#%%
+# %%
 interview_layout = html.Div(
     [
         html.Div([
@@ -348,15 +348,15 @@ interview_layout = html.Div(
                     dcc.Loading(
                         type="circle",
                         children=html.Div(
-                                id='selected-row-output',
-                                style={
-                                    'display': 'flex',
-                                    'flex-direction': 'column',
-                                    "max-height": "500px",  # Set maximum height in pixels (adjust as needed)
-                                    "overflowY": "auto",  # Enables vertical scrolling if content exceeds max height
-                                    "padding": "10px",  # Optional: Add padding for better visual spacing
-                                }
-                            ),
+                            id='selected-row-output',
+                            style={
+                                'display': 'flex',
+                                'flex-direction': 'column',
+                                "max-height": "500px",  # Set maximum height in pixels (adjust as needed)
+                                "overflowY": "auto",  # Enables vertical scrolling if content exceeds max height
+                                "padding": "10px",  # Optional: Add padding for better visual spacing
+                            }
+                        ),
                     ),
                     className="pretty_container eight columns",
                 ),
@@ -368,7 +368,7 @@ interview_layout = html.Div(
     ],
 
 )
-#%%
+# %%
 cards_layout = html.Div(
     [
         html.Div([
@@ -471,12 +471,14 @@ cards_layout = html.Div(
                                                             style={
                                                                 "text-align": "center",
                                                                 "font-family": "'Libre Baskerville', serif",
-                                                                "font-size": "clamp(1.4em, 2vw, 2.2em)",  # Responsive text
+                                                                "font-size": "clamp(1.4em, 2vw, 2.2em)",
+                                                                # Responsive text
                                                                 "font-weight": "bold",
                                                                 "color": "#2d2b28",
                                                             }
                                                         ),
-                                                        html.Hr(style={"border-top": "2px solid #2d2b28", "margin": "10px 0"}),
+                                                        html.Hr(style={"border-top": "2px solid #2d2b28",
+                                                                       "margin": "10px 0"}),
                                                         html.Div(
                                                             children=[
                                                                 html.Img(
@@ -497,7 +499,8 @@ cards_layout = html.Div(
                                                                     style={
                                                                         "position": "absolute",
                                                                         "bottom": "10px",
-                                                                        "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                                                                        "width": "clamp(20px, 5vw, 40px)",
+                                                                        # Responsive overlay
                                                                         "height": "clamp(20px, 5vw, 40px)",
                                                                         "opacity": "1",
                                                                         "marginLeft": "-80%",
@@ -522,36 +525,30 @@ cards_layout = html.Div(
                                                             style={
                                                                 "white-space": "pre-wrap",
                                                                 "font-family": "'Courier New', monospace",
-                                                                "font-size": "clamp(1em, 1.5vw, 1.2em)",  # Responsive font
+                                                                "font-size": "clamp(1em, 1.5vw, 1.2em)",
+                                                                # Responsive font
                                                                 "color": "#2d2b28",
                                                                 "line-height": "1.6",
                                                             }
                                                         ),
                                                         html.Div(
-                                                            id='timer_div',
-                                                            style={'display': 'none', 'justifyContent': 'center'},
-                                                            children=[
-                                                                html.Div(
-                                                                        [
-                                                                            html.Span("⏱️", style={'fontSize': '38px', 'marginRight': '10px'}),
-                                                                            html.Div(
-                                                                                "120 seconds left",
-                                                                                id='timer-display',
-                                                                                style={'fontSize': '28px', 'fontWeight': 'bold'}
-                                                                            ),
-                                                                        ],
-                                                                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'marginBottom': '20px'}
-                                                                    ),
-                                                                    # Start/Restart Button
-                                                                    html.Div(
-                                                                        [dbc.Button("Start timer", id='start-restart-button', color='primary', n_clicks=0,
-                                                                                    style={'marginRight': '7px'}),
-                                                                         dbc.Button("Found it", id='found-word-button', color='primary', n_clicks=0,
-                                                                                    style={'marginLeft': '7px'}),
-                                                                         ],
-                                                                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}
-                                                                    ),
-                                                            ]
+                                                            id='show_alert_timer_div',
+                                                            children=html.Button(
+                                                                'Open Timer', id='show_alert_timer_btn',
+                                                                style={
+                                                                    'width': 'clamp(100px, 15vw, 150px)',
+                                                                    # Responsive button
+                                                                    'alignItems': 'center',
+                                                                    'backgroundColor': 'rgb(245, 245, 245)'
+                                                                }
+                                                            ),
+                                                            style={
+                                                                'display': 'none',
+                                                                'alignItems': 'center',
+                                                                'justifyContent': 'center',
+                                                                'marginTop': '30px',
+
+                                                            }
                                                         ),
                                                         html.Div(
                                                             [
@@ -568,7 +565,8 @@ cards_layout = html.Div(
                                                                     html.Button(
                                                                         'Submit', id='card_pwd_button',
                                                                         style={
-                                                                            'width': 'clamp(100px, 15vw, 150px)',  # Responsive button
+                                                                            'width': 'clamp(100px, 15vw, 150px)',
+                                                                            # Responsive button
                                                                             'alignItems': 'center'
                                                                         }
                                                                     ),
@@ -580,10 +578,11 @@ cards_layout = html.Div(
                                                                     }
                                                                 )
                                                             ],
-                                                            style={'display': 'block', 'marginTop':'20px'}
+                                                            style={'display': 'block', 'marginTop': '20px'}
                                                         ),
                                                         html.Div(
-                                                            style={"border-top": "1px solid #2d2b28", "margin-top": "10px"}
+                                                            style={"border-top": "1px solid #2d2b28",
+                                                                   "margin-top": "10px"}
                                                         ),
                                                         dcc.Markdown(id='single_card_hint'),
                                                     ]),
@@ -641,7 +640,7 @@ cards_layout = html.Div(
     ],
 
 )
-#%%
+# %%
 final_answers_layout = html.Div(
     [
 
@@ -694,7 +693,7 @@ final_answers_layout = html.Div(
                                 style={'width': '100%', 'height': 'auto', 'backgroundColor': 'rgba(0,0,0,0)'},
                             ),
                         ],
-                        style={'marginTop':'15px'}
+                        style={'marginTop': '15px'}
                     ),
                     html.Div(
                         html.Button('Submit', id='button_clicked', style={'width': '150px', 'alignItems': 'center'}),
@@ -713,7 +712,7 @@ final_answers_layout = html.Div(
     ],
 
 )
-#%%
+# %%
 results_layout = html.Div(
     [
 
@@ -745,7 +744,8 @@ The motive behind the outbreak was found to be **accidental**. There was no deli
                     '''),
 
                     html.Div(
-                        html.Button('Go to Login', id='result_login_page', style={'width': '150px', 'alignItems': 'center'}),
+                        html.Button('Go to Login', id='result_login_page',
+                                    style={'width': '150px', 'alignItems': 'center'}),
                         style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
                                'marginTop': '30px'}
                     )
@@ -761,7 +761,7 @@ The motive behind the outbreak was found to be **accidental**. There was no deli
     ],
 
 )
-#%%
+# %%
 main_screen = html.Div([
     html.Div(
         [
@@ -933,7 +933,7 @@ main_screen = html.Div([
                                style={"marginBottom": "10px"}),
                 ],
                 style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
-                       'flexWrap': 'wrap', 'maxWidth':'100%',
+                       'flexWrap': 'wrap', 'maxWidth': '100%',
                        'marginBottom': '20px'}
             ),
             # Timer display
@@ -980,6 +980,41 @@ main_screen = html.Div([
         ]
     ),
     dmc.Modal(
+        id='alert_view_timer',
+        zIndex=10000,
+        title='',
+        closeOnClickOutside=False,
+        lockScroll=True,
+        children=[
+            html.Div(
+                style={'justifyContent': 'center'},
+                children=[
+                    html.Div(
+                        [
+                            html.Span("⏱️", style={'fontSize': '38px', 'marginRight': '10px'}),
+                            html.Div(
+                                "120 seconds left",
+                                id='timer-display',
+                                style={'fontSize': '28px', 'fontWeight': 'bold'}
+                            ),
+                        ],
+                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
+                               'marginBottom': '20px'}
+                    ),
+                    # Start/Restart Button
+                    html.Div(
+                        [dbc.Button("Start timer", id='start-restart-button', color='primary', n_clicks=0,
+                                    style={'marginRight': '7px'}),
+                         dbc.Button("Found it", id='found-word-button', color='primary', n_clicks=0,
+                                    style={'marginLeft': '7px'}),
+                         ],
+                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}
+                    ),
+                ]
+            ),
+        ]
+    ),
+    dmc.Modal(
         id='alert_view_other',
         zIndex=10000,
         title='Alert',
@@ -1016,7 +1051,7 @@ main_screen = html.Div([
         is_open=False,
     ),
 ], style={'display': 'flex', 'flexDirection': 'column'})
-#%%
+# %%
 login_screen = html.Div([
     # dcc.ConfirmDialog(
     #     id='confirm-dialog-login',
@@ -1092,7 +1127,7 @@ login_screen = html.Div([
     )
 ], style={'display': 'flex', 'flexDirection': 'column'})
 
-#%%
+# %%
 register_screen = html.Div([
     html.Div(
         [
@@ -1203,7 +1238,8 @@ register_screen = html.Div([
     )
 ], style={'display': 'flex', 'flexDirection': 'column'})
 
-#%%
+
+# %%
 def storyline_func(storylines_returned):
     list_sl = []
     for i in range(len(storylines_returned)):
@@ -1259,15 +1295,16 @@ def storyline_func(storylines_returned):
                     "overflowY": "auto",  # Enables vertical scrolling
                     "whiteSpace": "normal",  # Ensures text wraps to new lines
                     "wordWrap": "break-word",
-		    "display":"flex",
-		    "flexDirection":"column",
-		    "alignItems":"center",
-		    "overflowX": "hidden",
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "alignItems": "center",
+                    "overflowX": "hidden",
                     "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)",  # Optional: Shadow for a card effect
                 }
             )
         )
     return list_sl
+
 
 storyline_screen = html.Div([
     html.Div(
@@ -1349,6 +1386,7 @@ storyline_screen = html.Div([
     )
 ], style={'display': 'flex', 'flexDirection': 'column'})
 
+# %%
 app.layout = dmc.NotificationsProvider(
     html.Div([
         dcc.Store(id='initialized', data='/login', storage_type="local"),
@@ -1404,7 +1442,7 @@ app.layout = dmc.NotificationsProvider(
                         # ),
                         style={
                             "width": "100%",
-                            "height": "80vh",  # Adjust the height dynamically (change as needed)
+                            "height": "70vh",  # Adjust the height dynamically (change as needed)
                             "display": "flex",
                             "justifyContent": "center",
                             "alignItems": "center"
@@ -1427,6 +1465,10 @@ app.layout = dmc.NotificationsProvider(
 )
 
 
+# %%
+
+
+# %%
 @app.callback(
     [
         Output('virus_infection_rate', "data", allow_duplicate=True)
@@ -1585,7 +1627,8 @@ def send_email(receiver_email):
 def trigger_button(n_submit, n_clicks):
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -1603,7 +1646,8 @@ def trigger_button(n_submit, n_clicks):
 def trigger_button(n_submit, n_clicks):
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -1621,7 +1665,8 @@ def trigger_button(n_submit, n_clicks):
 def trigger_button(n_submit, n_clicks):
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -1639,7 +1684,8 @@ def trigger_button(n_submit, n_clicks):
 def trigger_button(n_submit, n_clicks):
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -1657,7 +1703,8 @@ def trigger_button(n_submit, n_clicks):
 def trigger_button(n_submit, n_clicks):
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -1676,7 +1723,8 @@ def trigger_button(n_submit, n_clicks):
     """Simulates a button click when Enter is pressed in the input field."""
     if n_clicks:
         return [n_clicks + 1]
-    return no_update
+    else:
+        return [1]
 
 
 @app.callback(
@@ -2208,12 +2256,14 @@ def on_initial_load(url, store_money_cities_time, cards_open):
     ]
 )
 def toggle_modal(url, close_click, open_video_click, is_open, previous_url):
-    if (close_click or open_video_click):
-        if (previous_url == '/storyline'):
-            return [not is_open]
+    if close_click:
+        return [False]
+    if open_video_click:
+        if (url == "/main") & (previous_url == '/storyline'):
+            return [True]
     if (url == "/main") & (previous_url == '/storyline'):
-        return [not is_open]
-    return [is_open]
+        return [True]
+    return [False]
 
 
 # %%
@@ -2416,7 +2466,8 @@ def update_map_center(zoom, lat, lon, nr_cities_infected, to_add):
         Output('money_left_archive', 'children', allow_duplicate=True),
         Output('money_left_interview', 'children', allow_duplicate=True),
         Output('money_left_cards', 'children', allow_duplicate=True),
-        Output('timer_div', 'style', allow_duplicate=True),
+        Output('alert_view_timer', 'opened'),
+        Output('show_alert_timer_div', 'style'),
     ],
     [
         Input('timer-interval', 'n_intervals'),
@@ -2438,17 +2489,18 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     if button_id == 'found-word-button':
-        return ["120 seconds left", 0, True, "Start timer", no_update, no_update, no_update, no_update,
+        return ["120 seconds left", 0, True, "Start timer", no_update, no_update, no_update, no_update, False,
                 {'display': 'none'}]
 
-    # If button is clicked, reset timer and start
+    # If the button is clicked, reset timer and start
     if n_clicks_start == 0:
-        return ["120 seconds left", 0, True, "Start timer", n_clicks_start, no_update, no_update, no_update, no_update]
+        return ["120 seconds left", 0, True, "Start timer", n_clicks_start, no_update, no_update, no_update, no_update,
+                no_update]
 
     if n_clicks_start > 0:
         if button_id == 'start-restart-button':  # if n_clicks_start>n_clicks_last:
             return ["120 seconds left", 0, False, "Restart timer", n_clicks_start, no_update, no_update, no_update,
-                    no_update]
+                    no_update, no_update]
 
     if n_intervals is None:
         return no_update
@@ -2459,11 +2511,11 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
         money_left = int(money_left.split('$')[0])
         money_left = money_left - 100
         money_left = str(money_left) + '$'
-        return ["Time's up!", 0, True, "Start timer", n_clicks_start, money_left, money_left, money_left,
+        return ["Time's up!", 0, True, "Start timer", n_clicks_start, money_left, money_left, money_left, False,
                 {'display': 'none'}]
 
     return [f"{seconds_left} seconds left", n_intervals, False, "Restart timer", n_clicks_start, no_update, no_update,
-            no_update, no_update]
+            no_update, no_update, no_update]
 
 
 # %%
@@ -3304,6 +3356,21 @@ def button_pressed(cards_open, passwords_remember):
         return no_update  # [{'display': 'flex', 'justifyContent': 'center'}]
 
 
+@app.callback(
+    [
+        Output('alert_view_timer', 'opened', allow_duplicate=True)
+    ],
+    [
+        Input('show_alert_timer_btn', 'n_clicks')
+    ],
+    prevent_initial_call=True
+)
+def button_pressed(show_alert_timer_btn):
+    if show_alert_timer_btn:
+        return [True]
+    return no_update
+
+
 # THIS cards_buttons_all IS GETTING PRESSED
 @app.callback(
     [
@@ -3329,8 +3396,8 @@ def button_pressed(cards_open, passwords_remember):
         Output('cards_password', 'placeholder'),
         Output('help_data', 'data', allow_duplicate=True),
         Output('card_body_id', 'style'),
-        Output('timer_div', 'style'),
         Output('markdown_text', 'children', allow_duplicate=True),
+        Output('show_alert_timer_div', 'style', allow_duplicate=True),
     ],
     [
         Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks'),
@@ -3402,14 +3469,18 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
                                     cards_open, no_update, no_update, no_update,
                                     {0: cards_input},
                                     no_update, no_update, no_update, no_update, no_update,
-                                    no_update, no_update, no_update, content]
+                                    no_update, no_update, content, no_update]
 
                 if card_data['Code'].lower().startswith("m "):
                     placeholder = 'Please enter the mystery word'
                     color_cardbutton = 'rgb(69, 155, 196)'
+                    show_button_alert = {'display': 'flex',
+                                         'alignItems': 'center',
+                                         'justifyContent': 'center'}
                 else:
                     placeholder = 'Please enter the password'
                     color_cardbutton = 'rgb(162, 138, 208)'
+                    show_button_alert = {'display': 'none'}
 
                 card_buton_style = {
                     "width": "100%",  # Adjust dynamically
@@ -3425,13 +3496,11 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
                 if (card_data.hasPassword == False):
                     style_input_pwd = {'width': '100%', 'display': 'none'}
                     style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
-                    style_timer = {'display': 'none'}
                 else:
                     style_input_pwd = {'width': '100%', 'display': 'block', 'backgroundColor': 'rgba(0,0,0,0)',
                                        'border': "1px solid #bbbbbb"}
                     style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                         'backgroundColor': '#F5F5F5'}
-                    style_timer = {'display': 'block'}
 
                 if card_data['Code'] not in cards_open.values():
                     cards_open = cards_open | {str(uuid4()): card_data['Code']}
@@ -3466,7 +3535,7 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
                             'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                             'Hint'], image, cards_open, False, no_update, no_update, {
                             0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data,
-                        card_buton_style, style_timer, no_update]
+                        card_buton_style, no_update, show_button_alert]
         elif button_index in cards['Code'].tolist():
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
@@ -3494,15 +3563,18 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
                                 cards_open, no_update, no_update, no_update,
                                 {0: cards_input},
                                 no_update, no_update, no_update, no_update, no_update,
-                                no_update, no_update, no_update, content]
+                                no_update, no_update, content, no_update]
 
             if card_data['Code'].lower().startswith("m "):
                 placeholder = 'Please enter the mystery word'
                 color_cardbutton = 'rgb(69, 155, 196)'
+                show_button_alert = {'display': 'flex',
+                                     'alignItems': 'center',
+                                     'justifyContent': 'center'}
             else:
                 placeholder = 'Please enter the password'
                 color_cardbutton = 'rgb(162, 138, 208)'
-
+                show_button_alert = {'display': 'none'}
             card_buton_style = {
                 "width": "100%",  # Adjust dynamically
                 "max-width": "400px",  # Limit max width on larger screens
@@ -3516,12 +3588,10 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
             if (card_data.hasPassword == False):
                 style_input_pwd = {'width': '100%', 'display': 'none'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
-                style_timer = {'display': 'none'}
             else:
                 style_input_pwd = {'width': '100%', 'display': 'block'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                     'backgroundColor': '#F5F5F5'}
-                style_timer = {'display': 'block'}
 
             if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Unknown.png"
@@ -3551,7 +3621,7 @@ def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_in
                         'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
                         'Hint'], image, cards_open, False, no_update, no_update, {
                         0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update,
-                    card_buton_style, style_timer, no_update]
+                    card_buton_style, no_update, show_button_alert]
         elif 'REMOVE' in button_index:
             button_index = json.loads(triggered_id)['index']
             if len(cards_open) > 0:
@@ -3711,9 +3781,6 @@ def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, p
             save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]), result, 0)
             return ['/results', previous_url, 0]
     return no_update
-
-
-
 
 if __name__ == "__main__":
     app.run_server(debug=True)
