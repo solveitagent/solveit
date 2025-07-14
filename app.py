@@ -1,6 +1,6 @@
 import dash
 from dash.dependencies import Input, Output, State, ALL
-from dash import dash_table, dcc, html, no_update, callback_context
+from dash import dcc, html, no_update, callback_context
 import dash_bootstrap_components as dbc
 import dash_leaflet as dl
 import dash_mantine_components as dmc
@@ -16,43 +16,88 @@ import requests
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Attachment, FileContent, FileName, FileType, Disposition, ContentId
 import base64
-import os
+import os, re
 from db_functions import read_user_data, save_data_logout, add_new_user, read_all_users, save_help_data
 
+is_it_run_localy = False
 
-archive_culprits_table_df = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits.csv')
-archive_culprits_table_df[
+if is_it_run_localy:
+    archive_culprits_table_df = pd.read_csv('data/culprits.csv')
+    archive_culprits_table_df[
+    'Image'] = 'assets/img/interviews/' + \
+               archive_culprits_table_df['Image']
+else:
+    archive_culprits_table_df = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits.csv')
+    archive_culprits_table_df[
     'Image'] = 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/' + \
                archive_culprits_table_df['Image']
+
+print('archive_culprits_table_df read!')
+
 for col in ['ID', 'Name']:
     archive_culprits_table_df[col] = archive_culprits_table_df[col].str.lower()
 
-cards = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/Cards.csv')
+if is_it_run_localy:
+    cards = pd.read_csv('data/Cards.csv')
+else:
+    cards = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/Cards.csv')
+print('cards read!')
 for col in ['Code', 'Title']:
     cards[col] = cards[col].str.lower()
 
-cities_info = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/cities_information.csv')
-storyline_data = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/storylines.csv')
-popup_info = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/popup_informations.csv')
-markdown_lists = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown_list.csv')
+if is_it_run_localy:
+    cities_info = pd.read_csv('data/cities_information.csv')
+else:
+    cities_info = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/cities_information.csv')
+print('cities_info read!')
+
+if is_it_run_localy:
+    storyline_data = pd.read_csv('data/storylines.csv')
+else:
+    storyline_data = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/storylines.csv')
+print('storyline_data read!')
+
+if is_it_run_localy:
+    popup_info = pd.read_csv('data/popup_informations.csv')
+else:
+    popup_info = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/popup_informations.csv')
+print('popup_info read!')
+
+if is_it_run_localy:
+    markdown_lists = pd.read_csv('data/markdown_list.csv')
+else:
+    markdown_lists = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown_list.csv')
+print('markdown_lists read!')
 markdown_lists.password = markdown_lists.password.astype('str')
 for col in ['title', 'password']:
     markdown_lists[col] = markdown_lists[col].str.lower()
 
-archive_parent = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Parent.csv')
+if is_it_run_localy:
+    archive_parent = pd.read_csv('data/ArchiveData_Parent.csv')
+else:
+    archive_parent = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Parent.csv')
+print('archive_parent read!')
 for col in ['id', 'pwd']:
     archive_parent[col] = archive_parent[col].str.lower()
 
-archive_child1 = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Children1.csv')
-archive_child2 = pd.read_csv(
-    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Children2.csv')
+if is_it_run_localy:
+    archive_child1 = pd.read_csv('data/ArchiveData_Children1.csv')
+else:
+    archive_child1 = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Children1.csv')
+print('archive_child1 read!')
+
+if is_it_run_localy:
+    archive_child2 = pd.read_csv('data/ArchiveData_Children2.csv')
+else:
+    archive_child2 = pd.read_csv(
+        'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/ArchiveData_Children2.csv')
+print('archive_child2 read!')
 for col in ['id']:
     archive_child1[col] = archive_child1[col].str.lower()
     archive_child2[col] = archive_child2[col].str.lower()
@@ -61,7 +106,8 @@ users = read_all_users()
 for col in ['username']:
     users[col] = users[col].str.lower()
 
-user_data = read_user_data(cities_info)
+user_data = read_user_data()
+print('user_data read!')
 
 app_start_time = time.time()
 
@@ -125,6 +171,8 @@ help_data_start = {}
 for crd in cards[cards.Code.str.contains('m ')].Code:
     help_data_start[crd] = 'not_opened'
 
+pwd_remember_dict = {title:0 for title in markdown_lists.title.tolist()}
+
 
 app = dash.Dash(suppress_callback_exceptions=True, external_stylesheets=[dbc.icons.BOOTSTRAP, dbc.themes.BOOTSTRAP,
                                                                          'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css'],
@@ -187,6 +235,17 @@ archive_layout = html.Div(
                             'boxSizing': 'border-box',  # Ensures padding is part of the width
                         }
                     ),
+                    html.Div(
+                        id = 'archive_history_div',
+                        children=[
+                            html.Div()
+                        ],
+                        style={'display': 'flex',
+                               'flexWrap': 'wrap',
+                               'gap': '15px',
+                                'height': '40px',
+                                'overflowY':'auto'}
+                    ),
                 ],
                     className="pretty_container twelve columns",
                 ),
@@ -208,7 +267,10 @@ archive_layout = html.Div(
                                  'padding': '10px',  # Adds some internal spacing
                                  'boxSizing': 'border-box',  # Ensures padding is part of the width
                              }),
-                    html.Div(id='new-content')
+                    dcc.Loading(
+                        type="circle",
+                        children=html.Div(id='new-content')
+                    )
                 ],
                     className="pretty_container twelve columns",
                 ),
@@ -220,7 +282,7 @@ archive_layout = html.Div(
     ],
 
 )
-
+#%%
 interview_layout = html.Div(
     [
         html.Div([
@@ -283,15 +345,18 @@ interview_layout = html.Div(
                     className="pretty_container four columns",
                 ),
                 html.Div(
-                    html.Div(
-                        id='selected-row-output',
-                        style={
-                            'display': 'flex',
-                            'flex-direction': 'column',
-                            "max-height": "500px",  # Set maximum height in pixels (adjust as needed)
-                            "overflow-y": "auto",  # Enables vertical scrolling if content exceeds max height
-                            "padding": "10px",  # Optional: Add padding for better visual spacing
-                        }
+                    dcc.Loading(
+                        type="circle",
+                        children=html.Div(
+                                id='selected-row-output',
+                                style={
+                                    'display': 'flex',
+                                    'flex-direction': 'column',
+                                    "max-height": "500px",  # Set maximum height in pixels (adjust as needed)
+                                    "overflowY": "auto",  # Enables vertical scrolling if content exceeds max height
+                                    "padding": "10px",  # Optional: Add padding for better visual spacing
+                                }
+                            ),
                     ),
                     className="pretty_container eight columns",
                 ),
@@ -303,7 +368,7 @@ interview_layout = html.Div(
     ],
 
 )
-
+#%%
 cards_layout = html.Div(
     [
         html.Div([
@@ -362,7 +427,7 @@ cards_layout = html.Div(
                         id='small_cards_grid',
                         style={
                             "display": "flex",
-                            "flex-wrap": "wrap",  # Prevent wrapping to force horizontal scrolling
+                            "flexWrap": "wrap",  # Prevent wrapping to force horizontal scrolling
                             "gap": "20px",  # Space between cards
                             "height": "200px",  # Set height (adjust as needed)
                             "overflowY": "auto",  # Enable horizontal scrolling
@@ -378,135 +443,166 @@ cards_layout = html.Div(
             [
                 html.Div(
                     [
-                        html.Div(
-                            id='single_card_div',
-                            style={'display': 'none', 'justify-content': 'center'},  # Center the card
-                            children=[
+                        dcc.Loading(
+                            type="circle",
+                            children=
+                            [
                                 html.Div(
-                                    style={
-                                        "width": "90%",  # Make it responsive by default
-                                        "max-width": "600px",  # Prevent it from getting too wide
-                                        "display": "flex",
-                                        "align-items": "center",
-                                        "justify-content": "center",
-                                        "padding": "20px",
-                                    },
+                                    id='single_card_div',
+                                    style={'display': 'none', 'justifyContent': 'center'},  # Center the card
                                     children=[
-                                        dbc.Card(
-                                            id='card_body_id',
-                                            children=
-                                            dbc.CardBody([
-                                                html.H4(
-                                                    id='single_card_title',
-                                                    className="card-title",
-                                                    style={
-                                                        "text-align": "center",
-                                                        "font-family": "'Libre Baskerville', serif",
-                                                        "font-size": "clamp(1.4em, 2vw, 2.2em)",  # Responsive text
-                                                        "font-weight": "bold",
-                                                        "color": "#2d2b28",
-                                                    }
-                                                ),
-                                                html.Hr(style={"border-top": "2px solid #2d2b28", "margin": "10px 0"}),
-                                                html.Div(
-                                                    children=[
-                                                        html.Img(
-                                                            id="single_card_thumbnail-img",
+                                        html.Div(
+                                            style={
+                                                "width": "90%",  # Make it responsive by default
+                                                "max-width": "600px",  # Prevent it from getting too wide
+                                                "display": "flex",
+                                                "alignItems": "center",
+                                                "justifyContent": "center",
+                                                "padding": "20px",
+                                            },
+                                            children=[
+                                                dbc.Card(
+                                                    id='card_body_id',
+                                                    children=
+                                                    dbc.CardBody([
+                                                        html.H4(
+                                                            id='single_card_title',
+                                                            className="card-title",
                                                             style={
-                                                                "width": "100%",  # Always fit the container
-                                                                "height": "auto",
-                                                                "margin-bottom": "15px",
-                                                                "border": "1px solid #2d2b28",
-                                                                "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
-                                                                "cursor": "pointer",
-                                                                "object-fit": "cover",
+                                                                "text-align": "center",
+                                                                "font-family": "'Libre Baskerville', serif",
+                                                                "font-size": "clamp(1.4em, 2vw, 2.2em)",  # Responsive text
+                                                                "font-weight": "bold",
+                                                                "color": "#2d2b28",
                                                             }
                                                         ),
-                                                        html.Img(
-                                                            id="overlay_image",
-                                                            src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/magnifier.png",
+                                                        html.Hr(style={"border-top": "2px solid #2d2b28", "margin": "10px 0"}),
+                                                        html.Div(
+                                                            children=[
+                                                                html.Img(
+                                                                    id="single_card_thumbnail-img",
+                                                                    style={
+                                                                        "width": "100%",  # Always fit the container
+                                                                        "height": "auto",
+                                                                        "marginBottom": "15px",
+                                                                        "border": "1px solid #2d2b28",
+                                                                        "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                                                                        "cursor": "pointer",
+                                                                        "object-fit": "cover",
+                                                                    }
+                                                                ),
+                                                                html.Img(
+                                                                    id="overlay_image",
+                                                                    src="https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/magnifier.png",
+                                                                    style={
+                                                                        "position": "absolute",
+                                                                        "bottom": "10px",
+                                                                        "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                                                                        "height": "clamp(20px, 5vw, 40px)",
+                                                                        "opacity": "1",
+                                                                        "marginLeft": "-80%",
+                                                                        "marginBottom": "12px",
+                                                                    },
+                                                                ),
+                                                            ],
                                                             style={
-                                                                "position": "absolute",
-                                                                "bottom": "10px",
-                                                                "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
-                                                                "height": "clamp(20px, 5vw, 40px)",
-                                                                "opacity": "1",
-                                                                "marginLeft": "-80%",
-                                                                "marginBottom": "12px",
+                                                                "display": "flex",
+                                                                "justifyContent": "center",
+                                                                "alignItems": "center",
+                                                                "height": "60%",
+                                                                "overflow": "hidden",
+                                                                "position": "relative",
+                                                                "cursor": "pointer",
                                                             },
+                                                            className="thumbnail-container"
                                                         ),
-                                                    ],
-                                                    style={
-                                                        "display": "flex",
-                                                        "justify-content": "center",
-                                                        "align-items": "center",
-                                                        "height": "60%",
-                                                        "overflow": "hidden",
-                                                        "position": "relative",
-                                                        "cursor": "pointer",
-                                                    },
-                                                    className="thumbnail-container"
-                                                ),
-                                                dcc.Markdown(
-                                                    id='single_card_text',
-                                                    className="card-text",
-                                                    style={
-                                                        "white-space": "pre-wrap",
-                                                        "font-family": "'Courier New', monospace",
-                                                        "font-size": "clamp(1em, 1.5vw, 1.2em)",  # Responsive font
-                                                        "color": "#2d2b28",
-                                                        "line-height": "1.6",
-                                                    }
-                                                ),
-                                                html.Div(
-                                                    [
-                                                        dbc.Input(
-                                                            id="cards_password",
-                                                            placeholder="Please enter the Mystery Word!",
-                                                            type="password",
+                                                        dcc.Markdown(
+                                                            id='single_card_text',
+                                                            className="card-text",
                                                             style={
-                                                                'background-color': 'rgba(0,0,0,0)',
-                                                                'border': "1px solid #bbbbbb"
+                                                                "white-space": "pre-wrap",
+                                                                "font-family": "'Courier New', monospace",
+                                                                "font-size": "clamp(1em, 1.5vw, 1.2em)",  # Responsive font
+                                                                "color": "#2d2b28",
+                                                                "line-height": "1.6",
                                                             }
                                                         ),
                                                         html.Div(
-                                                            html.Button(
-                                                                'Submit', id='card_pwd_button',
-                                                                style={
-                                                                    'width': 'clamp(100px, 15vw, 150px)',  # Responsive button
-                                                                    'alignItems': 'center'
-                                                                }
-                                                            ),
-                                                            style={
-                                                                'display': 'flex',
-                                                                'alignItems': 'center',
-                                                                'justifyContent': 'center',
-                                                                'marginTop': '30px'
-                                                            }
-                                                        )
-                                                    ],
-                                                    style={'display': 'block'}
+                                                            id='timer_div',
+                                                            style={'display': 'none', 'justifyContent': 'center'},
+                                                            children=[
+                                                                html.Div(
+                                                                        [
+                                                                            html.Span("⏱️", style={'fontSize': '38px', 'marginRight': '10px'}),
+                                                                            html.Div(
+                                                                                "120 seconds left",
+                                                                                id='timer-display',
+                                                                                style={'fontSize': '28px', 'fontWeight': 'bold'}
+                                                                            ),
+                                                                        ],
+                                                                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'marginBottom': '20px'}
+                                                                    ),
+                                                                    # Start/Restart Button
+                                                                    html.Div(
+                                                                        [dbc.Button("Start timer", id='start-restart-button', color='primary', n_clicks=0,
+                                                                                    style={'marginRight': '7px'}),
+                                                                         dbc.Button("Found it", id='found-word-button', color='primary', n_clicks=0,
+                                                                                    style={'marginLeft': '7px'}),
+                                                                         ],
+                                                                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}
+                                                                    ),
+                                                            ]
+                                                        ),
+                                                        html.Div(
+                                                            [
+                                                                dbc.Input(
+                                                                    id="cards_password",
+                                                                    placeholder="Please enter the Mystery Word!",
+                                                                    type="password",
+                                                                    style={
+                                                                        'background-color': 'rgba(0,0,0,0)',
+                                                                        'border': "1px solid #bbbbbb"
+                                                                    }
+                                                                ),
+                                                                html.Div(
+                                                                    html.Button(
+                                                                        'Submit', id='card_pwd_button',
+                                                                        style={
+                                                                            'width': 'clamp(100px, 15vw, 150px)',  # Responsive button
+                                                                            'alignItems': 'center'
+                                                                        }
+                                                                    ),
+                                                                    style={
+                                                                        'display': 'flex',
+                                                                        'alignItems': 'center',
+                                                                        'justifyContent': 'center',
+                                                                        'marginTop': '30px'
+                                                                    }
+                                                                )
+                                                            ],
+                                                            style={'display': 'block', 'marginTop':'20px'}
+                                                        ),
+                                                        html.Div(
+                                                            style={"border-top": "1px solid #2d2b28", "margin-top": "10px"}
+                                                        ),
+                                                        dcc.Markdown(id='single_card_hint'),
+                                                    ]),
+                                                    style={
+                                                        "width": "100%",  # Adjust dynamically
+                                                        "max-width": "400px",  # Limit max width on larger screens
+                                                        "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
+                                                        "border": "2px solid #2d2b28",
+                                                        "border-radius": "5px",
+                                                        "background-color": "#fdf8e4",
+                                                        "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
+                                                        "padding": "20px",
+                                                    },
                                                 ),
-                                                html.Div(
-                                                    style={"border-top": "1px solid #2d2b28", "margin-top": "10px"}
-                                                ),
-                                                dcc.Markdown(id='single_card_hint'),
-                                            ]),
-                                            style={
-                                                "width": "100%",  # Adjust dynamically
-                                                "max-width": "400px",  # Limit max width on larger screens
-                                                "box-shadow": "0px 4px 8px rgba(0, 0, 0, 0.4)",
-                                                "border": "2px solid #2d2b28",
-                                                "border-radius": "5px",
-                                                "background-color": "#fdf8e4",
-                                                "background-image": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
-                                                "padding": "20px",
-                                            },
+                                            ]
                                         ),
                                     ]
                                 ),
-                            ]
-                        ),
+                            ]),
                         html.Div(
                             style={
                                 'display': 'flex',
@@ -545,7 +641,7 @@ cards_layout = html.Div(
     ],
 
 )
-
+#%%
 final_answers_layout = html.Div(
     [
 
@@ -617,7 +713,55 @@ final_answers_layout = html.Div(
     ],
 
 )
+#%%
+results_layout = html.Div(
+    [
 
+        html.Div(
+            [
+                html.Div([
+                    dcc.Markdown('''
+                            # Outbreak Story: What Really Happened
+
+## Where Did the Virus Spread First?
+The virus outbreak began in **Drenas**, a town that quickly became the epicenter of the crisis. The first cases were reported here, setting off a chain of events that would soon affect many more.
+
+## Who Is Patient 0?
+**Drita Konjufca** was identified as Patient 0—the very first known case of the virus. Her diagnosis was crucial in tracing the origin and early spread of the disease.
+
+## How Did the Virus Spread?
+The virus was transmitted **through contact** between individuals. This mode of transmission allowed it to spread rapidly within the community before containment measures could be put in place.
+
+## What Is the Name of the Vaccine?
+In response to the outbreak, scientists developed a vaccine named **N-Serum**. This breakthrough was instrumental in controlling and eventually stopping the spread of the virus.
+
+## Who Are the Culprits?
+After thorough investigation, **Taulant Gashi** was identified as the person responsible for the virus’s release. However, it was determined that the release was not intentional.
+
+## What Was the Motive?
+The motive behind the outbreak was found to be **accidental**. There was no deliberate attempt to cause harm; instead, a series of unfortunate events led to the unintended release of the virus.
+
+
+                    '''),
+
+                    html.Div(
+                        html.Button('Go to Login', id='result_login_page', style={'width': '150px', 'alignItems': 'center'}),
+                        style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center',
+                               'marginTop': '30px'}
+                    )
+
+                ],
+                    className="pretty_container twelve columns",
+                ),
+
+            ],
+            className="row flex-display",
+        ),
+
+    ],
+
+)
+#%%
 main_screen = html.Div([
     html.Div(
         [
@@ -639,8 +783,8 @@ main_screen = html.Div([
                     'height': 'auto',
                     'marginLeft': '5px',
                     'padding': '0 0px',
-                    'z-index': '2',
-                    'flex-shrink': 0  # Prevent shrinking
+                    'zIndex': '2',
+                    'flexShrink': 0  # Prevent shrinking
                 }
             ),
 
@@ -652,7 +796,7 @@ main_screen = html.Div([
                         style={"marginBottom": "0px"},
                     )
                 ],
-                style={'flex-grow': 1, 'textAlign': 'center', 'width': '100%', 'marginLeft': '-80px'}
+                style={'flexGrow': 1, 'textAlign': 'center', 'width': '100%', 'marginLeft': '-80px'}
                 # Ensure it takes remaining space and centers text
             ),
 
@@ -675,15 +819,15 @@ main_screen = html.Div([
                     'height': 'auto',
                     'marginRight': '10px',
                     'padding': '0 0px',
-                    'flex-shrink': 0  # Prevent shrinking
+                    'flexShrink': 0  # Prevent shrinking
                 }
             )
         ],
         className="header row",
         style={
-            "margin-bottom": "25px",
+            "marginBottom": "25px",
             "display": "flex",
-            'flex-wrap': 'nowrap',
+            'flexWrap': 'nowrap',
             "justifyContent": "space-between",  # Space out the elements
             "alignItems": "center",  # Vertically align items
             "width": "100%",  # Make sure it takes the full width
@@ -763,8 +907,8 @@ main_screen = html.Div([
                         'width': '100%',
                         'height': '80vh',  # Optional: Set a specific height for the container
                         'display': 'flex',
-                        'justify-content': 'center',  # Centers the map horizontally in the div
-                        'align-items': 'center',
+                        'justifyContent': 'center',  # Centers the map horizontally in the div
+                        'alignItems': 'center',
                         'marginBottom': '10px'  # Centers the map vertically in the div
                     }
                 )]
@@ -793,30 +937,11 @@ main_screen = html.Div([
                        'marginBottom': '20px'}
             ),
             # Timer display
-            html.Div(
-                [
-                    html.Span("⏱️", style={'fontSize': '48px', 'marginRight': '10px'}),
-                    html.Div(
-                        "120 seconds left",
-                        id='timer-display',
-                        style={'fontSize': '38px', 'fontWeight': 'bold'}
-                    ),
-                ],
-                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'marginBottom': '20px'}
-            ),
-            # Start/Restart Button
-            html.Div(
-                [dbc.Button("Start timer", id='start-restart-button', color='primary', n_clicks=0,
-                            style={'marginRight': '7px'}),
-                 dbc.Button("Found it", id='found-word-button', color='primary', n_clicks=0,
-                            style={'marginLeft': '7px'}),
-                 ],
-                style={'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}
-            ),
+
         ]),
         id="offcanvas_scrollable_left",
         title="",
-        style={"height": "50%"},
+        style={"height": "20%"},
         placement='top',
         is_open=False,
         scrollable=False,
@@ -891,7 +1016,7 @@ main_screen = html.Div([
         is_open=False,
     ),
 ], style={'display': 'flex', 'flexDirection': 'column'})
-
+#%%
 login_screen = html.Div([
     # dcc.ConfirmDialog(
     #     id='confirm-dialog-login',
@@ -933,14 +1058,14 @@ login_screen = html.Div([
                 children=[
                     dbc.Input(
                         id="username_login",
-                        value='',
+                        value='aurora.a.mullatahiri@gmail.com',
                         placeholder="Enter your username",
                         type="text",
                         style={"marginBottom": "10px"},
                     ),
                     dbc.Input(
                         id="password_login",
-                        value='',
+                        value='mini',
                         placeholder="Enter your password",
                         type="password",
                         style={"marginBottom": "20px"},
@@ -967,6 +1092,7 @@ login_screen = html.Div([
     )
 ], style={'display': 'flex', 'flexDirection': 'column'})
 
+#%%
 register_screen = html.Div([
     html.Div(
         [
@@ -981,15 +1107,15 @@ register_screen = html.Div([
                             'width': '50px',
                             'marginLeft': '25px',
                             'padding': '0 0px',
-                            'flex-shrink': 0  # Prevent shrinking
+                            'flexShrink': 0  # Prevent shrinking
                         }
                         )
         ],
         className="header row",
         style={
-            "margin-bottom": "25px",
+            "marginBottom": "25px",
             "display": "flex",
-            'flex-wrap': 'nowrap',
+            'flexWrap': 'nowrap',
             "justifyContent": "space-between",  # Space out the elements
             "alignItems": "center",  # Vertically align items
             "width": "100%",  # Make sure it takes the full width
@@ -1015,7 +1141,6 @@ register_screen = html.Div([
             "flexDirection": "column",
             "alignItems": "center",
             "justifyContent": "center",
-            "height": "100%",
             "height": "100%",
             "padding": "20px",
         },
@@ -1078,7 +1203,7 @@ register_screen = html.Div([
     )
 ], style={'display': 'flex', 'flexDirection': 'column'})
 
-
+#%%
 def storyline_func(storylines_returned):
     list_sl = []
     for i in range(len(storylines_returned)):
@@ -1144,7 +1269,6 @@ def storyline_func(storylines_returned):
         )
     return list_sl
 
-
 storyline_screen = html.Div([
     html.Div(
         [
@@ -1159,15 +1283,15 @@ storyline_screen = html.Div([
                             'width': '100px',
                             'marginLeft': '25px',
                             'padding': '0 0px',
-                            'flex-shrink': 0  # Prevent shrinking
+                            'flexShrink': 0  # Prevent shrinking
                         }
                         )
         ],
         className="header row",
         style={
-            "margin-bottom": "25px",
+            "marginBottom": "25px",
             "display": "flex",
-            'flex-wrap': 'nowrap',
+            'flexWrap': 'nowrap',
             "justifyContent": "space-between",  # Space out the elements
             "alignItems": "center",  # Vertically align items
             "width": "100%",  # Make sure it takes the full width
@@ -1200,7 +1324,6 @@ storyline_screen = html.Div([
             "flexDirection": "column",
             "alignItems": "center",
             "justifyContent": "center",
-            "height": "100%",
             "height": "100%",
             "padding": "20px",
         },
@@ -1243,10 +1366,14 @@ app.layout = dmc.NotificationsProvider(
         dcc.Store(id='archive_status', data=archive_button_statuses_dict, storage_type="local"),
         dcc.Store(id='archive_button_child1_3sec_delay', storage_type="local"),
         dcc.Store(id='archive_button_clicked_3sec_delay', storage_type="local"),
+        dcc.Store(id='archive_buttons_clicked_delay', storage_type="local"),
         dcc.Store(id='cards_open', data={}, storage_type="local"),
+        dcc.Store(id='archives_open', data={}, storage_type="local"),
         dcc.Store(id='last_touched_button', storage_type="local"),
         dcc.Store(id="help_data", data=help_data_start, storage_type="local"),
         dcc.Store(id="previous_url", data=''),
+        dcc.Store(id="passwords_remember", data=pwd_remember_dict, storage_type="local"),
+        dcc.Store(id="solved_game", data=0, storage_type="local"),
         dcc.Interval(
             id='interval-component',
             interval=60 * 1000,  # Update every minute (in milliseconds)
@@ -1257,6 +1384,7 @@ app.layout = dmc.NotificationsProvider(
         html.Div(id='registerscreen', children=register_screen, style={'display': 'none'}),
         html.Div(id='storylinescreen', children=storyline_screen, style={'display': 'none'}),
         html.Div(id='mainscreen', children=main_screen, style={'display': 'none'}),
+        html.Div(id='resultsscreen', children=results_layout, style={'display': 'none'}),
         dbc.Modal(
             [
                 dbc.ModalHeader("Don't forget to look at your email, and check your spam folder!"),
@@ -1278,8 +1406,8 @@ app.layout = dmc.NotificationsProvider(
                             "width": "100%",
                             "height": "80vh",  # Adjust the height dynamically (change as needed)
                             "display": "flex",
-                            "justify-content": "center",
-                            "align-items": "center"
+                            "justifyContent": "center",
+                            "alignItems": "center"
                         }
                     ),
                     style={"height": "auto"}  # Let modal body adjust naturally
@@ -1299,6 +1427,55 @@ app.layout = dmc.NotificationsProvider(
 )
 
 
+@app.callback(
+    [
+        Output('virus_infection_rate', "data", allow_duplicate=True)
+    ],
+    [
+        Input("url", "pathname")
+    ],
+    [
+        State("nr_cities_infected", "data"),
+        State("virus_infection_rate", "data"),
+        State("popup_status", "data"),
+        State("archive_status", "data"),
+        State("cards_open", "data"),
+        State("help_data", "data"),
+        State("passwords_remember", "data"),
+        State('time_sgs_archive', 'children'),
+        State('cities_outbreak_archive', 'children'),
+        State('money_left_archive', 'children'),
+        State('store_email', 'data'),
+        State('archives_open', 'data'),
+        Input("url", "pathname")
+    ],
+    prevent_initial_call=True
+)
+def save_every_change(url, nr_cities_infected, virus_infection_rate, popup_status, archive_status, cards_open,
+                      help_data, passwords_remember, time_sgs_archive, cities_outbreak_archive, money_left_archive,
+                      store_email, archives_open, prev_url):
+    if True:
+        nr_cities_infected = '3' if cities_infected_beginning is None else nr_cities_infected
+        virus_infection_rate = 0.2 if virus_infection_rate is None else virus_infection_rate
+        popup_status = popup_statuses_dict if popup_status is None else popup_status
+        archive_status = archive_button_statuses_dict if archive_status is None else archive_status
+        cards_open = {} if cards_open is None else cards_open
+        help_data = help_data_start if help_data is None else help_data
+        passwords_remember = pwd_remember_dict if passwords_remember is None else passwords_remember
+        time_sgs_archive = '0 Mins' if time_sgs_archive is None else time_sgs_archive
+        cities_outbreak_archive = '3' if cities_outbreak_archive is None else cities_outbreak_archive
+        money_left_archive = '1000$' if money_left_archive is None else money_left_archive
+        archives_open = {} if archives_open is None else archives_open
+
+        save_data_logout(store_email['email'],
+                         cities_outbreak_archive, money_left_archive, time_sgs_archive,
+                         -99, virus_infection_rate, 0, -99, popup_status, archive_status, nr_cities_infected,
+                         passwords_remember, cards_open, help_data, archives_open)
+
+    return no_update
+
+
+# %%
 def send_email(receiver_email):
     # Load and encode the Word Document
     response = requests.get('https://github.com/solveitagent/solveit/raw/refs/heads/main/data/RuleBook.pdf')
@@ -1313,9 +1490,9 @@ def send_email(receiver_email):
         <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; }
-            .header { text-align: center; margin-bottom: 20px; }
+            .header { text-align: center; marginBottom: 20px; }
             .header h1 { color: #007BFF; }
-            .content { margin-bottom: 30px; }
+            .content { marginBottom: 30px; }
             .footer { text-align: center; margin-top: 20px; }
             .logo { max-width: 150px; height: auto; }
             .btn { display: inline-block; padding: 10px 20px; color: white; background-color: #007BFF; text-decoration: none; border-radius: 5px; }
@@ -1352,7 +1529,7 @@ def send_email(receiver_email):
                 <p>Keep in mind you get <strong>3 free</strong> hints from an expert, each extra costs <strong>100$</strong>. Follow the <strong>Rule Book</strong> for more information.</p>
 
                 <p class="warning">The fate of Kosovo is in your hands. Proceed with caution but act decisively. Time is not on our side.</p>
-                
+
                 <p>If you want to train-before the mission, open <strong>A</strong>. If you want to start the mission directly open <strong>E</strong>.</p>
             </div>
             <div class="footer">
@@ -1365,12 +1542,12 @@ def send_email(receiver_email):
     """
 
     # Create Word Document Attachment
-    #doc_attachment = Attachment(
+    # doc_attachment = Attachment(
     #    FileContent(encoded_doc),
     #    FileName('RuleBook.pdf'),
     #    FileType('application/pdf'),
     #    Disposition('attachment')  # This will be a downloadable attachment
-    #)
+    # )
 
     # Create the email message
     message = Mail(
@@ -1381,7 +1558,7 @@ def send_email(receiver_email):
     )
 
     # Attach the logo image
-    #message.attachment = doc_attachment
+    # message.attachment = doc_attachment
 
     # Send the email
     try:
@@ -1392,79 +1569,134 @@ def send_email(receiver_email):
         print(f"Failed to send email: {e}")
 
 
+# %%
 @app.callback(
-    Output({"type": "archive_buttons", "index": 'INPUT'}, "n_clicks"),
-    Input("archive_input", "n_submit"),
-    State({"type": "archive_buttons", "index": 'INPUT'}, "n_clicks"),
+    [
+        Output({"type": "archive_buttons", "index": 'INPUT'}, "n_clicks")
+    ],
+    [
+        Input("archive_input", "n_submit")
+    ],
+    [
+        State({"type": "archive_buttons", "index": 'INPUT'}, "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
-    return n_clicks + 1
+    if n_clicks:
+        return [n_clicks + 1]
+    return no_update
 
 
 @app.callback(
-    Output('interview_button_clicked', "n_clicks"),
-    Input("suspects_input", "n_submit"),
-    State('interview_button_clicked', "n_clicks"),
+    [
+        Output('interview_button_clicked', "n_clicks")
+    ],
+    [
+        Input("suspects_input", "n_submit")
+    ],
+    [
+        State('interview_button_clicked', "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
-    return n_clicks + 1
+    if n_clicks:
+        return [n_clicks + 1]
+    return no_update
 
 
 @app.callback(
-    Output({'type': 'cards_buttons_all', 'index': 'cards_button_clicked'}, "n_clicks"),
-    Input("cards_input", "n_submit"),
-    State({'type': 'cards_buttons_all', 'index': 'cards_button_clicked'}, "n_clicks"),
+    [
+        Output({'type': 'cards_buttons_all', 'index': 'cards_button_clicked'}, "n_clicks")
+    ],
+    [
+        Input("cards_input", "n_submit")
+    ],
+    [
+        State({'type': 'cards_buttons_all', 'index': 'cards_button_clicked'}, "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
-    return n_clicks + 1
+    if n_clicks:
+        return [n_clicks + 1]
+    return no_update
 
 
 @app.callback(
-    Output('login_btn_login', "n_clicks"),
-    Input("password_login", "n_submit"),
-    State('login_btn_login', "n_clicks"),
+    [
+        Output('login_btn_login', "n_clicks")
+    ],
+    [
+        Input("password_login", "n_submit")
+    ],
+    [
+        State('login_btn_login', "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
-    return n_clicks + 1
+    if n_clicks:
+        return [n_clicks + 1]
+    return no_update
 
 
 @app.callback(
-    Output('register_button_register', "n_clicks"),
-    Input("password_input_register", "n_submit"),
-    State('register_button_register', "n_clicks"),
+    [
+        Output('register_button_register', "n_clicks")
+    ],
+    [
+        Input("password_input_register", "n_submit")
+    ],
+    [
+        State('register_button_register', "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
-    return n_clicks + 1
+    if n_clicks:
+        return [n_clicks + 1]
+    return no_update
 
 
 @app.callback(
-    Output("search_long_lat_button", "n_clicks"),
-    Input("lon_input", "n_submit"),
-    State("search_long_lat_button", "n_clicks"),
-    prevent_initial_call=True
-)
-def trigger_button(n_submit, n_clicks):
-    """Simulates a button click when Enter is pressed in the input field."""
-    return n_clicks + 1
-
-
-@app.callback(
-    Output("card_pwd_button", "n_clicks"),
-    Input("cards_password", "n_submit"),
-    State("card_pwd_button", "n_clicks"),
+    [
+        Output("search_long_lat_button", "n_clicks")
+    ],
+    [
+        Input("lon_input", "n_submit")
+    ],
+    [
+        State("search_long_lat_button", "n_clicks")
+    ],
     prevent_initial_call=True
 )
 def trigger_button(n_submit, n_clicks):
     """Simulates a button click when Enter is pressed in the input field."""
     if n_clicks:
-        return n_clicks + 1
+        return [n_clicks + 1]
+    return no_update
+
+
+@app.callback(
+    [
+        Output("card_pwd_button", "n_clicks")
+    ],
+    [
+        Input("cards_password", "n_submit")
+    ],
+    [
+        State("card_pwd_button", "n_clicks")
+    ],
+    prevent_initial_call=True
+)
+def trigger_button(n_submit, n_clicks):
+    """Simulates a button click when Enter is pressed in the input field."""
+    if n_clicks:
+        return [n_clicks + 1]
     else:
-        return 1
+        return [1]
 
 
 def hash_password(password: str) -> str:
@@ -1474,33 +1706,53 @@ def hash_password(password: str) -> str:
 
 
 @app.callback(
-    Output("loginscreen", "style"),
-    Output("registerscreen", "style"),
-    Output("storylinescreen", "style"),
-    Output("mainscreen", "style"),
-    Output('initialized', 'data'),
-    Input("url", "pathname"),
+    [
+        Output("loginscreen", "style"),
+        Output("registerscreen", "style"),
+        Output("storylinescreen", "style"),
+        Output("mainscreen", "style"),
+        Output("resultsscreen", "style"),
+        Output('initialized', 'data')
+    ],
+    [
+        Input("url", "pathname")
+    ],
 )
 def display_page(pathname):
     if pathname == "/main":
-        return {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'block'}, '/main'
+        return [{'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'block'},
+                {'display': 'none'}, '/main']
     elif pathname == '/register':
-        return {'display': 'none'}, {'display': 'block'}, {'display': 'none'}, {'display': 'none'}, '/register'
+        return [{'display': 'none'}, {'display': 'block'}, {'display': 'none'}, {'display': 'none'},
+                {'display': 'none'}, '/register']
     elif pathname == '/storyline':
-        return {'display': 'none'}, {'display': 'none'}, {'display': 'block'}, {'display': 'none'}, '/storyline'
+        return [{'display': 'none'}, {'display': 'none'}, {'display': 'block'}, {'display': 'none'},
+                {'display': 'none'}, '/storyline']
+    elif pathname == '/results':
+        return [{'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'},
+                {'display': 'block'}, '/results']
     else:
-        return {'display': 'block'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, '/login'
+        return [{'display': 'block'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'},
+                {'display': 'none'}, '/login']
 
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('confirm-dialog-login_text', 'children'),
-    Output('confirm-dialog-login', 'opened'),
-    Output("store_email", "data", allow_duplicate=True),
-    Output('message_login', 'children'),
-    Output('previous_url', 'data', allow_duplicate=True),
-    [Input("login_btn_login", "n_clicks")],
-    [State("username_login", "value"), State("password_login", "value"), State("url", "pathname")],
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('confirm-dialog-login_text', 'children'),
+        Output('confirm-dialog-login', 'opened'),
+        Output("store_email", "data", allow_duplicate=True),
+        Output('message_login', 'children'),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("login_btn_login", "n_clicks")
+    ],
+    [
+        State("username_login", "value"),
+        State("password_login", "value"),
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_login(login_clicks, username, password, previous_url):
@@ -1509,41 +1761,55 @@ def handle_login(login_clicks, username, password, previous_url):
             password_hashed = hash_password(password)
             user_name_check = users[(users['username'] == username.lower()) & (users['password'] == password_hashed)]
             if len(user_name_check) == 1:
-                #our_user = read_user_data(cities_info, username)[username]
-                #button_, style_ = switch_between_input_and_back_button_archive('back_button')
-                return (
-                '/storyline', '', False, {'name': user_name_check.iloc[0]['name'], 'email': username}, '', previous_url)
+                # our_user = read_user_data(cities_info, username)[username]
+                # button_, style_ = switch_between_input_and_back_button_archive('back_button')
+                return [
+                    '/storyline', '', False, {'name': user_name_check.iloc[0]['name'], 'email': username}, '',
+                    previous_url]
 
-            return no_update, 'Wrong username or password', True, no_update, no_update, no_update
+            return [no_update, 'Wrong username or password', True, no_update, no_update, no_update]
     return no_update
 
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Input("register_btn_login", "n_clicks"),
-    State("url", "pathname"),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("register_btn_login", "n_clicks")
+    ],
+    [
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_login_register(register_clicks, previous_url):
-    if register_clicks > 0:
-        return '/register', previous_url
+    if register_clicks:
+        if register_clicks > 0:
+            return ['/register', previous_url]
     return no_update
 
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('confirm-dialog-register_text', 'children'),
-    Output('confirm-dialog-register', 'opened'),
-    Output("store_email", "data", allow_duplicate=True),
-    Output('message_register', 'children'),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Input("register_button_register", "n_clicks"),
-    State("name_input_register", "value"),
-    State("surname_input_register", "value"),
-    State("email_input_register", "value"),
-    State("password_input_register", "value"),
-    State("url", "pathname"),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('confirm-dialog-register_text', 'children'),
+        Output('confirm-dialog-register', 'opened'),
+        Output("store_email", "data", allow_duplicate=True),
+        Output('message_register', 'children'),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("register_button_register", "n_clicks")
+    ],
+    [
+        State("name_input_register", "value"),
+        State("surname_input_register", "value"),
+        State("email_input_register", "value"),
+        State("password_input_register", "value"),
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_register(n_clicks, name, surname, email, password, previous_url):
@@ -1580,58 +1846,74 @@ def handle_register(n_clicks, name, surname, email, password, previous_url):
 
                 add_new_user(email.lower(), password_hashed, name, surname)
 
-                return ('/storyline', '', False, {'name': name, 'email': email}, '', previous_url)
+                return ['/storyline', '', False, {'name': name, 'email': email}, '', previous_url]
             else:
-                return no_update, "This email already exists!", True, no_update, no_update, no_update
+                return [no_update, "This email already exists!", True, no_update, no_update, no_update]
         else:
-            return no_update, "Please fill in all fields.", True, no_update, no_update, no_update
+            return [no_update, "Please fill in all fields.", True, no_update, no_update, no_update]
     return no_update
 
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Input("back_button_register", "n_clicks"),
-    State("url", "pathname"),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("back_button_register", "n_clicks")
+    ],
+    [
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_login(back_button_register, previous_url):
     if back_button_register:
-        return '/login', previous_url
+        return ['/login', previous_url]
     return no_update
 
 
 # Logout and save state
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output("offcanvas_scrollable_left", 'is_open', allow_duplicate=True),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Input("logout-button", "n_clicks"),
-    State('time_sgs_archive', 'children'),
-    State('cities_outbreak_archive', 'children'),
-    State('money_left_archive', 'children'),
-    State('store_what_happened', 'data'),
-    State('nr_cities_infected', 'data'),
-    State('virus_infection_rate', 'data'),
-    State('restart_timer_state', 'data'),
-    State('should_we_call_popup', 'data'),
-    State('hierarchy_status', 'data'),
-    State('popup_status', 'data'),
-    State('archive_status', 'data'),
-    State('archive_button_child1_3sec_delay', 'data'),
-    State('archive_button_clicked_3sec_delay', 'data'),
-    State('cards_open', 'data'),
-    State('last_touched_button', 'data'),
-    State('store_email', 'data'),
-    State('url', 'pathname'),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output("offcanvas_scrollable_left", 'is_open', allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("logout-button", "n_clicks")
+    ],
+    [
+        State('time_sgs_archive', 'children'),
+        State('cities_outbreak_archive', 'children'),
+        State('money_left_archive', 'children'),
+        State('store_what_happened', 'data'),
+        State('nr_cities_infected', 'data'),
+        State('virus_infection_rate', 'data'),
+        State('restart_timer_state', 'data'),
+        State('should_we_call_popup', 'data'),
+        State('hierarchy_status', 'data'),
+        State('popup_status', 'data'),
+        State('archive_status', 'data'),
+        State('archive_button_child1_3sec_delay', 'data'),
+        State('archive_button_clicked_3sec_delay', 'data'),
+        State('cards_open', 'data'),
+        State('last_touched_button', 'data'),
+        State('store_email', 'data'),
+        State('passwords_remember', 'data'),
+        State('help_data', 'data'),
+        State('archives_open', 'data'),
+        State('url', 'pathname'),
+    ],
     prevent_initial_call=True,
 )
 def handle_logout(logout_button, time, cities_infected, money_left, store_what_happened, nr_cities_infected,
                   virus_infection_rate,
                   restart_timer_state, should_we_call_popup, hierarchy_status, popup_status, archive_status,
                   archive_button_child1_3sec_delay,
-                  archive_button_clicked_3sec_delay, cards_open, last_touched_button, store_email, previous_url):
+                  archive_button_clicked_3sec_delay, cards_open, last_touched_button, store_email, passwords_remember,
+                  help_data, archives_open, previous_url):
     if logout_button:
         new_element_key = store_email['email']
         new_element_value = {"cities_infected": cities_infected,
@@ -1649,111 +1931,159 @@ def handle_logout(logout_button, time, cities_infected, money_left, store_what_h
                              "archive_button_clicked_3sec_delay": None,
                              "cards_open": cards_open,
                              "last_touched_button": last_touched_button,
+                             "passwords_remember": passwords_remember,
+                             "help_data": help_data,
+                             "archives_open": archives_open
                              }
         global user_data
         user_data[new_element_key] = new_element_value
-        # print(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
-        save_data_logout(store_email['email'], cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected)
+        save_data_logout(store_email['email'], cities_infected, money_left, time, store_what_happened,
+                         virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status,
+                         nr_cities_infected, passwords_remember, cards_open, help_data, archives_open)
 
-        return '/storyline', False, previous_url
+        return ['/storyline', False, previous_url]
     return no_update
 
 
 # Restart game
 @app.callback(
-    Output('interval-component', 'n_intervals', allow_duplicate=True),
-    Output('time_sgs_archive', 'children', allow_duplicate=True),
-    Output('time_sgs_interview', 'children', allow_duplicate=True),
-    Output('time_sgs_cards', 'children', allow_duplicate=True),
-    Output('cities_outbreak_archive', 'children', allow_duplicate=True),
-    Output('cities_outbreak_interview', 'children', allow_duplicate=True),
-    Output('cities_outbreak_cards', 'children', allow_duplicate=True),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('store_what_happened', 'data', allow_duplicate=True),
-    Output('nr_cities_infected', 'data', allow_duplicate=True),
-    Output('help_data', 'data', allow_duplicate=True),
-    Output('virus_infection_rate', 'data', allow_duplicate=True),
-    Output('restart_timer_state', 'data', allow_duplicate=True),
-    Output('should_we_call_popup', 'data', allow_duplicate=True),
-    Output('hierarchy_status', 'data', allow_duplicate=True),
-    Output('popup_status', 'data', allow_duplicate=True),
-    Output('archive_status', 'data', allow_duplicate=True),
-    Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
-    Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
-    Output('cards_open', 'data', allow_duplicate=True),
-    Output('last_touched_button', 'data', allow_duplicate=True),
-    Output('selected-row-output', 'children', allow_duplicate=True),
-    Output('image_layout', 'src', allow_duplicate=True),
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'style', allow_duplicate=True),
-    Input("restart-game-button", "n_clicks"),
+    [
+        Output('interval-component', 'n_intervals', allow_duplicate=True),
+        Output('time_sgs_archive', 'children', allow_duplicate=True),
+        Output('time_sgs_interview', 'children', allow_duplicate=True),
+        Output('time_sgs_cards', 'children', allow_duplicate=True),
+        Output('cities_outbreak_archive', 'children', allow_duplicate=True),
+        Output('cities_outbreak_interview', 'children', allow_duplicate=True),
+        Output('cities_outbreak_cards', 'children', allow_duplicate=True),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('store_what_happened', 'data', allow_duplicate=True),
+        Output('nr_cities_infected', 'data', allow_duplicate=True),
+        Output('help_data', 'data', allow_duplicate=True),
+        Output('virus_infection_rate', 'data', allow_duplicate=True),
+        Output('restart_timer_state', 'data', allow_duplicate=True),
+        Output('should_we_call_popup', 'data', allow_duplicate=True),
+        Output('hierarchy_status', 'data', allow_duplicate=True),
+        Output('popup_status', 'data', allow_duplicate=True),
+        Output('archive_status', 'data', allow_duplicate=True),
+        Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
+        Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
+        Output('cards_open', 'data', allow_duplicate=True),
+        Output('last_touched_button', 'data', allow_duplicate=True),
+        Output('selected-row-output', 'children', allow_duplicate=True),
+        Output('image_layout', 'src', allow_duplicate=True),
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+        Output('passwords_remember', 'data', allow_duplicate=True),
+        Output('archives_open', 'data', allow_duplicate=True),
+        Output('markdown_text', 'children', allow_duplicate=True),
+    ],
+    [
+        Input("restart-game-button", "n_clicks")
+    ],
     prevent_initial_call=True,
 )
 def handle_restartgame(restart_button):
     if restart_button:
         button_, style_ = switch_between_input_and_back_button_archive('back_button')
-        return (0, '0 Mins', '0 Mins', '0 Mins', '3', '3', '3', '1000$', '1000$', '1000$', None,
+
+        return [0, '0 Mins', '0 Mins', '0 Mins', '3', '3', '3', '1000$', '1000$', '1000$', None,
                 cities_infected_beginning, help_data_start, 0.2,
                 -1, None, {"archive_parent": None, "archive_child1": None, "archive_child2": None},
                 {"NOTE_1": 0, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0},
                 {"Hospital": 0, "Police": 0, "CCTV": 0, "Operations": 0, "Lab": 0, "Evidence Photos": 0}, None, None,
-                {}, None, [], 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [],
-                button_, style_)
+                {}, None, [],
+                'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png',
+                [],
+                button_, style_, pwd_remember_dict, {}, []]
     return no_update
 
 
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Input("back_button_storyline", "n_clicks"),
-    State("url", "pathname"),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("back_button_storyline", "n_clicks")
+    ],
+    [
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_login(back_button_storyline, previous_url):
     if back_button_storyline:
-        return '/login', previous_url
+        return ['/login', previous_url]
     return no_update
 
 
+# %%
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Output('interval-component', 'n_intervals', allow_duplicate=True),
-    Output('time_sgs_archive', 'children', allow_duplicate=True),
-    Output('time_sgs_interview', 'children', allow_duplicate=True),
-    Output('time_sgs_cards', 'children', allow_duplicate=True),
-    Output('cities_outbreak_archive', 'children', allow_duplicate=True),
-    Output('cities_outbreak_interview', 'children', allow_duplicate=True),
-    Output('cities_outbreak_cards', 'children', allow_duplicate=True),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('store_what_happened', 'data', allow_duplicate=True),
-    Output('nr_cities_infected', 'data', allow_duplicate=True),
-    Output('virus_infection_rate', 'data', allow_duplicate=True),
-    Output('restart_timer_state', 'data', allow_duplicate=True),
-    Output('should_we_call_popup', 'data', allow_duplicate=True),
-    Output('hierarchy_status', 'data', allow_duplicate=True),
-    Output('popup_status', 'data', allow_duplicate=True),
-    Output('archive_status', 'data', allow_duplicate=True),
-    Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
-    Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
-    Output('cards_open', 'data', allow_duplicate=True),
-    Output('last_touched_button', 'data', allow_duplicate=True),
-    Output('selected-row-output', 'children', allow_duplicate=True),
-    Output('image_layout', 'src', allow_duplicate=True),
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'style', allow_duplicate=True),
-    Output('store_money_cities_time', 'data', allow_duplicate=True),
-    Output('previous_url', 'data', allow_duplicate=True),
-    Output('show_loader_div', 'children'),
-    Output('help_data', 'data', allow_duplicate=True),
-    Input({"type": "storyline_buttons", "index": ALL}, "n_clicks"),
-    State("store_email", "data"),
-    State("url", "pathname"),
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("result_login_page", "n_clicks")
+    ],
+    [
+        State("url", "pathname")
+    ],
+    prevent_initial_call=True,
+)
+def handle_results(result_login_page, previous_url):
+    if result_login_page:
+        return ['/login', previous_url]
+    return no_update
+
+
+# %%
+@app.callback(
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('interval-component', 'n_intervals', allow_duplicate=True),
+        Output('time_sgs_archive', 'children', allow_duplicate=True),
+        Output('time_sgs_interview', 'children', allow_duplicate=True),
+        Output('time_sgs_cards', 'children', allow_duplicate=True),
+        Output('cities_outbreak_archive', 'children', allow_duplicate=True),
+        Output('cities_outbreak_interview', 'children', allow_duplicate=True),
+        Output('cities_outbreak_cards', 'children', allow_duplicate=True),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('store_what_happened', 'data', allow_duplicate=True),
+        Output('nr_cities_infected', 'data', allow_duplicate=True),
+        Output('virus_infection_rate', 'data', allow_duplicate=True),
+        Output('restart_timer_state', 'data', allow_duplicate=True),
+        Output('should_we_call_popup', 'data', allow_duplicate=True),
+        Output('hierarchy_status', 'data', allow_duplicate=True),
+        Output('popup_status', 'data', allow_duplicate=True),
+        Output('archive_status', 'data', allow_duplicate=True),
+        Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
+        Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
+        Output('cards_open', 'data', allow_duplicate=True),
+        Output('last_touched_button', 'data', allow_duplicate=True),
+        Output('selected-row-output', 'children', allow_duplicate=True),
+        Output('image_layout', 'src', allow_duplicate=True),
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+        Output('store_money_cities_time', 'data', allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True),
+        Output('show_loader_div', 'children'),
+        Output('help_data', 'data', allow_duplicate=True),
+        Output('passwords_remember', 'data', allow_duplicate=True),
+    ],
+    [
+        Input({"type": "storyline_buttons", "index": ALL}, "n_clicks")
+    ],
+    [
+        State("store_email", "data"),
+        State("url", "pathname")
+    ],
     prevent_initial_call=True,
 )
 def handle_storyline(storyline_buttons, store_email, previous_url):
@@ -1767,18 +2097,18 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
     else:
         button_index = json.loads(triggered_id)['index']
         if button_index == 'virus_storyline':
-            user_data = read_user_data(cities_info, store_email['email'].lower())
+            user_data = read_user_data(store_email['email'].lower())
 
             our_user = user_data[store_email['email'].lower()]
             button_, style_ = switch_between_input_and_back_button_archive('back_button')
             try:
-                print('Sent email')
-                send_email(store_email['email'].lower())
+                print()
+                # send_email(store_email['email'].lower())
             except Exception as e:
                 print(f'No Internet connection or {e}')
             # import time
             # time.sleep(50)
-            return ('/main', int(our_user['time'].split(' ')[0]),
+            return ['/main', int(our_user['time'].split(' ')[0]),
                     our_user['time'], our_user['time'], our_user['time'],
                     our_user['cities_infected'], our_user['cities_infected'], our_user['cities_infected'],
                     our_user['money_left'], our_user['money_left'], our_user['money_left'],
@@ -1788,50 +2118,61 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
                     our_user['archive_status'], our_user['archive_button_child1_3sec_delay'],
                     our_user['archive_button_clicked_3sec_delay'], our_user['cards_open'],
                     our_user['last_touched_button'], [],
-                    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [], button_,
+                    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png',
+                    [], button_,
                     style_,
                     {'time': our_user['time'], 'cities': our_user['cities_infected'], 'money': our_user['money_left']},
-                    previous_url, '', help_data_start)
+                    previous_url, '', our_user['help_data'], our_user['passwords_remember']]
 
     return no_update
 
 
 @app.callback(
-    Output("store_money_cities_time", "data"),
-    Input('time_sgs_archive', 'children'),
-    Input('cities_outbreak_archive', 'children'),
-    Input('money_left_archive', 'children'),
+    [
+        Output("store_money_cities_time", "data")
+    ],
+    [
+        Input('time_sgs_archive', 'children'),
+        Input('cities_outbreak_archive', 'children'),
+        Input('money_left_archive', 'children')
+    ],
 )
 def on_initial_load(time_sgs_archive, cities_outbreak_archive, money_left_archive):
     if time_sgs_archive and cities_outbreak_archive and money_left_archive:
-        return {'time': time_sgs_archive, 'cities': cities_outbreak_archive, 'money': money_left_archive}
+        return [{'time': time_sgs_archive, 'cities': cities_outbreak_archive, 'money': money_left_archive}]
     return no_update
 
 
 @app.callback(
-    Output('interval-component', 'n_intervals', allow_duplicate=True),
-    Output('time_sgs_archive', 'children', allow_duplicate=True),
-    Output('time_sgs_interview', 'children', allow_duplicate=True),
-    Output('time_sgs_cards', 'children', allow_duplicate=True),
-    Output('cities_outbreak_archive', 'children', allow_duplicate=True),
-    Output('cities_outbreak_interview', 'children', allow_duplicate=True),
-    Output('cities_outbreak_cards', 'children', allow_duplicate=True),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('should_we_call_popup', 'data', allow_duplicate=True),
-    Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
-    Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
-    Output('last_touched_button', 'data', allow_duplicate=True),
-    Output('selected-row-output', 'children', allow_duplicate=True),
-    Output('image_layout', 'src', allow_duplicate=True),
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'style', allow_duplicate=True),
-    Output('cards_open', 'data', allow_duplicate=True),
-    Input("url", "pathname"),
-    State("store_money_cities_time", "data"),
-    State("cards_open", "data"),
+    [
+        Output('interval-component', 'n_intervals', allow_duplicate=True),
+        Output('time_sgs_archive', 'children', allow_duplicate=True),
+        Output('time_sgs_interview', 'children', allow_duplicate=True),
+        Output('time_sgs_cards', 'children', allow_duplicate=True),
+        Output('cities_outbreak_archive', 'children', allow_duplicate=True),
+        Output('cities_outbreak_interview', 'children', allow_duplicate=True),
+        Output('cities_outbreak_cards', 'children', allow_duplicate=True),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('should_we_call_popup', 'data', allow_duplicate=True),
+        Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
+        Output('archive_button_clicked_3sec_delay', 'data', allow_duplicate=True),
+        Output('last_touched_button', 'data', allow_duplicate=True),
+        Output('selected-row-output', 'children', allow_duplicate=True),
+        Output('image_layout', 'src', allow_duplicate=True),
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+        Output('cards_open', 'data', allow_duplicate=True)
+    ],
+    [
+        Input("url", "pathname")
+    ],
+    [
+        State("store_money_cities_time", "data"),
+        State("cards_open", "data")
+    ],
     prevent_initial_call='initial_duplicate',
 )
 def on_initial_load(url, store_money_cities_time, cards_open):
@@ -1841,18 +2182,21 @@ def on_initial_load(url, store_money_cities_time, cards_open):
             cd = {}
         else:
             cd = cards_open
-        return (int(store_money_cities_time['time'].split(' ')[0]),
+        return [int(store_money_cities_time['time'].split(' ')[0]),
                 store_money_cities_time['time'], store_money_cities_time['time'], store_money_cities_time['time'],
                 store_money_cities_time['cities'], store_money_cities_time['cities'], store_money_cities_time['cities'],
                 store_money_cities_time['money'], store_money_cities_time['money'], store_money_cities_time['money'],
                 None, None, None, None, [],
-                'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png', [], button_,
-                style_, cd)
+                'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews/Unknown.png',
+                [], button_,
+                style_, cd]
     return no_update
 
 
 @app.callback(
-    Output("video-modal", "is_open"),
+    [
+        Output("video-modal", "is_open")
+    ],
     [
         Input("url", "pathname"),
         Input("close-modal", "n_clicks"),
@@ -1866,35 +2210,49 @@ def on_initial_load(url, store_money_cities_time, cards_open):
 def toggle_modal(url, close_click, open_video_click, is_open, previous_url):
     if (close_click or open_video_click):
         if (previous_url == '/storyline'):
-            return not is_open
+            return [not is_open]
     if (url == "/main") & (previous_url == '/storyline'):
-        return not is_open
-    return is_open
+        return [not is_open]
+    return [is_open]
 
 
+# %%
+
+# %%
 @app.callback(
-    Output("map", "children", allow_duplicate=True),
-    Output('nr_cities_infected', 'data', allow_duplicate=True),
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Output('cities_outbreak_archive', 'children', allow_duplicate=True),
-    Output('cities_outbreak_interview', 'children', allow_duplicate=True),
-    Output('cities_outbreak_cards', 'children', allow_duplicate=True),
-    Input('interval-component', 'n_intervals'),
-    Input('nr_cities_infected', 'data'),
-    State('cities_outbreak_archive', 'children'),
-    State('virus_infection_rate', 'data'),
+    [
+        Output("map", "children", allow_duplicate=True),
+        Output('nr_cities_infected', 'data', allow_duplicate=True),
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('cities_outbreak_archive', 'children', allow_duplicate=True),
+        Output('cities_outbreak_interview', 'children', allow_duplicate=True),
+        Output('cities_outbreak_cards', 'children', allow_duplicate=True)
+    ],
+    [
+        Input('interval-component', 'n_intervals'),
+        Input('nr_cities_infected', 'data')
+    ],
+    [
+        State('cities_outbreak_archive', 'children'),
+        State('virus_infection_rate', 'data')
+    ],
     prevent_initial_call=True
 )
 def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infection_rate):
+    if n is None:
+        return no_update
+
+    if type(nr_cities_infected) != dict:
+        return no_update
     # Calculate the time since the app started in minutes
     elapsed_time = n  # (time.time() - app_start_time) / 60  # Convert to minutes
     show_alert = False
     message_alert = ''
     cities_infected = int(cities_outbreak)
     if elapsed_time % 10 == 0 and elapsed_time != 0:
-        print('Infect a new city every 10 mins!')
+        # Infect a new city every 10 mins!
         keys_with_zero = [key for key, value in nr_cities_infected.items() if value == 0]
 
         # Randomly select one key and change its value to 1
@@ -1932,59 +2290,86 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
         )
         to_add.append(new_marker)
 
-    return to_add, nr_cities_infected, show_alert, 'Dr. Driton calls you and says:', message_alert, str(
-        cities_infected), str(cities_infected), str(cities_infected)
+    return [to_add, nr_cities_infected, show_alert, 'Dr. Driton calls you and says:', message_alert, str(
+        cities_infected), str(cities_infected), str(cities_infected)]
 
 
 @app.callback(
-    Output('time_sgs_archive', 'children'),
-    Output('time_sgs_interview', 'children'),
-    Output('time_sgs_cards', 'children'),
-    Input('interval-component', 'n_intervals'),
-    State('nr_cities_infected', 'data'),
+    [
+        Output('time_sgs_archive', 'children'),
+        Output('time_sgs_interview', 'children'),
+        Output('time_sgs_cards', 'children')
+    ],
+    [
+        Input('interval-component', 'n_intervals')
+    ],
+    [
+        State('nr_cities_infected', 'data')
+    ],
     prevent_initial_call=True
 )
 def update_time_since_start(n, nr_cities_infected):
     # Calculate the time since the app started in minutes
+    if n is None:
+        return no_update
+
     elapsed_time = n
     elapsed_timee = f'{elapsed_time:.0f} Mins'
-    return elapsed_timee, elapsed_timee, elapsed_timee
+    return [elapsed_timee, elapsed_timee, elapsed_timee]
 
 
 @app.callback(
-    Output('offcanvas_scrollable', 'is_open'),
-    Input('map_button', 'n_clicks'),
-    State('offcanvas_scrollable', 'is_open'),
+    [
+        Output('offcanvas_scrollable', 'is_open')
+    ],
+    [
+        Input('map_button', 'n_clicks')
+    ],
+    [
+        State('offcanvas_scrollable', 'is_open')
+    ],
 )
 def toggle_offcanvas_scrollable(map_button, is_open):
     if map_button:
-        return not is_open
-    return is_open
+        return [not is_open]
+    return [is_open]
 
 
 @app.callback(
-    Output('offcanvas_scrollable_left', 'is_open'),
-    Output('found-word-button', 'n_clicks'),
-    Input('time_button', 'n_clicks'),
-    State('offcanvas_scrollable_left', 'is_open'),
-    State('found-word-button', 'n_clicks'),
+    [
+        Output('offcanvas_scrollable_left', 'is_open'),
+        Output('found-word-button', 'n_clicks')
+    ],
+    [
+        Input('time_button', 'n_clicks')
+    ],
+    [
+        State('offcanvas_scrollable_left', 'is_open'),
+        State('found-word-button', 'n_clicks')
+    ],
     prevent_initial_call=True
 )
 def toggle_offcanvas_scrollable(map_button, is_open, n_clicks):
     if map_button:
-        return not is_open, n_clicks + 1
+        return [not is_open, n_clicks + 1]
     return no_update
 
 
 @app.callback(
-    Output("map", "zoom"),
-    Input("search_long_lat_button", "n_clicks"),
-    State("lat_input", "value"),
-    State("lon_input", "value"),
+    [
+        Output("map", "zoom")
+    ],
+    [
+        Input("search_long_lat_button", "n_clicks")
+    ],
+    [
+        State("lat_input", "value"),
+        State("lon_input", "value")
+    ],
 )
 def update_map_center(n_clicks, lat, lon):
     if n_clicks > 0 and lat and lon:
-        return 18
+        return [18]
     return no_update
 
 
@@ -1995,11 +2380,15 @@ def update_map_center(n_clicks, lat, lon):
         Output("lat_input", "value"),
         Output("lon_input", "value"),
     ],
-    Input("map", "zoom"),
-    State("lat_input", "value"),
-    State("lon_input", "value"),
-    State('nr_cities_infected', 'data'),
-    State("map", "children"),
+    [
+        Input("map", "zoom")
+    ],
+    [
+        State("lat_input", "value"),
+        State("lon_input", "value"),
+        State('nr_cities_infected', 'data'),
+        State("map", "children")
+    ],
 )
 def update_map_center(zoom, lat, lon, nr_cities_infected, to_add):
     if lat and lon:
@@ -2013,7 +2402,7 @@ def update_map_center(zoom, lat, lon, nr_cities_infected, to_add):
         )
 
         to_add.append(new_marker)
-        return to_add, coords, '', ''
+        return [to_add, coords, '', '']
     return no_update
 
 
@@ -2027,15 +2416,18 @@ def update_map_center(zoom, lat, lon, nr_cities_infected, to_add):
         Output('money_left_archive', 'children', allow_duplicate=True),
         Output('money_left_interview', 'children', allow_duplicate=True),
         Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('timer_div', 'style', allow_duplicate=True),
     ],
     [
         Input('timer-interval', 'n_intervals'),
         Input('start-restart-button', 'n_clicks'),
         Input('found-word-button', 'n_clicks')
     ],
-    State('money_left_archive', 'children'),
-    State('timer-interval', 'disabled'),
-    State('restart_timer_state', 'data'),
+    [
+        State('money_left_archive', 'children'),
+        State('timer-interval', 'disabled'),
+        State('restart_timer_state', 'data')
+    ],
     prevent_initial_call=True
 )
 def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_disabled, n_clicks_last):
@@ -2046,15 +2438,20 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
     if button_id == 'found-word-button':
-        return "120 seconds left", 0, True, "Start timer", no_update, no_update, no_update, no_update
+        return ["120 seconds left", 0, True, "Start timer", no_update, no_update, no_update, no_update,
+                {'display': 'none'}]
 
     # If button is clicked, reset timer and start
     if n_clicks_start == 0:
-        return "120 seconds left", 0, True, "Start timer", n_clicks_start, no_update, no_update, no_update
+        return ["120 seconds left", 0, True, "Start timer", n_clicks_start, no_update, no_update, no_update, no_update]
 
     if n_clicks_start > 0:
         if button_id == 'start-restart-button':  # if n_clicks_start>n_clicks_last:
-            return "120 seconds left", 0, False, "Restart timer", n_clicks_start, no_update, no_update, no_update
+            return ["120 seconds left", 0, False, "Restart timer", n_clicks_start, no_update, no_update, no_update,
+                    no_update]
+
+    if n_intervals is None:
+        return no_update
 
     # Countdown logic
     seconds_left = 120 - n_intervals
@@ -2062,28 +2459,40 @@ def update_timer(n_intervals, n_clicks_start, n_clicks_found, money_left, is_dis
         money_left = int(money_left.split('$')[0])
         money_left = money_left - 100
         money_left = str(money_left) + '$'
-        return "Time's up!", 0, True, "Start timer", n_clicks_start, money_left, money_left, money_left
+        return ["Time's up!", 0, True, "Start timer", n_clicks_start, money_left, money_left, money_left,
+                {'display': 'none'}]
 
-    return f"{seconds_left} seconds left", n_intervals, False, "Restart timer", n_clicks_start, no_update, no_update, no_update
+    return [f"{seconds_left} seconds left", n_intervals, False, "Restart timer", n_clicks_start, no_update, no_update,
+            no_update, no_update]
 
 
+# %%
+
+# %%
 @app.callback(
-    Output('alert_view', 'opened', allow_duplicate=True),
-    Output('alert_text', 'children', allow_duplicate=True),
-    Output('alert_submit_button', 'disabled', allow_duplicate=True),
-    Output('alert_submit_button', 'children'),
-    Output('alert_cancel_button', 'children'),
-    Output('alert_cancel_button', 'style'),
-    Input('should_we_call_popup', 'data'),
-    State('money_left_archive', 'children'),
+    [
+        Output('alert_view', 'opened', allow_duplicate=True),
+        Output('alert_text', 'children', allow_duplicate=True),
+        Output('alert_submit_button', 'disabled', allow_duplicate=True),
+        Output('alert_submit_button', 'children'),
+        Output('alert_cancel_button', 'children'),
+        Output('alert_cancel_button', 'style')
+    ],
+    [
+        Input('should_we_call_popup', 'data')
+    ],
+    [
+        State('money_left_archive', 'children')
+    ],
     prevent_initial_call=True
 )
 def display_click_data(should_we_call_popup, money_left):
     if should_we_call_popup:
         if should_we_call_popup == 'NOTE_2':
-            text = dcc.Markdown("Team, the clock has run out. It's time to submit your **Final Answers**. Upload your report and discover if you've truly uncovered the truth—or missed what was hiding in plain sight.", style={'width': '100%', 'fontSize': '12px'})
-            
-            return True, text, False, 'Ok', None, {'display':'none'}
+            text = dcc.Markdown(
+                "Team, the clock has run out. It's time to submit your **Final Answers**. Upload your report and discover if you've truly uncovered the truth—or missed what was hiding in plain sight.",
+                style={'width': '100%', 'fontSize': '12px'})
+            return [True, text, False, 'Ok', None, {'display': 'none'}]
         else:
             popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
             if len(popup_data) > 0:
@@ -2094,34 +2503,40 @@ def display_click_data(should_we_call_popup, money_left):
                 if money_left < 100:
                     disbld = True
 
-                return True, dcc.Markdown(popup_data['TEXT'], style={'width': '100%', 'fontSize': '12px'}), disbld, \
-                       popup_data['YES'], popup_data['NO'], {'display':'block'}
+                return [True, dcc.Markdown(popup_data['TEXT'], style={'width': '100%', 'fontSize': '12px'}), disbld,
+                        popup_data['YES'], popup_data['NO'], {'display': 'block'}]
 
     return no_update
 
 
 @app.callback(
-    Output('alert_view', 'opened', allow_duplicate=True),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('alert_view_other', 'opened', allow_duplicate=True),
-    Output('alert_other_text', 'children', allow_duplicate=True),
-    Output('virus_infection_rate', 'data'),
-    Input('alert_submit_button', 'n_clicks'),
-    Input('alert_cancel_button', 'n_clicks'),
-    State('should_we_call_popup', 'data'),
-    State('money_left_archive', 'children'),
-    State('virus_infection_rate', 'data'),
+    [
+        Output('alert_view', 'opened', allow_duplicate=True),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('alert_view_other', 'opened', allow_duplicate=True),
+        Output('alert_other_text', 'children', allow_duplicate=True),
+        Output('virus_infection_rate', 'data')
+    ],
+    [
+        Input('alert_submit_button', 'n_clicks'),
+        Input('alert_cancel_button', 'n_clicks')
+    ],
+    [
+        State('should_we_call_popup', 'data'),
+        State('money_left_archive', 'children'),
+        State('virus_infection_rate', 'data')
+    ],
     prevent_initial_call=True
 )
 def display_click_data(alert_submit_button, alert_cancel_button, should_we_call_popup, money_left,
                        virus_infection_rate):
-    trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
     if should_we_call_popup:
-        if should_we_call_popup=='NOTE_2':
-            return False, no_update, no_update, no_update, False, no_update, no_update
-        else:    
+        trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
+        if should_we_call_popup == 'NOTE_2':
+            return [False, no_update, no_update, no_update, False, no_update, no_update]
+        else:
             popup_data = popup_info[popup_info['ID'] == should_we_call_popup]
             if len(popup_data) > 0:
                 popup_data = popup_data.iloc[0]
@@ -2138,8 +2553,55 @@ def display_click_data(alert_submit_button, alert_cancel_button, should_we_call_
                 else:
                     return no_update
 
-                return False, money_left, money_left, money_left, True, message_to_show, virus_infection_rate
+                return [False, money_left, money_left, money_left, True, message_to_show, virus_infection_rate]
     return no_update
+
+
+# %%
+
+# %%
+@app.callback(
+    [
+        Output('archive_history_div', 'children')
+    ],
+    [
+        Input('archives_open', 'data')
+    ]
+)
+def toggle_modal(archives_open):
+    if archives_open:
+        if len(archives_open) > 0:
+            list_of_buttons_to_return = []
+            for name, markdown_id in archives_open.items():
+                button = dbc.Button(
+                    children=html.Div(
+                        name,
+                        style={
+                            'width': '100%',
+                            'height': '100%',
+                        }
+                    ),
+                    className="card-title",
+                    id={'type': 'archive_buttons', 'index': name},
+                    style={
+                        'display': 'block',
+                        # 'marginRight':'15px',
+                        'height': '40px',
+                        "fontFamily": "'Libre Baskerville', serif",
+                        "fontSize": "10px",
+                        "color": "#2d2b28",
+                        "textAlign": "center",
+                        "borderRadius": "5px",
+                        "borderColor": "black",
+                        "borderWidth": "1px",
+                        "fontWeight": "bold",
+                        "backgroundColor": "white",
+                        "padding": "10px"}
+                )
+
+                list_of_buttons_to_return.append(button)
+            return [list_of_buttons_to_return]
+    return [[]]
 
 
 def switch_between_input_and_back_button_archive(clicked):
@@ -2241,20 +2703,40 @@ def get_parent_div_children(parent_id):
         Output('confirm-dialog_text', 'children', allow_duplicate=True),
         Output('should_we_call_popup', 'data', allow_duplicate=True),
         Output('popup_status', 'data', allow_duplicate=True),
-
+        Output('archives_open', 'data', allow_duplicate=True),
+        Output('archive_buttons_clicked_delay', 'data')
     ],
     [
-        Input({"type": "archive_buttons", "index": 'INPUT'}, 'n_clicks'),
+        # Input({"type": "archive_buttons", "index": 'INPUT'}, 'n_clicks'),
+        Input({"type": "archive_buttons", "index": ALL}, 'n_clicks'),
         State('archive_input', 'value'),
         State('hierarchy_status', 'data'),
         State('popup_status', 'data'),
+        State('archives_open', 'data'),
+        State('archive_buttons_clicked_delay', 'data')
     ],
     prevent_initial_call=True
 )
-def toggle_content(n_clicks, archive_input, hierarchy_status, popup_status):
-    if n_clicks:
+def toggle_content(n_clicks, archive_input, hierarchy_status, popup_status, archives_open,
+                   archive_buttons_clicked_delay):
+    ctx = dash.callback_context
+    if not ctx.triggered:
+        return no_update
+
+    triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if archive_buttons_clicked_delay and time.time() - archive_buttons_clicked_delay < 0.7:
+        return no_update
+
+    if ('archive_buttons' not in triggered_id):
+        return no_update
+
+    button_index = json.loads(triggered_id)['index']
+
+    if button_index == 'INPUT':
         parent_id = archive_parent[archive_parent['pwd'] == archive_input.lower()]
         if len(parent_id) > 0:
+            archives_open = archives_open | {parent_id['name'].iloc[0]: ['parent', archive_input.lower()]}
             new_content_div = get_parent_div_children(parent_id)
             button_, style_ = switch_between_input_and_back_button_archive('input_button')
             if (archive_input.lower() == 'Police and Lab Records'.lower()) & (popup_status['NOTE_4'] == 0):
@@ -2265,11 +2747,23 @@ def toggle_content(n_clicks, archive_input, hierarchy_status, popup_status):
                 popup_status['NOTE_2'] = 1
             else:
                 should_we_call_popup = no_update
-            return new_content_div, {'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
-                                     'archive_child2': None}, time.time(), button_, style_, False, '', '', should_we_call_popup, popup_status
+            return [new_content_div, {'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
+                                      'archive_child2': None}, time.time(), button_, style_, False, '', '',
+                    should_we_call_popup, popup_status, archives_open, time.time()]
         else:
             button_, style_ = switch_between_input_and_back_button_archive('back_button')
-            return [], no_update, no_update, button_, style_, True, 'Alert', 'Wrong code provided', no_update, no_update
+            return [no_update, no_update, no_update, button_, style_, True, 'Alert', 'Wrong code provided', no_update,
+                    no_update, no_update, no_update]
+    elif button_index in list(archives_open.keys()):
+        selected_value_name = archives_open[button_index]
+        if selected_value_name[0] != 'parent':
+            return no_update
+        parent_id = archive_parent[archive_parent['pwd'] == selected_value_name[1]]
+        new_content_div = get_parent_div_children(parent_id)
+        button_, style_ = switch_between_input_and_back_button_archive('input_button')
+        return [new_content_div, {'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
+                                  'archive_child2': None}, time.time(), button_, style_, no_update, no_update,
+                no_update, no_update, no_update, no_update, time.time()]
     return no_update
 
 
@@ -2308,11 +2802,11 @@ def get_child_div_children(child1):
                             'word-wrap': 'break-word',  # Ensures long words are broken properly
                             'overflow': 'hidden',  # Prevents overflow
                             'display': 'flex',
-                            'align-items': 'center',
-                            'justify-content': 'center',
+                            'alignItems': 'center',
+                            'justifyContent': 'center',
                             'width': '100%',  # Ensures it scales with the parent
                             'height': '100%',  # Adjust based on the div size
-                            'margin-left':'7px'
+                            'margin-left': '7px'
                         }
                     ),
                 ],
@@ -2330,24 +2824,38 @@ def get_child_div_children(child1):
 
 
 @app.callback(
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('hierarchy_status', 'data', allow_duplicate=True),
-    Output('archive_button_child1_3sec_delay', 'data'),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('archive_status', 'data', allow_duplicate=True),
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Input({'type': 'archive_button_child1', 'index': ALL}, "n_clicks"),
-    State("archive_button_clicked_3sec_delay", "data"),
-    State('hierarchy_status', 'data'),
-    State('money_left_archive', 'children'),
-    State('archive_status', 'data'),
+    [
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('hierarchy_status', 'data', allow_duplicate=True),
+        Output('archive_button_child1_3sec_delay', 'data'),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('archive_status', 'data', allow_duplicate=True),
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('archives_open', 'data', allow_duplicate=True),
+        Output('archive_buttons_clicked_delay', 'data', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+    ],
+    [
+        Input({'type': 'archive_button_child1', 'index': ALL}, "n_clicks"),
+        Input({"type": "archive_buttons", "index": ALL}, 'n_clicks'),
+    ],
+    [
+        State("archive_button_clicked_3sec_delay", "data"),
+        State('hierarchy_status', 'data'),
+        State('money_left_archive', 'children'),
+        State('archive_status', 'data'),
+        State('archives_open', 'data'),
+        State('archive_buttons_clicked_delay', 'data')
+    ],
     prevent_initial_call=True
 )
-def handle_dynamic_button(n_clicks, archive_button_clicked_3sec_delay, hierarchy_status, money_left, archive_status):
+def handle_dynamic_button(n_clicks, n_clicks2, archive_button_clicked_3sec_delay, hierarchy_status, money_left,
+                          archive_status, archives_open, archive_buttons_clicked_delay):
     ctx = dash.callback_context
     if not ctx.triggered:
         return no_update
@@ -2356,8 +2864,25 @@ def handle_dynamic_button(n_clicks, archive_button_clicked_3sec_delay, hierarchy
     if archive_button_clicked_3sec_delay and current_time - archive_button_clicked_3sec_delay < 0.5:
         return no_update
 
+    if archive_buttons_clicked_delay and time.time() - archive_buttons_clicked_delay < 0.7:
+        return no_update
+
     triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    if ('archive_button_child1' not in triggered_id):
+    if ('archive_buttons' in triggered_id):
+        button_index = json.loads(triggered_id)['index']
+        if button_index in list(archives_open.keys()):
+            selected_value_name = archives_open[button_index]
+            if selected_value_name[0] == 'child1':
+                child1 = archive_child1[
+                    (archive_child1['id'] == selected_value_name[1]) & (
+                                archive_child1['button_clicked'] == selected_value_name[2])]
+                div_return = get_child_div_children(child1)
+                button_, style_ = switch_between_input_and_back_button_archive('input_button')
+                h_status = {'archive_parent': selected_value_name[1], 'archive_child1': selected_value_name[2],
+                            'archive_child2': None}
+                return [div_return, h_status, time.time(), no_update, no_update, no_update, no_update, no_update,
+                        no_update, no_update, no_update, time.time(), button_, style_]
+    elif ('archive_button_child1' not in triggered_id):
         return no_update
     else:
         parent_id = hierarchy_status['archive_parent'].lower()
@@ -2366,40 +2891,57 @@ def handle_dynamic_button(n_clicks, archive_button_clicked_3sec_delay, hierarchy
         child1 = archive_child1[
             (archive_child1['id'] == parent_id) & (archive_child1['button_clicked'] == button_index + 1)]
         if len(child1) > 0:
+            archives_open = archives_open | {child1['name'].iloc[0]: ['child1', parent_id, button_index + 1]}
             div_return = get_child_div_children(child1)
             this_is_the_parent_button_clicked = \
-            archive_parent[archive_parent.id == parent_id]['has_button' + str(button_index + 1)].iloc[0]
+                archive_parent[archive_parent.id == parent_id]['has_button' + str(button_index + 1)].iloc[0]
             if archive_status[this_is_the_parent_button_clicked] == 0:
                 if int(money_left.split('$')[0]) < 100:
-                    return no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', 'No Money left!'
+                    return [no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert',
+                            'No Money left!', no_update, time.time(), no_update, no_update]
                 money_left = str(int(money_left.split('$')[0]) - 100) + '$'
                 archive_status[this_is_the_parent_button_clicked] = 1
             else:
                 money_left = no_update
 
-            return div_return, {'archive_parent': parent_id, 'archive_child1': str(button_index + 1),
-                                'archive_child2': None}, time.time(), money_left, money_left, money_left, archive_status, False, '', ''
+            return [div_return, {'archive_parent': parent_id, 'archive_child1': str(button_index + 1),
+                                 'archive_child2': None}, time.time(), money_left, money_left, money_left,
+                    archive_status, False, '', '', archives_open, time.time(), no_update, no_update]
     return no_update
 
 
 @app.callback(
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('hierarchy_status', 'data', allow_duplicate=True),
-    Output('money_left_archive', 'children', allow_duplicate=True),
-    Output('money_left_interview', 'children', allow_duplicate=True),
-    Output('money_left_cards', 'children', allow_duplicate=True),
-    Output('archive_status', 'data', allow_duplicate=True),
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Input({'type': 'archive_button_child2', 'index': ALL}, "n_clicks"),
-    State("archive_button_child1_3sec_delay", "data"),
-    State('hierarchy_status', 'data'),
-    State('money_left_archive', 'children'),
-    State('archive_status', 'data'),
+    [
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('hierarchy_status', 'data', allow_duplicate=True),
+        Output('money_left_archive', 'children', allow_duplicate=True),
+        Output('money_left_interview', 'children', allow_duplicate=True),
+        Output('money_left_cards', 'children', allow_duplicate=True),
+        Output('archive_status', 'data', allow_duplicate=True),
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('archives_open', 'data', allow_duplicate=True),
+        Output('archive_buttons_clicked_delay', 'data', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+    ],
+    [
+        Input({'type': 'archive_button_child2', 'index': ALL}, "n_clicks"),
+        Input({"type": "archive_buttons", "index": ALL}, 'n_clicks'),
+    ],
+    [
+        State("archive_button_child1_3sec_delay", "data"),
+        State('hierarchy_status', 'data'),
+        State('money_left_archive', 'children'),
+        State('archive_status', 'data'),
+        State('archives_open', 'data'),
+        State('archive_buttons_clicked_delay', 'data')
+    ],
     prevent_initial_call=True
 )
-def handle_dynamic_button(n_clicks, archive_button_child1_3sec_delay, hierarchy_status, money_left, archive_status):
+def handle_dynamic_button(n_clicks, n_clicks2, archive_button_child1_3sec_delay, hierarchy_status, money_left,
+                          archive_status, archives_open, archive_buttons_clicked_delay):
     ctx = dash.callback_context
     if not ctx.triggered:
         return no_update
@@ -2408,8 +2950,32 @@ def handle_dynamic_button(n_clicks, archive_button_child1_3sec_delay, hierarchy_
     if archive_button_child1_3sec_delay and current_time - archive_button_child1_3sec_delay < 0.5:
         return no_update
 
+    if archive_buttons_clicked_delay and time.time() - archive_buttons_clicked_delay < 0.7:
+        return no_update
+
     triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
-    if ('archive_button_child2' not in triggered_id):
+    if ('archive_buttons' in triggered_id):
+        button_index = json.loads(triggered_id)['index']
+        if button_index in list(archives_open.keys()):
+            selected_value_name = archives_open[button_index]
+            if selected_value_name[0] == 'child2':
+                child2 = archive_child2[
+                    (archive_child2['id'] == selected_value_name[1]) & (
+                                archive_child2['h1 button clicked'] == selected_value_name[2]) & (
+                            archive_child2['h2 button clicked'] == selected_value_name[3])]
+                h_status = {'archive_parent': selected_value_name[1], 'archive_child1': selected_value_name[2],
+                            'archive_child2': selected_value_name[3]}
+                child2 = child2.iloc[0].dropna()
+                response = requests.get(
+                    'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/archive/' +
+                    child2['markdown_id'])
+                content = response.text
+                button_, style_ = switch_between_input_and_back_button_archive('input_button')
+                div_return = [dcc.Markdown(id='markdown_content', children=content, style={'width': '100%'})]
+                return [div_return, h_status, no_update, no_update, no_update, no_update, no_update, no_update,
+                        no_update, no_update, time.time(), button_, style_]
+
+    elif ('archive_button_child2' not in triggered_id):
         return no_update
     else:
         parent_id = hierarchy_status['archive_parent'].lower()
@@ -2418,8 +2984,10 @@ def handle_dynamic_button(n_clicks, archive_button_child1_3sec_delay, hierarchy_
 
         child2 = archive_child2[
             (archive_child2['id'] == parent_id) & (archive_child2['h1 button clicked'] == int(archive_child1_id)) & (
-                        archive_child2['h2 button clicked'] == button_index + 1)]
+                    archive_child2['h2 button clicked'] == button_index + 1)]
         if len(child2) > 0:
+            archives_open = archives_open | {
+                child2['name'].iloc[0]: ['child2', parent_id, int(archive_child1_id), button_index + 1]}
             child2 = child2.iloc[0].dropna()
             response = requests.get(
                 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/archive/' +
@@ -2433,29 +3001,41 @@ def handle_dynamic_button(n_clicks, archive_button_child1_3sec_delay, hierarchy_
                 'has_button' + str(button_index + 1)].iloc[0]
             if archive_status[this_is_the_parent_button_clicked] == 0:
                 if int(money_left.split('$')[0]) < 100:
-                    return no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', 'No Money left!'
+                    return [no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert',
+                            'No Money left!', no_update, time.time(), no_update, no_update]
                 money_left = str(int(money_left.split('$')[0]) - 100) + '$'
                 archive_status[this_is_the_parent_button_clicked] = 1
             else:
                 money_left = no_update
-            return div_return, {'archive_parent': parent_id, 'archive_child1': archive_child1_id, 'archive_child2': str(
-                button_index + 1)}, money_left, money_left, money_left, archive_status, False, '', ''
+            return [div_return,
+                    {'archive_parent': parent_id, 'archive_child1': archive_child1_id, 'archive_child2': str(
+                        button_index + 1)}, money_left, money_left, money_left, archive_status, False, '', '',
+                    archives_open, time.time(), no_update, no_update]
     return no_update
 
 
 @app.callback(
-    Output('hierarchy_status', 'data', allow_duplicate=True),
-    Output('new-content', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'children', allow_duplicate=True),
-    Output('archive_input_button_div', 'style', allow_duplicate=True),
-    Output("archive_button_clicked_3sec_delay", "data", allow_duplicate=True),
-    Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
-    Input({"type": "archive_buttons", "index": ALL}, "n_clicks"),
-    State('hierarchy_status', 'data'),
-    State('archive_button_clicked_3sec_delay', 'data'),
+    [
+        Output('hierarchy_status', 'data', allow_duplicate=True),
+        Output('new-content', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'children', allow_duplicate=True),
+        Output('archive_input_button_div', 'style', allow_duplicate=True),
+        Output("archive_button_clicked_3sec_delay", "data", allow_duplicate=True),
+        Output('archive_button_child1_3sec_delay', 'data', allow_duplicate=True),
+        Output('archive_buttons_clicked_delay', 'data', allow_duplicate=True)
+    ],
+    [
+        Input({"type": "archive_buttons", "index": ALL}, "n_clicks")
+    ],
+    [
+        State('hierarchy_status', 'data'),
+        State('archive_button_clicked_3sec_delay', 'data'),
+        State('archive_buttons_clicked_delay', 'data')
+    ],
     prevent_initial_call=True
 )
-def handle_dynamic_button_click(n_clicks_list, hierarchy_status, archive_back_button_clicked_3sec_delay):
+def handle_dynamic_button_click(n_clicks_list, hierarchy_status, archive_back_button_clicked_3sec_delay,
+                                archive_buttons_clicked_delay):
     ctx = dash.callback_context
     if not ctx.triggered:
         return no_update
@@ -2464,46 +3044,51 @@ def handle_dynamic_button_click(n_clicks_list, hierarchy_status, archive_back_bu
     if archive_back_button_clicked_3sec_delay and current_time - archive_back_button_clicked_3sec_delay < 0.5:
         return no_update
 
+    if archive_buttons_clicked_delay and time.time() - archive_buttons_clicked_delay < 0.7:
+        return no_update
+
     triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
     if ('archive_buttons' not in triggered_id):
+        return no_update
+    elif (ctx.triggered[0]['value'] == 0):
         return no_update
     else:
         button_index = json.loads(triggered_id)['index']
 
         if button_index == 'BACK':
             if hierarchy_status['archive_child2'] is not None:
-                print('Go to 1st child')
                 child1 = archive_child1[(archive_child1['id'] == hierarchy_status['archive_parent']) & (
-                            archive_child1['button_clicked'] == int(hierarchy_status['archive_child1']))]
+                        archive_child1['button_clicked'] == int(hierarchy_status['archive_child1']))]
                 new_content_div = get_child_div_children(child1)
                 button_, style_ = switch_between_input_and_back_button_archive('input_button')
-                return {'archive_parent': hierarchy_status['archive_parent'],
-                        'archive_child1': str(hierarchy_status['archive_child1']),
-                        'archive_child2': None}, new_content_div, button_, style_, no_update, time.time()
+                return [{'archive_parent': hierarchy_status['archive_parent'],
+                         'archive_child1': str(hierarchy_status['archive_child1']),
+                         'archive_child2': None}, new_content_div, button_, style_, no_update, time.time(), time.time()]
 
             elif hierarchy_status['archive_child1'] is not None:
                 parent_id = archive_parent[archive_parent['pwd'] == hierarchy_status['archive_parent']]
                 new_content_div = get_parent_div_children(parent_id)
                 button_, style_ = switch_between_input_and_back_button_archive('input_button')
-                return {'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
-                        'archive_child2': None}, new_content_div, button_, style_, time.time(), no_update
+                return [{'archive_parent': parent_id['id'].iloc[0], 'archive_child1': None,
+                         'archive_child2': None}, new_content_div, button_, style_, time.time(), no_update, time.time()]
 
             else:
                 button_, style_ = switch_between_input_and_back_button_archive('back_button')
-                return {'archive_parent': None, 'archive_child1': None,
-                        'archive_child2': None}, [], button_, style_, no_update, no_update
+                return [{'archive_parent': None, 'archive_child1': None,
+                         'archive_child2': None}, [], button_, style_, no_update, no_update, time.time()]
         else:
             return no_update
 
 
+# %%
 def generate_interview_divs(current_speaker, current_message_part, suspect_image, agent_name):
     container_style = {
         'display': 'flex',
-        'justify-content': 'flex-start' if current_speaker.strip() == "Agent" else 'flex-end',
+        'justifyContent': 'flex-start' if current_speaker.strip() == "Agent" else 'flex-end',
         'marginBottom': '10px',
         'maxWidth': '60%',
         'align-self': 'flex-start' if current_speaker.strip() == "Agent" else 'flex-end',
-        'align-items': 'center'}
+        'alignItems': 'center'}
 
     div_style = {
         'padding': '10px',
@@ -2547,21 +3132,25 @@ def generate_interview_divs(current_speaker, current_message_part, suspect_image
     return new_message_div
 
 
-
-
 # Callback to handle row click data
 @app.callback(
-    Output('selected-row-output', 'children', allow_duplicate=True),
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Output('image_layout', 'src', allow_duplicate=True),
-    Output('should_we_call_popup', 'data', allow_duplicate=True),
-    Output('popup_status', 'data', allow_duplicate=True),
-    Input('interview_button_clicked', 'n_clicks'),
-    State('suspects_input', 'value'),
-    State('store_email', 'data'),
-    State('popup_status', 'data'),
+    [
+        Output('selected-row-output', 'children', allow_duplicate=True),
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('image_layout', 'src', allow_duplicate=True),
+        Output('should_we_call_popup', 'data', allow_duplicate=True),
+        Output('popup_status', 'data', allow_duplicate=True)
+    ],
+    [
+        Input('interview_button_clicked', 'n_clicks')
+    ],
+    [
+        State('suspects_input', 'value'),
+        State('store_email', 'data'),
+        State('popup_status', 'data')
+    ],
     prevent_initial_call=True
 )
 def update_output(bt_archive, suspects_input, store_email, popup_status):
@@ -2570,9 +3159,10 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
         if (len(selectedRows) > 0):
 
             suspect_image = selectedRows['Image'].iloc[0]
-            content = pd.read_csv('https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(' ','%20') + '.csv')
+            content = pd.read_csv(
+                'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/culprits/' + suspects_input.title().replace(
+                    ' ', '%20') + '.csv')
 
-            
             if (suspects_input.lower() == 'Taulant Gashi'.lower()) & (popup_status['NOTE_5'] == 0):
                 should_we_call_popup = 'NOTE_5'
                 popup_status['NOTE_5'] = 1
@@ -2585,34 +3175,45 @@ def update_output(bt_archive, suspects_input, store_email, popup_status):
                 current_message = content.iloc[index]["message"]
                 current_speaker = content.iloc[index]["speaker"]
 
-
-
                 current_message_part = current_message
 
                 new_message_div = generate_interview_divs(current_speaker, current_message_part, suspect_image,
                                                           store_email['name'].split(' ')[0])
                 displayed.append(new_message_div)
-            return displayed, False, no_update, no_update, suspect_image, should_we_call_popup, popup_status
+            return [displayed, False, no_update, no_update, suspect_image, should_we_call_popup, popup_status]
         else:
-            return no_update, True, 'Alert', f'Wrong submitted code "{suspects_input}"!', '/assets/img/interviews/Unknown.png', no_update, no_update
+            return [no_update, True, 'Alert', f'Wrong submitted code "{suspects_input}"!',
+                    '/assets/img/interviews/Unknown.png', no_update, no_update]
     return no_update
 
 
 # Callback to toggle the modal
 @app.callback(
-    Output("image-modal", "is_open"),
-    [Input("single_card_thumbnail-img", "n_clicks")],
-    [State("image-modal", "is_open")]
+    [
+        Output("image-modal", "is_open")
+    ],
+    [
+        Input("single_card_thumbnail-img", "n_clicks")
+    ],
+    [
+        State("image-modal", "is_open")
+    ],
+
 )
 def toggle_modal(n_clicks, is_open):
     if n_clicks:
-        return not is_open
-    return is_open
+        return [not is_open]
+    return [is_open]
 
 
+# %%
 @app.callback(
-    Output('small_cards_grid', 'children'),
-    Input('cards_open', 'data')
+    [
+        Output('small_cards_grid', 'children')
+    ],
+    [
+        Input('cards_open', 'data')
+    ]
 )
 def toggle_modal(cards_open):
     if len(cards_open) > 0:
@@ -2622,10 +3223,49 @@ def toggle_modal(cards_open):
                 bcg_color = 'rgb(69, 155, 196)'
             else:
                 bcg_color = 'rgb(162, 138, 208)'
+
             button = dbc.Button(
-                card,
+                children=html.Div(
+                    card,
+                    style={
+                        'width': '100%',
+                        'height': '100%',
+                        'marginTop': '20px'
+                    }
+                ),
                 className="card-title",
+                id={'type': 'cards_buttons_all', 'index': card},
                 style={
+                    'marginTop': '10px',
+                    'width': '100%',
+                    'height': '110px',
+                    'backgroundColor': 'transparent',
+                    'border': '0px'
+                }
+            )
+            button_close = dbc.Button(
+                children=html.Div(
+                    'X',
+                    style={
+                        'width': '100%',
+                        'height': '100%',
+                        'marginLeft': '10px'
+                    }
+                ),
+                id={'type': 'cards_buttons_all', 'index': f'REMOVE {card}'},
+                style={
+                    'width': '40px',
+                    'height': '40px',
+                    'marginLeft': '40px',
+                    'backgroundColor': 'transparent',
+                    'border': '0px',
+                    'color': 'black'
+                }
+            )
+            something_else = html.Div(
+                [button_close, button],
+                style={
+                    'display': 'block',
                     'width': '100px',
                     'height': '180px',
                     "fontFamily": "'Libre Baskerville', serif",
@@ -2639,58 +3279,74 @@ def toggle_modal(cards_open):
                     "backgroundColor": bcg_color,
                     "backgroundImage": "url('https://www.transparenttextures.com/patterns/cardboard.png')",
                     "padding": "10px"},
-                # id='btn_'+card
-                id={'type': 'cards_buttons_all', 'index': card}
             )
-            list_of_buttons_to_return.append(button)
-        return list_of_buttons_to_return
-    return []
+            list_of_buttons_to_return.append(something_else)
+        return [list_of_buttons_to_return]
+    return [[]]
 
 
 @app.callback(
-    Output('single_card_div', 'style', allow_duplicate=True),
-    Input('cards_open', 'data'),
+    [
+        Output('single_card_div', 'style', allow_duplicate=True)
+    ],
+    [
+        Input('cards_open', 'data')
+    ],
+    [
+        State('passwords_remember', 'data'),
+    ],
     prevent_initial_call=True
 )
-def button_pressed(cards_open):
+def button_pressed(cards_open, passwords_remember):
     if len(cards_open) == 0:
-        return {'display': 'none'}
+        return [{'display': 'none'}]
     else:
-        return {'display': 'flex', 'justify-content': 'center'}
+        return no_update  # [{'display': 'flex', 'justifyContent': 'center'}]
 
 
 # THIS cards_buttons_all IS GETTING PRESSED
 @app.callback(
-    Output('single_card_div', 'style'),
-    Output('markdown_text', 'style'),
-    Output('markdown_text_help_more_button', 'style'),
-    Output('single_card_title', 'children'),
-    Output('single_card_thumbnail-img', 'src'),
-    Output('single_card_thumbnail-img', 'style'),
-    Output('overlay_image', 'style'),
-    Output('single_card_text', 'children'),
-    Output('single_card_hint', 'children'),
-    Output('image_for_modal', 'src'),
-    Output('cards_open', 'data'),
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Output('last_touched_button', 'data'),
-    Output('cards_input', 'value'),
-    Output('cards_password', 'style'),
-    Output('card_pwd_button', 'style'),
-    Output('cards_password', 'value'),
-    Output('cards_password', 'placeholder'),
-    Output('help_data', 'data', allow_duplicate=True),
-    Output('card_body_id', 'style'),
-    [Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks')],
-    State('small_cards_grid', 'children'),
-    State('cards_input', 'value'),
-    State('cards_open', 'data'),
-    State('help_data', 'data'),
+    [
+        Output('single_card_div', 'style'),
+        Output('markdown_text', 'style'),
+        Output('markdown_text_help_more_button', 'style'),
+        Output('single_card_title', 'children'),
+        Output('single_card_thumbnail-img', 'src'),
+        Output('single_card_thumbnail-img', 'style'),
+        Output('overlay_image', 'style'),
+        Output('single_card_text', 'children'),
+        Output('single_card_hint', 'children'),
+        Output('image_for_modal', 'src'),
+        Output('cards_open', 'data'),
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('last_touched_button', 'data'),
+        Output('cards_input', 'value'),
+        Output('cards_password', 'style'),
+        Output('card_pwd_button', 'style'),
+        Output('cards_password', 'value'),
+        Output('cards_password', 'placeholder'),
+        Output('help_data', 'data', allow_duplicate=True),
+        Output('card_body_id', 'style'),
+        Output('timer_div', 'style'),
+        Output('markdown_text', 'children', allow_duplicate=True),
+    ],
+    [
+        Input({'type': 'cards_buttons_all', 'index': ALL}, 'n_clicks'),
+        Input({'type': 'cards_buttons_all_close', 'index': ALL}, 'n_clicks'),
+    ],
+    [
+        State('small_cards_grid', 'children'),
+        State('cards_input', 'value'),
+        State('cards_open', 'data'),
+        State('help_data', 'data'),
+        State('passwords_remember', 'data')
+    ],
     prevent_initial_call=True
 )
-def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, help_data):
+def button_pressed(button_clicks, button_back_clicks, small_cards_grid, cards_input, cards_open, help_data,
+                   passwords_remember):
     ctx = dash.callback_context
     if small_cards_grid:
         nr_of_children = len(small_cards_grid)
@@ -2702,20 +3358,51 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
 
     triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-    if ('cards_buttons_all' not in triggered_id):
-        return no_update
-    else:
+    if ('cards_buttons_all' in triggered_id):
         button_index = json.loads(triggered_id)['index']
 
         if button_index == 'cards_button_clicked':
+
             selectedRows = cards[cards['Code'] == cards_input.lower()]
+
+            if ('m' in cards_input.lower()) and ('m ' not in cards_input.lower()):
+                cards_input = re.sub(r'([A-Za-z])([0-9])', r'\1 \2', cards_input.lower())
+                selectedRows = cards[cards['Code'] == cards_input.lower()]
             if len(selectedRows) == 0:
                 if cards_input == '':
                     return no_update
-                return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!', no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
+                return [no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update,
+                        no_update, no_update, no_update, True, 'Alert', f'Wrong submitted code "{cards_input}"!',
+                        no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update,
+                        no_update, no_update]
             else:
                 card_data = selectedRows.iloc[0]
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
+
+                if card_data['Code'].lower() in list(passwords_remember.keys()):
+                    if passwords_remember[card_data['Code'].lower()] == 1:
+                        markdown_single_file = markdown_lists[(markdown_lists['title'] == card_data['Code'].lower())]
+                        if len(markdown_single_file) > 0:
+                            txt_file_name = markdown_single_file.iloc[0]['id']
+                            response = requests.get(
+                                'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/cards/' + txt_file_name)
+                            content = response.text
+
+                            if 'm ' in card_data['Code'].lower():
+                                help_button_style = {'width': '350px'}
+                            else:
+                                help_button_style = {'display': 'none'}
+
+                            if card_data['Code'] not in cards_open.values():
+                                cards_open = cards_open | {str(uuid4()): card_data['Code']}
+
+                            return [{'display': 'none'}, {'textAlign': 'left'}, help_button_style,
+                                    no_update, no_update, no_update,
+                                    no_update, no_update, no_update, no_update,
+                                    cards_open, no_update, no_update, no_update,
+                                    {0: cards_input},
+                                    no_update, no_update, no_update, no_update, no_update,
+                                    no_update, no_update, no_update, content]
 
                 if card_data['Code'].lower().startswith("m "):
                     placeholder = 'Please enter the mystery word'
@@ -2738,11 +3425,14 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                 if (card_data.hasPassword == False):
                     style_input_pwd = {'width': '100%', 'display': 'none'}
                     style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
+                    style_timer = {'display': 'none'}
                 else:
                     style_input_pwd = {'width': '100%', 'display': 'block', 'backgroundColor': 'rgba(0,0,0,0)',
                                        'border': "1px solid #bbbbbb"}
                     style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                         'backgroundColor': '#F5F5F5'}
+                    style_timer = {'display': 'block'}
+
                 if card_data['Code'] not in cards_open.values():
                     cards_open = cards_open | {str(uuid4()): card_data['Code']}
                     help_data[card_data['Code'].lower()] = 'opened'
@@ -2752,10 +3442,10 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                     style = {'display': 'none'}
                     style_layover = {'display': 'none'}
                 else:
-                    style={
+                    style = {
                         "width": "100%",  # Always fit the container
                         "height": "auto",
-                        "margin-bottom": "15px",
+                        "marginBottom": "15px",
                         "border": "1px solid #2d2b28",
                         "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
                         "cursor": "pointer",
@@ -2771,13 +3461,40 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
                         "marginBottom": "12px",
                     }
 
-                return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
-                    'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
-                           'Hint'], image, cards_open, False, no_update, no_update, {
-                           0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data, card_buton_style
+                return [{'display': 'flex', 'justifyContent': 'center'}, {'display': 'none'}, {'display': 'none'},
+                        card_data[
+                            'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
+                            'Hint'], image, cards_open, False, no_update, no_update, {
+                            0: cards_input}, '', style_input_pwd, style_button_pwd, '', placeholder, help_data,
+                        card_buton_style, style_timer, no_update]
         elif button_index in cards['Code'].tolist():
             card_data = cards[cards.Code == button_index].iloc[0]
             image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/cards/{card_data['Img']}"
+
+            if card_data['Code'].lower() in list(passwords_remember.keys()):
+                if passwords_remember[card_data['Code'].lower()] == 1:
+                    markdown_single_file = markdown_lists[(markdown_lists['title'] == card_data['Code'].lower())]
+                    if len(markdown_single_file) > 0:
+                        txt_file_name = markdown_single_file.iloc[0]['id']
+                        response = requests.get(
+                            'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/cards/' + txt_file_name)
+                        content = response.text
+
+                        if 'm ' in card_data['Code'].lower():
+                            help_button_style = {'width': '350px'}
+                        else:
+                            help_button_style = {'display': 'none'}
+
+                        if card_data['Code'] not in cards_open.values():
+                            cards_open = cards_open | {str(uuid4()): card_data['Code']}
+
+                        return [{'display': 'none'}, {'textAlign': 'left'}, help_button_style,
+                                no_update, no_update, no_update,
+                                no_update, no_update, no_update, no_update,
+                                cards_open, no_update, no_update, no_update,
+                                {0: cards_input},
+                                no_update, no_update, no_update, no_update, no_update,
+                                no_update, no_update, no_update, content]
 
             if card_data['Code'].lower().startswith("m "):
                 placeholder = 'Please enter the mystery word'
@@ -2799,63 +3516,92 @@ def button_pressed(button_clicks, small_cards_grid, cards_input, cards_open, hel
             if (card_data.hasPassword == False):
                 style_input_pwd = {'width': '100%', 'display': 'none'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'none'}
+                style_timer = {'display': 'none'}
             else:
                 style_input_pwd = {'width': '100%', 'display': 'block'}
                 style_button_pwd = {'width': '100%', 'maxWidth': '200px', 'display': 'block',
                                     'backgroundColor': '#F5F5F5'}
+                style_timer = {'display': 'block'}
+
             if (card_data['Img'] == False) | (card_data['Img'].lower() == 'false'):
                 image = f"https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/assets/img/interviews//Unknown.png"
                 style = {'display': 'none'}
                 style_layover = {'display': 'none'}
             else:
-                style={
-                        "width": "100%",  # Always fit the container
-                        "height": "auto",
-                        "margin-bottom": "15px",
-                        "border": "1px solid #2d2b28",
-                        "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
-                        "cursor": "pointer",
-                        "object-fit": "cover",
-                    }
+                style = {
+                    "width": "100%",  # Always fit the container
+                    "height": "auto",
+                    "marginBottom": "15px",
+                    "border": "1px solid #2d2b28",
+                    "box-shadow": "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                    "cursor": "pointer",
+                    "object-fit": "cover",
+                }
                 style_layover = {
-                        "position": "absolute",
-                        "bottom": "10px",
-                        "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
-                        "height": "clamp(20px, 5vw, 40px)",
-                        "opacity": "1",
-                        "marginLeft": "-80%",
-                        "marginBottom": "12px",
-                    }
-            return {'display': 'flex', 'justify-content': 'center'}, {'display': 'none'}, {'display': 'none'}, card_data[
-                'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
-                       'Hint'], image, cards_open, False, no_update, no_update, {
-                       0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update, card_buton_style
+                    "position": "absolute",
+                    "bottom": "10px",
+                    "width": "clamp(20px, 5vw, 40px)",  # Responsive overlay
+                    "height": "clamp(20px, 5vw, 40px)",
+                    "opacity": "1",
+                    "marginLeft": "-80%",
+                    "marginBottom": "12px",
+                }
+            return [{'display': 'flex', 'justifyContent': 'center'}, {'display': 'none'}, {'display': 'none'},
+                    card_data[
+                        'Title'].upper(), image, style, style_layover, card_data['Text'], card_data[
+                        'Hint'], image, cards_open, False, no_update, no_update, {
+                        0: button_index}, no_update, style_input_pwd, style_button_pwd, '', placeholder, no_update,
+                    card_buton_style, style_timer, no_update]
+        elif 'REMOVE' in button_index:
+            button_index = json.loads(triggered_id)['index']
+            if len(cards_open) > 0:
+                button_index = button_index.replace('REMOVE ', '')
+                if button_index in cards['Code'].tolist():
+                    cards_open_removed = {k: v for k, v in cards_open.items() if v != str(button_index)}
+                    return [no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update,
+                            no_update, no_update, cards_open_removed, no_update, no_update, no_update, no_update,
+                            no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update,
+                            no_update]
         else:
             return no_update
 
+    return no_update
 
+
+# %%
 @app.callback(
-    Output('confirm-dialog', 'opened', allow_duplicate=True),
-    Output('confirm-dialog', 'title', allow_duplicate=True),
-    Output('confirm-dialog_text', 'children', allow_duplicate=True),
-    Output('cards_password', 'value', allow_duplicate=True),
-    Output('single_card_div', 'style', allow_duplicate=True),
-    Output('markdown_text_help_more_button', 'style', allow_duplicate=True),
-    Output('markdown_text', 'style', allow_duplicate=True),
-    Output('markdown_text', 'children'),
-    Output('should_we_call_popup', 'data', allow_duplicate=True),
-    Output('popup_status', 'data', allow_duplicate=True),
-    Input('card_pwd_button', 'n_clicks'),
-    State('cards_password', 'value'),
-    State('single_card_title', 'children'),
-    State('popup_status', 'data'),
+    [
+        Output('confirm-dialog', 'opened', allow_duplicate=True),
+        Output('confirm-dialog', 'title', allow_duplicate=True),
+        Output('confirm-dialog_text', 'children', allow_duplicate=True),
+        Output('cards_password', 'value', allow_duplicate=True),
+        Output('single_card_div', 'style', allow_duplicate=True),
+        Output('markdown_text_help_more_button', 'style', allow_duplicate=True),
+        Output('markdown_text', 'style', allow_duplicate=True),
+        Output('markdown_text', 'children'),
+        Output('should_we_call_popup', 'data', allow_duplicate=True),
+        Output('popup_status', 'data', allow_duplicate=True),
+        Output('passwords_remember', 'data', allow_duplicate=True)
+    ],
+    [
+        Input('card_pwd_button', 'n_clicks')
+    ],
+    [
+        State('cards_password', 'value'),
+        State('single_card_title', 'children'),
+        State('popup_status', 'data'),
+        State('passwords_remember', 'data')
+    ],
     prevent_initial_call=True
 )
-def display_click_data(card_pwd_button, cards_password, single_card_title, popup_status):
+def pwd_button_pressed(card_pwd_button, cards_password, single_card_title, popup_status, passwords_remember):
     if card_pwd_button:
         markdown_single_file = markdown_lists[(markdown_lists['title'] == single_card_title.lower()) & (
-                    markdown_lists['password'] == cards_password.lower())]
+                markdown_lists['password'] == cards_password.lower())]
         if len(markdown_single_file) > 0:
+
+            passwords_remember[single_card_title.lower()] = 1
+
             txt_file_name = markdown_single_file.iloc[0]['id']
             response = requests.get(
                 'https://raw.githubusercontent.com/solveitagent/solveit/refs/heads/main/data/markdown files/cards/' + txt_file_name)
@@ -2872,21 +3618,29 @@ def display_click_data(card_pwd_button, cards_password, single_card_title, popup
             else:
                 should_we_call_popup = no_update
 
-            return False, '', '', '', {'display': 'none'}, help_button_style, {
-                'textAlign': 'left'}, content, should_we_call_popup, popup_status
+            return [False, '', '', '', {'display': 'none'}, help_button_style, {
+                'textAlign': 'left'}, content, should_we_call_popup, popup_status, passwords_remember]
         else:
 
-            return True, 'Alert', 'Wrong password, please try again!', '', no_update, no_update, no_update, no_update, no_update, no_update
-    return no_update, no_update, no_update, '', no_update, no_update, no_update, no_update, no_update, no_update
+            return [True, 'Alert', 'Wrong password, please try again!', '', no_update, no_update, no_update, no_update,
+                    no_update, no_update, no_update]
+    return [no_update, no_update, no_update, '', no_update, no_update, no_update, no_update, no_update, no_update,
+            no_update]
 
 
 @app.callback(
-    Output('alert_more_help', 'opened', allow_duplicate=True),
-    Output('alert_more_help_text', 'children', allow_duplicate=True),
-    Output('help_data', 'data', allow_duplicate=True),
-    Input('markdown_text_help_more_button', 'n_clicks'),
-    State('single_card_title', 'children'),
-    State('help_data', 'data'),
+    [
+        Output('alert_more_help', 'opened'),
+        Output('alert_more_help_text', 'children'),
+        Output('help_data', 'data', allow_duplicate=True)
+    ],
+    [
+        Input('markdown_text_help_more_button', 'n_clicks')
+    ],
+    [
+        State('single_card_title', 'children'),
+        State('help_data', 'data')
+    ],
     prevent_initial_call=True
 )
 def display_click_data(markdown_text_help_more_button, single_card_title, help_data):
@@ -2902,27 +3656,47 @@ def display_click_data(markdown_text_help_more_button, single_card_title, help_d
         if len(markdown_single_file) > 0:
             markdown_single_file = markdown_single_file['hint'].iloc[0]
             help_data[single_card_title.lower()] = 'help'
-            return True, markdown_single_file, help_data
+            return [True, markdown_single_file, help_data]
     return no_update
 
 
 @app.callback(
-    Output('alert_view_other', 'opened'),
-    Output('alert_other_text', 'children'),
-    Input("button_clicked", "n_clicks"),
-    State('time_sgs_archive', 'children'),
-    State('help_data', 'data'),
-    State('comments_textarea', 'value'),
-    State('store_email', 'data'),
-    [State(f"question_answer_input_{index}", "value") for index in range(len(final_answers_dropdown_options.keys()))],
+    [
+        Output("url", "pathname", allow_duplicate=True),
+        Output('previous_url', 'data', allow_duplicate=True),
+        Output('solved_game', 'data', allow_duplicate=True),
+    ],
+    [
+        Input("button_clicked", "n_clicks")
+    ],
+    [
+        State('time_sgs_archive', 'children'),
+        State('help_data', 'data'),
+        State('comments_textarea', 'value'),
+        State('store_email', 'data'),
+        State("url", "pathname"),
+    ],
+    [
+        State(f"question_answer_input_{index}", "value") for index in range(len(final_answers_dropdown_options.keys()))
+    ],
+    prevent_initial_call=True
     # Inputs for all questions
 )
-def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *answers):
+def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, previous_url, *answers):
     if n_clicks:
         result = [answers[i] for i in range(len(answers)) if answers[i]]
         real_answers = ['Drenasi', 'Drita Konjufca', 'Through contact', 'N-Serum', 'Taulant Gashi', 'Accidental']
+
+        save_data_logout(store_email['email'], '3', '1000$', '0 Mins', -99, 0.2, 0, -99,
+                         {"NOTE_1": 0, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0},
+                         {"Hospital": 0, "Police": 0, "CCTV": 0, "Operations": 0, "Lab": 0, "Evidence Photos": 0},
+                         cities_infected_beginning, pwd_remember_dict,
+                         {}, {"m 1": "not_opened", "m 2": "not_opened", "m 3": "not_opened", "m 4": "not_opened",
+                              "m 5": "not_opened", "m 6": "not_opened", "m 7": "not_opened", "m 8": "not_opened",
+                              "m 9": "not_opened"}, {})
         if not result:
-            return True, 'Wrong, try again!'
+            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]), result, 0)
+            return ['/results', previous_url, 0]
 
         incorrect_answers = {}
         for i in range(len(result)):
@@ -2930,15 +3704,12 @@ def collect_answers(n_clicks, time, help_data, comments_textarea, store_email, *
                 incorrect_answers[list(final_answers_dropdown_options.keys())[i]] = result[i]
 
         if len(incorrect_answers) == 0:
+            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]), result, 1)
+            return ['/results', previous_url, 1]
 
-            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]))
-            return True, 'Congrats, you solved the case in ' + time + '!'
         else:
-            to_return_text = [dcc.Markdown('**Wrong answers**'), html.Br()]
-            for key, value in incorrect_answers.items():
-                to_return_text.append(dcc.Markdown(f'{key} : **{value}**'))
-                to_return_text.append(html.Br())
-            return True, html.Div(to_return_text)
+            save_help_data(store_email['email'], help_data, comments_textarea, int(time.split(' ')[0]), result, 0)
+            return ['/results', previous_url, 0]
     return no_update
 
 

@@ -2,6 +2,7 @@ import psycopg2
 import os
 import pandas as pd
 from datetime import datetime
+import json
 
 def read_sql_data(sql_query):
     USER = os.getenv('db_user')
@@ -18,14 +19,14 @@ def read_sql_data(sql_query):
             port=PORT,
             dbname=DBNAME
         )
-        print("Connection successful!")
+        # print("Connection successful!")
 
         # Create a cursor to execute SQL queries
         df = pd.read_sql(sql_query, connection)
 
         # Close the cursor and connection
         connection.close()
-        print("Connection closed.")
+        # print("Connection closed.")
         return df
     except Exception as e:
         print(f"Failed to connect: {e}")
@@ -46,7 +47,7 @@ def insert_edit_sql_data(sql_query):
             port=PORT,
             dbname=DBNAME
         )
-        print("Connection successful!")
+        #print("Connection successful!")
 
         # Create a cursor to execute SQL queries
         cursor = connection.cursor()
@@ -54,134 +55,116 @@ def insert_edit_sql_data(sql_query):
         # Example query
         cursor.execute(sql_query)
         connection.commit()
-        print("Data inserted")
+        #print("Data inserted")
 
         # Close the cursor and connection
         cursor.close()
         connection.close()
-        print("Connection closed.")
+        #print("Connection closed.")
 
     except Exception as e:
         print(f"Failed to connect: {e}")
 
 def add_new_user(username, password, name, surname):
+    archive_status = {"Lab": 0, "CCTV": 0, "Police": 0, "Hospital": 0, "Operations": 0, "Evidence_Photos": 0}
+    end_game = {"mc_1": "not_opened", "mc_2": "not_opened", "mc_3": "not_opened", "mc_4": "not_opened", "mc_5": "not_opened", "mc_6": "not_opened", "mc_7": "not_opened", "mc_8": "not_opened", "mc_9": "not_opened", "Comments": -99, "finished_time": -99, "solved":0, "answers":""}
+    hierarchy_status = {"archive_child1": -99, "archive_child2": -99, "archive_parent": -99}
+    cities_infected = {"Peja": 0, "Klina": 0, "Vitia": 0, "Artana": 0, "Burimi": 0, "Decani": 0, "Juniku": 0,
+                       "Sharri": 0, "Shtime": 0, "Besiana": 0, "Dardana": 0, "Drenasi": 15, "Ferizaj": 0, "Gjakova": 0,
+                       "Gjilani": 0, "Lipjani": 13, "Mamusha": 0, "Zvecani": 0, "Kacaniku": 0, "Kllokoti": 0, "Parteshi": 0,
+                       "Prizreni": 0, "Rahoveci": 0, "Shterpca": 0, "Theranda": 0, "Gracanica": 0, "Kastrioti": 0,
+                       "Malisheva": 0, "Mitrovica": 0, "Prishtina": 15, "Ranillugu": 0, "Skenderaj": 0, "Vushtrria": 0,
+                       "Leposaviqi": 0, "Fushe Kosova": 0, "Zubin Potoku": 0, "Hani i Elezit": 0, "Mitrovica e Veriut": 0}
+    popup_status = {"NOTE_1": 1, "NOTE_2": 0, "NOTE_4": 0, "NOTE_5": 0}
+    pwd_remember = {"12": 0, "24": 0, "25": 0, "26": 0, "29": 0, "30": 0, "m 1": 0, "m 2": 0, "m 3": 0, "m 4": 0, "m 5": 0, "m 6": 0, "m 7": 0, "m 8": 0, "m 9": 0}
+    user_metadata = {"time": "0 Mins", "money_left": "1000$", "cities_infected": 3, "last_touched_button": -99, "restart_timer_state": 0, "store_what_happened": -99, "should_we_call_popup": -99, "virus_infection_rate": 0.2, "archive_button_child1_3sec_delay": -99, "archive_button_clicked_3sec_delay": -99}
+    cards_open = {}
+    archives_open = {}
+    help_data = {"mc_1": "not_opened", "mc_2": "not_opened", "mc_3": "not_opened", "mc_4": "not_opened", "mc_5": "not_opened", "mc_6": "not_opened", "mc_7": "not_opened", "mc_8": "not_opened", "mc_9": "not_opened"}
     sql_query = f'''
         INSERT INTO users VALUES ('{username}', '{password}', '{name}', '{surname}');
-        INSERT INTO users_metadata VALUES ('{username}', '3', '1000$', '0 Mins', NULL, 0.2, 0, NULL, NULL, NULL, NULL);
-        INSERT INTO popup_status VALUES ('{username}', '0', '0', '0', '0');
-        INSERT INTO nr_cities_infected VALUES ('{username}', '15', '15', '13');
-        INSERT INTO hierarchy_status VALUES ('{username}', NULL, NULL, NULL);
-        INSERT INTO archive_status VALUES ('{username}', '0', '0', '0', '0', '0', '0');
+        INSERT INTO all_metadata VALUES ('{username}', 
+                                          NOW(), 
+                                          '{str(archive_status).replace("'", '"')}', 
+                                          '{str(end_game).replace("'", '"')}', 
+                                          '{str(hierarchy_status).replace("'", '"')}', 
+                                          '{str(cities_infected).replace("'", '"')}', 
+                                          '{str(popup_status).replace("'", '"')}', 
+                                          '{str(pwd_remember).replace("'", '"')}', 
+                                          '{str(user_metadata).replace("'", '"')}', 
+                                          '{str(cards_open).replace("'", '"')}', 
+                                          '{str(help_data).replace("'", '"')}')
+                                          '{str(archives_open).replace("'", '"')}');
     '''
     insert_edit_sql_data(sql_query)
 
-def save_data_logout(username, cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected):
-    set_clause = ", ".join([f"<maca>{city.replace(' ', '_')}<maca> = '{nr_cities_infected[city]}'" for city in nr_cities_infected.keys()])
-    set_clause = set_clause.replace('<maca>','"')
-    store_what_happened = 'NULL' if store_what_happened == None else "'"+store_what_happened+"'"
+def save_data_logout(username, cities_infected, money_left, time, store_what_happened, virus_infection_rate, restart_timer_state, should_we_call_popup, popup_status, archive_status, nr_cities_infected, pwd_remember, cards_open, help_data, archives_open):
+    hierarchy_status = {"archive_child1": -99, "archive_child2": -99, "archive_parent": -99}
+    user_metadata = {"time": time, "money_left": money_left, "cities_infected": cities_infected, "last_touched_button": -99,
+                     "restart_timer_state": 0, "store_what_happened": -99, "should_we_call_popup": -99,
+                     "virus_infection_rate": virus_infection_rate, "archive_button_child1_3sec_delay": -99,
+                     "archive_button_clicked_3sec_delay": -99}
+
     sql_query = f'''
-        UPDATE users_metadata
-        SET cities_infected = '{cities_infected}',
-            money_left = '{money_left}',
-            time = '{time}',
-            store_what_happened = {store_what_happened},
-            virus_infection_rate = {virus_infection_rate},
-            restart_timer_state = {restart_timer_state},
-            should_we_call_popup = '{should_we_call_popup}'
+        UPDATE all_metadata
+        SET archive_status = '{str(archive_status).replace("'", '"')}',
+            hierarchy_status = '{str(hierarchy_status).replace("'", '"')}',
+            nr_cities_infected = '{str(nr_cities_infected).replace("'", '"')}',
+            popup_status = '{str(popup_status).replace("'", '"')}',
+            pwd_remember = '{str(pwd_remember).replace("'", '"')}',
+            user_metadata = '{str(user_metadata).replace("'", '"')}',
+            cards_open = '{str(cards_open).replace("'", '"')}',
+            help_data = '{str(help_data).replace("'", '"')}',
+            archives_open = '{str(archives_open).replace("'", '"')}'
         WHERE username = '{username}';
-        
-        UPDATE popup_status 
-        SET "NOTE_1" = '{popup_status['NOTE_1']}',
-            "NOTE_2" = '{popup_status['NOTE_2']}',
-            "NOTE_4" = '{popup_status['NOTE_4']}',
-            "NOTE_5" = '{popup_status['NOTE_5']}'
-        WHERE username = '{username}';
-            
-        UPDATE archive_status 
-        SET "Hospital" = '{archive_status['Hospital']}',
-            "Police" = '{archive_status['Police']}',
-            "CCTV" = '{archive_status['CCTV']}',
-            "Operations" = '{archive_status['Operations']}',
-            "Lab" = '{archive_status['Lab']}',
-            "Evidence_Photos" = '{archive_status['Evidence Photos']}'
-        WHERE username = '{username}';  
-        
-        UPDATE nr_cities_infected
-        SET {set_clause}
-        WHERE username = '{username}';
-        
-        
     '''
     insert_edit_sql_data(sql_query)
 
 
 
-def read_user_data(cities, username=None):
+def read_user_data(username=None):
 
     if username != None:
         sql_query_user_mtd = f'''
                 SELECT *
-                FROM users_metadata um
-                JOIN popup_status ps ON um.username = ps.username
-                JOIN nr_cities_infected nci ON um.username = nci.username
-                JOIN archive_status arcs ON um.username = arcs.username
+                FROM all_metadata um
+--                 JOIN all_metadata am ON um.username = am.username
                 WHERE um.username = '{username}'
         '''
     else:
         sql_query_user_mtd = f'''
                         SELECT *
-                        FROM users_metadata um
-                        JOIN popup_status ps ON um.username = ps.username
-                        JOIN nr_cities_infected nci ON um.username = nci.username
-                        JOIN archive_status arcs ON um.username = arcs.username
+                        FROM all_metadata um
+--                         JOIN all_metadata am ON um.username = am.username
                 '''
 
     dff = read_sql_data(sql_query_user_mtd)
+    dff = dff.replace(-99, None)
     all_json_data = {}
     for i in range(0, len(dff)):
         df = dff.iloc[i]
 
         json_data = {}
 
-        json_data['restart_timer_state'] = 0
-        json_data['should_we_call_popup'] = None
-        json_data['archive_button_child1_3sec_delay'] = None
-        json_data['archive_button_clicked_3sec_delay'] = None
-        json_data['cards_open'] = {}
-        json_data['last_touched_button'] = None
 
-        for col in ['time', 'money_left', 'store_what_happened', 'cities_infected', 'virus_infection_rate']:
-            json_data[col] = df[col]
+        json_data['cards_open'] = df['cards_open']
+
+        for col in df['user_metadata'].keys():
+            json_data[col] = df['user_metadata'][col]
+
+        json_data['nr_cities_infected'] = df['nr_cities_infected']
 
 
-        cities = pd.read_csv('data/cities_information.csv')
+        json_data['popup_status'] = df['popup_status']
+        json_data['hierarchy_status'] = df['hierarchy_status']
+        json_data['archive_status'] = df['archive_status']
+        json_data['passwords_remember'] = df['pwd_remember']
+        json_data['help_data'] = df['help_data']
+        json_data['archives_open'] = df['archives_open']
 
-        nr_cities_infected = {}
-        for col in cities.City.tolist():
-            nr_cities_infected[col] = df[col.replace(' ', '_')]
 
-        json_data['nr_cities_infected'] = nr_cities_infected
+        all_json_data[df['username']] = json_data
 
-        popup_status = {}
-        for col in ['NOTE_1', 'NOTE_2', 'NOTE_4', 'NOTE_5']:
-            popup_status[col] = df[col]
-
-        json_data['popup_status'] = popup_status
-
-        hierarchy_status = {}
-        for col in ['archive_parent', 'archive_child1', 'archive_child2']:
-            hierarchy_status[col] = None
-
-        json_data['hierarchy_status'] = hierarchy_status
-
-        archive_status = {}
-        for col in ['Hospital', 'Police', 'CCTV', 'Operations', 'Lab']:
-            archive_status[col] = df[col]
-
-        archive_status['Evidence Photos'] = df['Evidence_Photos']
-        json_data['archive_status'] = archive_status
-
-        all_json_data[df['username'].iloc[0]] = json_data
     return all_json_data
 
 
@@ -197,21 +180,20 @@ def read_all_users():
     return df
 
 
-def save_help_data(username, help_data, comments, time_start):
-    sql_query = f'''
-        INSERT INTO end_game_table (username, comments, mc_1, mc_2, mc_3, mc_4, mc_5, mc_6, mc_7, mc_8, mc_9, finished_time) 
-        VALUES ('{username}', 
-                '{comments}', 
-                '{help_data['mc 1']}', 
-                '{help_data['mc 2']}', 
-                '{help_data['mc 3']}', 
-                '{help_data['mc 4']}', 
-                '{help_data['mc 5']}', 
-                '{help_data['mc 6']}', 
-                '{help_data['mc 7']}', 
-                '{help_data['mc 8']}', 
-                '{help_data['mc 9']}', 
-                '{time_start}');
+def save_help_data(username, help_data, comments, time_start, answers, solved):
+    end_game = {
+        "comments":comments,
+        "finished_time":time_start,
+        "solved":solved,
+        "answers":';'.join(answers)
+    }
 
+    for mc_cards in list(help_data.keys()):
+        end_game[mc_cards] = help_data[mc_cards]
+
+    sql_query = f'''
+        UPDATE all_metadata
+        SET end_game = '{str(end_game).replace("'", '"')}'
+        WHERE username = '{username}';
     '''
     insert_edit_sql_data(sql_query)
