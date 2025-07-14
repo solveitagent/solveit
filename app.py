@@ -2150,8 +2150,7 @@ def handle_storyline(storyline_buttons, store_email, previous_url):
             our_user = user_data[store_email['email'].lower()]
             button_, style_ = switch_between_input_and_back_button_archive('back_button')
             try:
-                print()
-                # send_email(store_email['email'].lower())
+                send_email(store_email['email'].lower())
             except Exception as e:
                 print(f'No Internet connection or {e}')
             # import time
