@@ -862,7 +862,7 @@ main_screen = html.Div([
                 html.Div(
                     dl.Map(
                         id="map",
-                        children=[dl.TileLayer(),
+                        children=[dl.TileLayer(maxZoom=22),
                                   dl.DivMarker(
                                       position=[cities_info[cities_info.City == 'Drenasi']['Lat'].iloc[0],
                                                 cities_info[cities_info.City == 'Drenasi']['Long'].iloc[0]],
@@ -2324,7 +2324,7 @@ def update_time_since_start(n, nr_cities_infected, cities_outbreak, virus_infect
 
     filtered_dict = {key: int(value) for key, value in nr_cities_infected.items() if int(value) > 0}
 
-    to_add = [dl.TileLayer()]
+    to_add = [dl.TileLayer(maxZoom=22)]
     for city in filtered_dict.keys():
         icon = dict(
             # str(filtered_dict[city])
@@ -2418,7 +2418,7 @@ def toggle_offcanvas_scrollable(map_button, is_open, n_clicks):
 )
 def update_map_center(n_clicks, lat, lon):
     if n_clicks > 0 and lat and lon:
-        return [18]
+        return [21]
     return no_update
 
 
